@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="backgroundColorNight">#191B1E</color>
+    <color name="backgroundColor">#FFFFFF</color>
+    <color name="backgroundThirdlyNight">#0CFFFFFF</color>
+    <color name="backgroundThirdly">#0D000000</color>
+    <color name="backgroundColorSecodaryNight">#202125</color>
+    <color name="backgroundColorSecodary">#EDEDED</color>
+    <color name="rippleSecodary">#CACACA</color>
+    <color name="rippleSecodaryNight">#000000</color>
+    <color name="white">#ffff</color>
+    <color name="black">#000000</color>
+    <color name="disabledWhite">#575757</color>
+    <color name="disabledBlack">#535353</color>
+    <color name="floatingButtonSecodaryBG">#DDDDDD</color>
+    <color name="floatingButtonPrimaryBG">#E3E3E3</color>
+    <color name="floatingButtonSecodaryBGNight">#0E52B8</color>
+    <color name="floatingButtonPrimaryBGNight">#333333</color>
+
+    <color name="button_healthNight">#057FDF</color>
+    <color name="button_bodyNight">#12BC6C</color>
+    <color name="button_mindNight">#A8EC0A</color>
+    <color name="button_moneyNight">#AFD506</color>
+
+    <color name="financialTrendLineColorNight">#A7C61A</color>
+    <color name="financialTrendLineColor">#8C248A</color>
+    <color name="financialTrendLineColoGradEnd">#32A5FD</color>
+    <color name="financialTrendLineColorNeg">#ff6859</color>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="backgroundThirdly" type="color"/>
+    <attr name="backgroundSecondary" format="color"/>
+    <attr name="backgroundPrimary" format="color"/>
+    <attr name="textColorPrimary" format="color"/>
+    <attr name="textColorPrimaryDisabled" format="color"/>
+    <attr name="rippleSecondary" format="color"/>
+    <attr name="floatingButtonBGPrimary" format="color"/>
+    <attr name="floatingButtonBGSecondary" format="color"/>
+    <attr name="financialGraphTrendline" format="color"/>
+    <attr name="financialGraphTrendlineGradEnd" format="color"/>
+</resources>
