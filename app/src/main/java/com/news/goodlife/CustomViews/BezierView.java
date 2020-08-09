@@ -85,7 +85,7 @@ public class BezierView extends View {
         //paint.setShader(new LinearGradient(0, 0, 0, 400, trendLineColorStart, trendLineColorEnd, Shader.TileMode.CLAMP));
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(trendLineColorStart);
-        paint.setStrokeWidth(10);
+        paint.setStrokeWidth(6);
         paint.setAntiAlias(true);
 
         lineZeroPaint.setColor(Color.WHITE);

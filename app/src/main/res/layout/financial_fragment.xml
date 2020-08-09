@@ -48,9 +48,52 @@
         app:layout_constraintTop_toBottomOf="@id/chart_container"
         app:layout_constraintBottom_toTopOf="@id/cashflow_data_card"/>
     <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/casjflow_timeline_numbers_container"
+        app:layout_constraintBottom_toBottomOf="@id/casjflow_timeline_numbers_container"
+        app:layout_constraintLeft_toLeftOf="@id/casjflow_timeline_numbers_container"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        android:layout_margin="8dp"
+        app:cardBackgroundColor="?attr/backgroundThirdly">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="1400,95€"
+            android:textColor="?attr/financialGraphTrendline"
+            android:fontFamily="sans-serif-medium"
+            android:id="@+id/chartresult_amount"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:paddingStart="20dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="14 July 2020"
+            android:padding="8dp"
+            android:layout_marginEnd="12dp"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:alpha=".8"
+            android:elevation="0dp"
+            android:layout_gravity="center"
+            android:id="@+id/chartresult_date"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/chartresult_amount"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardViewh
         android:id="@+id/cashflow_data_card"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="300dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="8dp"
         app:cardCornerRadius="25dp"
@@ -60,7 +103,7 @@
         <include
             layout="@layout/cashflow_card"
             />
-    </androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardViewh>
 
     <FrameLayout
         android:id="@+id/finacial_input_container"
