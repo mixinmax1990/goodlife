@@ -73,9 +73,9 @@ public class GoalsBezierView extends View {
         paint.setColor(trendLineColorStart);
         paint.setStrokeWidth(6);
         paint.setAntiAlias(true);
-        paint.setAlpha(80);
+        paint.setAlpha(200);
         paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setPathEffect(new DashPathEffect(new float[] {0,20}, 5));
+        paint.setPathEffect(new DashPathEffect(new float[] {0,50}, 5));
 
         lineZeroPaint.setColor(Color.WHITE);
         lineZeroPaint.setAlpha(40);
@@ -91,7 +91,7 @@ public class GoalsBezierView extends View {
 
         //max points 3
         int countPoints = 0;
-        int factorTime = 1000;
+        int factorTime = 4000;
         float factorAmount = 0.1f;
         float zeroMark = this.getHeight()/2;
         int lines = 0;
@@ -107,7 +107,7 @@ public class GoalsBezierView extends View {
             x2 = point.getTime() * factorTime;
             y2 = zeroMark - (point.getAmount() * factorAmount);
 
-            spread = (x2 - lastPoint.getTime() * factorTime)/4;
+            spread = (x2 - lastPoint.getTime() * factorTime)/20;
 
             x0 = (lastPoint.getTime() * factorTime) + spread;
             y0 = zeroMark - (lastPoint.getAmount() * factorAmount);
@@ -116,6 +116,7 @@ public class GoalsBezierView extends View {
             y1 = y2;
 
             path.cubicTo(x0, y0, x1, y1, x2, y2);
+
             lastPoint = point;
 
         }
@@ -146,7 +147,7 @@ public class GoalsBezierView extends View {
 
         CashflowBezierPoint cashflowBezierPoint;
         // Point One
-        cashflowBezierPoint = new CashflowBezierPoint(2000f,1f);
+        cashflowBezierPoint = new CashflowBezierPoint(6000f,1f);
         cashflowBezierPath.add(cashflowBezierPoint);
 
         return cashflowBezierPath;

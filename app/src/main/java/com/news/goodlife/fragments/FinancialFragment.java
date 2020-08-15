@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,11 +17,14 @@ import android.widget.CalendarView;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -65,6 +69,10 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
     ConstraintLayout cashflowPopContainer;
     boolean blurOn = false;
 
+    //Charts
+
+    HorizontalScrollView chartscrollWindow;
+
     //BlurView
     BlurView blurView;
 
@@ -74,6 +82,7 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
     FrameLayout popAmountClickArea;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -111,6 +120,17 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
         startBlurring(5);
 
         //Charts
+        chartscrollWindow = root.findViewById(R.id.chart_scroll_view);
+
+        chartscrollWindow.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                Log.i("Scroll", ""+scrollX);
+
+            }
+        });
+
 
 
 

@@ -11,11 +11,13 @@ import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -39,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 
 public class BezierView extends View {
 
-    Paint paint;
+    Paint paint, outerpoints, innerpoints;
     Path path;
     Paint lineZeroPaint;
     Paint linesAmountPaint;
@@ -52,19 +54,50 @@ public class BezierView extends View {
         super(context, attrs);
 
         final TypedValue value = new TypedValue ();
-        context.getTheme ().resolveAttribute (R.attr.financialGraphTrendline, value, true);
+        context.getTheme().resolveAttribute (R.attr.financialGraphTrendline, value, true);
         trendLineColorStart = value.data;
 
         final TypedValue value2 = new TypedValue ();
-        context.getTheme ().resolveAttribute (R.attr.colorAccent, value, true);
+        context.getTheme().resolveAttribute (R.attr.backgroundThirdly, value2, true);
         trendLineColorEnd = value2.data;
 
         db = new DatabaseController(context);
 
+    }
 
+    ConstraintLayout parent;
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        parent = (ConstraintLayout) getParent();
 
 
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int index = event.getActionIndex();
+        int action = event.getActionMasked();
+        int pointerId = event.getPointerId(index);
+
+        switch(action) {
+            case MotionEvent.ACTION_DOWN:
+                //Log.i("Down", "True");
+                break;
+            case MotionEvent.ACTION_MOVE:
+
+                //Log.i("Move", "True" + parent.getX());
+                break;
+            case MotionEvent.ACTION_UP:
+                //Log.i("Up", "True");
+                break;
+            }
+        return true;
+                //super.onTouchEvent(event);
+        }
+
+
 
     public BezierView(Context context) {
         super(context);
@@ -78,6 +111,8 @@ public class BezierView extends View {
         // TODO Make sure that unesesarry loads happen
 
         paint = new Paint();
+        innerpoints = new Paint();
+        outerpoints = new Paint();
         path = new Path();
         lineZeroPaint = new Paint();
         linesAmountPaint = new Paint();
@@ -85,8 +120,20 @@ public class BezierView extends View {
         //paint.setShader(new LinearGradient(0, 0, 0, 400, trendLineColorStart, trendLineColorEnd, Shader.TileMode.CLAMP));
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(trendLineColorStart);
-        paint.setStrokeWidth(6);
+        paint.setStrokeWidth(8);
+        paint.setAlpha(200);
         paint.setAntiAlias(true);
+
+        innerpoints.setStyle(Paint.Style.FILL);
+        innerpoints.setColor(Color.parseColor("#202125"));
+        innerpoints.setAntiAlias(true);
+        innerpoints.setAlpha(255);
+
+        outerpoints.setStyle(Paint.Style.STROKE);
+        outerpoints.setColor(trendLineColorStart);
+        outerpoints.setStrokeWidth(3);
+        outerpoints.setAntiAlias(true);
+        outerpoints.setAlpha(200);
 
         lineZeroPaint.setColor(Color.WHITE);
         lineZeroPaint.setAlpha(40);
@@ -126,7 +173,12 @@ public class BezierView extends View {
             x1 = x2 - spread;
             y1 = y2;
 
+            // Draw Bezier Lines
             path.cubicTo(x0, y0, x1, y1, x2, y2);
+            // Draw Actual Lines
+            // canvas.drawLine(lastPoint.getTime() + factorTime, lastPoint.getAmount() * factorAmount, point.time * factorTime, lastPoint.amount * factorAmount, lineZeroPaint);
+            // canvas.drawLine(point.getTime() + factorTime, lastPoint.getAmount() * factorAmount, point.time * factorTime, point.amount * factorAmount, lineZeroPaint);
+
             lastPoint = point;
 
             if(lines == 5){
@@ -146,6 +198,17 @@ public class BezierView extends View {
         //path.cubicTo(600, 1000, 900, 1000, 1000, 400);
         //path.cubicTo(anc0X, anc0Y, anc1X, anc1Y, this.getWidth(), 500);
         canvas.drawPath(path, paint);
+
+
+        for(CashflowBezierPoint point: cashflowPath){
+            //get each individual point
+            x2 = point.getTime() * factorTime;
+            y2 = zeroMark - (point.getAmount() * factorAmount);
+
+            canvas.drawCircle(x2, y2, 12, innerpoints);
+            canvas.drawCircle(x2, y2, 12, outerpoints);
+
+        }
 
         //Drawing Lines
         canvas.drawLine(0, zeroMark, this.getWidth(), zeroMark, lineZeroPaint);
@@ -305,9 +368,11 @@ public class BezierView extends View {
     private List<CashflowBezierPoint> calculatedData(JSONObject cashflowData) {
 
         List<CashflowBezierPoint> cashflowBezierPath = new ArrayList<>();
+        List<CashflowBezierPoint> cashflowLinePath = new ArrayList<>();
 
         int graphSize = sizeInDays + daysSinceFirstEntry;
         CashflowBezierPoint cashflowBezierPoint;
+        CashflowBezierPoint cashflowLinePoint;
         int cash = 0;
         for(int i = 0; i < graphSize; i++){
 
@@ -316,17 +381,19 @@ public class BezierView extends View {
                     cash = cash + Integer.parseInt(cashflowData.get(""+i).toString());
                     //Log.i("CashData Look for -", ""+cashflowData.get(""+i).toString());
                     //Log.i("CashData A Look for -", ""+Integer.parseInt(cashflowData.get(""+i).toString()));
+                    cashflowBezierPoint = new CashflowBezierPoint((float)cash,(float)i);
+                    cashflowBezierPath.add(cashflowBezierPoint);
+
+                    cashflowLinePoint = new CashflowBezierPoint((float)cash,(float)i);
+                    cashflowLinePath.add(cashflowLinePoint);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
-            cashflowBezierPoint = new CashflowBezierPoint((float)cash,(float)i);
-            cashflowBezierPath.add(cashflowBezierPoint);
         }
 
-        return cashflowBezierPath;
+        return cashflowLinePath;
     }
 
     private List<CashflowBezierPoint> testData(){

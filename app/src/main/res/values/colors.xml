@@ -25,8 +25,8 @@
     <color name="button_mindNight">#A8EC0A</color>
     <color name="button_moneyNight">#AFD506</color>
 
-    <color name="financialTrendLineColorNight">#A7C61A</color>
+    <color name="financialTrendLineColorNight">#008DFD</color>
     <color name="financialTrendLineColor">#8C248A</color>
-    <color name="financialTrendLineColoGradEnd">#32A5FD</color>
+    <color name="financialTrendLineColoGradEnd">#00DBAF</color>
     <color name="financialTrendLineColorNeg">#ff6859</color>
 </resources>

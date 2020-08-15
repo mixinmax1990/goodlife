@@ -90,7 +90,7 @@
             app:layout_constraintLeft_toRightOf="@id/chartresult_amount"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
-    <androidx.cardview.widget.CardViewh
+    <androidx.cardview.widget.CardView
         android:id="@+id/cashflow_data_card"
         android:layout_width="match_parent"
         android:layout_height="300dp"
@@ -103,7 +103,7 @@
         <include
             layout="@layout/cashflow_card"
             />
-    </androidx.cardview.widget.CardViewh>
+    </androidx.cardview.widget.CardView>
 
     <FrameLayout
         android:id="@+id/finacial_input_container"
