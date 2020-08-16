@@ -1,8 +1,10 @@
 package com.news.goodlife.CustomViews;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -29,9 +31,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -41,8 +45,8 @@ import java.util.concurrent.TimeUnit;
 
 public class BezierView extends View {
 
-    Paint paint, outerpoints, innerpoints;
-    Path path;
+    Paint paint, outerpoints, innerpoints, scrollPointLine, scrollPoint;
+    Path path, scrollPath;
     Paint lineZeroPaint;
     Paint linesAmountPaint;
     int trendLineColorStart, trendLineColorEnd;
@@ -61,7 +65,89 @@ public class BezierView extends View {
         context.getTheme().resolveAttribute (R.attr.backgroundThirdly, value2, true);
         trendLineColorEnd = value2.data;
 
+        scrollPointLine = new Paint();
+        scrollPointLine.setStyle(Paint.Style.STROKE);
+        scrollPointLine.setColor(Color.WHITE);
+        scrollPointLine.setStrokeWidth(4);
+        scrollPointLine.setAlpha(155);
+        scrollPointLine.setStrokeCap(Paint.Cap.ROUND);
+        scrollPointLine.setPathEffect(new DashPathEffect(new float[] {0, 10}, 5));
+        scrollPointLine.setAntiAlias(true);
+
+        scrollPoint = new Paint();
+        scrollPoint.setStyle(Paint.Style.STROKE);
+        scrollPoint.setStrokeWidth(3);
+        scrollPoint.setColor(Color.WHITE);
+        scrollPoint.setAntiAlias(true);
+        scrollPoint.setAlpha(255);
+
+        scrollPath = new Path();
+
         db = new DatabaseController(context);
+
+    }
+
+    public String ScrollDay;
+    boolean hasAnim = false;
+
+    public void growGrafAnimation(){
+        ValueAnimator va = ValueAnimator.ofFloat(.0f, .1f);
+        va.setDuration(500);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                factorAmount = (float) valueAnimator.getAnimatedValue();
+                invalidate();
+            }
+        });
+        va.start();
+    }
+
+    public void flattenGrafAnimation(){
+        ValueAnimator va = ValueAnimator.ofFloat(.1f, .0f);
+        va.setDuration(500);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                factorAmount = (float) valueAnimator.getAnimatedValue();
+                invalidate();
+            }
+        });
+        va.start();
+    }
+
+    boolean scrollDraw = false;
+
+    public float updateScroll(int ScrollPos){
+        //scrollPosData;
+        //Checks if we have reached the last Point
+        if(ScrollPoint != numOfPoints - 1){
+            if(ScrollPos > scrollPosData.get(ScrollPoint + 1).getTime()){
+                ScrollPoint = ScrollPoint + 1;
+                scrollDraw = true;
+                invalidate();
+
+            }
+
+        }
+        //Checks if we are at the First Point
+        if(ScrollPoint != 0){
+            if(ScrollPos < scrollPosData.get(ScrollPoint).getTime()){
+                ScrollPoint = ScrollPoint - 1;
+
+                scrollDraw = true;
+                invalidate();
+
+            }
+        }
+
+
+        firstCalendarEntry.setTime(firstEntryDate);
+        firstCalendarEntry.add(Calendar.DATE, ScrollPos / factorTime);
+        SimpleDateFormat sdf1 = new SimpleDateFormat("d MMM YY");
+        ScrollDay = sdf1.format(firstCalendarEntry.getTime());
+
+        return scrollPosData.get(ScrollPoint).getAmount();
 
     }
 
@@ -75,38 +161,22 @@ public class BezierView extends View {
 
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        int index = event.getActionIndex();
-        int action = event.getActionMasked();
-        int pointerId = event.getPointerId(index);
-
-        switch(action) {
-            case MotionEvent.ACTION_DOWN:
-                //Log.i("Down", "True");
-                break;
-            case MotionEvent.ACTION_MOVE:
-
-                //Log.i("Move", "True" + parent.getX());
-                break;
-            case MotionEvent.ACTION_UP:
-                //Log.i("Up", "True");
-                break;
-            }
-        return true;
-                //super.onTouchEvent(event);
-        }
-
-
-
     public BezierView(Context context) {
         super(context);
     }
     float x0,y0,x1,y1,x2,y2;
     CashflowBezierPoint lastPoint;
+    private List<CashflowBezierPoint> scrollPosData = new ArrayList<>();
+    int ScrollPoint = 0;
+    int numOfPoints;
+    int factorTime = 30;
+    float factorAmount = 0.1f;
+    float zeroMark;
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+
 
         // TODO Make sure that unesesarry loads happen
 
@@ -146,19 +216,23 @@ public class BezierView extends View {
         //x is Time
         //y is Amount
         List<CashflowBezierPoint> cashflowPath = calculatedData(getData());
+        scrollPosData.clear();
+
 
         //max points 3
         int countPoints = 0;
-        int factorTime = 30;
-        float factorAmount = 0.1f;
-        float zeroMark = this.getHeight()/2;
+
+
+        zeroMark = this.getHeight()/2;
         int lines = 0;
 
 
 
         float spread;
-        lastPoint = new CashflowBezierPoint(2000f,0f);
+        lastPoint = new CashflowBezierPoint(zeroMark,0f);
         path.moveTo(lastPoint.getTime()*factorTime, zeroMark - lastPoint.getAmount() * factorAmount);
+        scrollPosData.add(addScrollData(lastPoint.getTime()*factorTime, 0));
+        numOfPoints++;
 
         for(CashflowBezierPoint point: cashflowPath){
             //get each individual point
@@ -175,6 +249,8 @@ public class BezierView extends View {
 
             // Draw Bezier Lines
             path.cubicTo(x0, y0, x1, y1, x2, y2);
+            scrollPosData.add(addScrollData(x2, point.getAmount()));
+            numOfPoints++;
             // Draw Actual Lines
             // canvas.drawLine(lastPoint.getTime() + factorTime, lastPoint.getAmount() * factorAmount, point.time * factorTime, lastPoint.amount * factorAmount, lineZeroPaint);
             // canvas.drawLine(point.getTime() + factorTime, lastPoint.getAmount() * factorAmount, point.time * factorTime, point.amount * factorAmount, lineZeroPaint);
@@ -209,8 +285,9 @@ public class BezierView extends View {
             canvas.drawCircle(x2, y2, 12, outerpoints);
 
         }
-
+        paint.setStrokeWidth(3);
         //Drawing Lines
+        canvas.drawLine(0, 0, 0, this.getHeight(), paint);
         canvas.drawLine(0, zeroMark, this.getWidth(), zeroMark, lineZeroPaint);
         canvas.drawLine(0, (zeroMark/10)*8, this.getWidth(), (zeroMark/10)*8, linesAmountPaint);
         canvas.drawLine(0, (zeroMark/10)*6, this.getWidth(), (zeroMark/10)*6, linesAmountPaint);
@@ -219,7 +296,12 @@ public class BezierView extends View {
         canvas.drawLine(0, (zeroMark/10)*14, this.getWidth(), (zeroMark/10)*14, linesAmountPaint);
         canvas.drawLine(0, (zeroMark/10)*16, this.getWidth(), (zeroMark/10)*16, linesAmountPaint);
 
-
+        if(scrollDraw){
+            float cx = scrollPosData.get(ScrollPoint).getTime();
+            float cy = zeroMark - (scrollPosData.get(ScrollPoint).getAmount() * factorAmount);
+            canvas.drawLine(scrollPosData.get(ScrollPoint).getTime() + 5, zeroMark - (scrollPosData.get(ScrollPoint).getAmount() * factorAmount), scrollPosData.get(ScrollPoint + 1).getTime(), zeroMark - (scrollPosData.get(ScrollPoint).getAmount() * factorAmount), scrollPointLine);
+            canvas.drawCircle(cx, cy , 12, scrollPoint);
+        }
 
 
 
@@ -232,9 +314,18 @@ public class BezierView extends View {
 
     }
 
+    private CashflowBezierPoint addScrollData(float position, float amount){
+
+        CashflowBezierPoint point = new CashflowBezierPoint(amount, position);
+
+        return point;
+    }
+
     int sizeInDays = 365;
     int daysSinceFirstEntry, daysSinceFirstEntryToday;
-    long firstEntry;
+    public long firstEntry;
+    Calendar firstCalendarEntry = Calendar.getInstance();
+    Date firstEntryDate;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     private JSONObject getData(){
 
@@ -244,19 +335,17 @@ public class BezierView extends View {
         boolean first = true;
         for(CashflowModel cashflow: data){
 
-            Log.i("CashData Look for -", ""+cashflow.getValue());
-
-
             if(first){
                 String dateStr = cashflow.getDate();
 
                 try {
-                    Date date = sdf.parse(dateStr);
+                    firstEntryDate = sdf.parse(dateStr);
                     Date today = new Date();
 
-                    long diff = today.getTime() - date.getTime();
+                    long diff = today.getTime() - firstEntryDate.getTime();
                     daysSinceFirstEntryToday = (int)TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                    firstEntry = date.getTime();
+                    firstEntry = firstEntryDate.getTime();
+
 
 
                 } catch (ParseException e) {
@@ -292,7 +381,16 @@ public class BezierView extends View {
                     }
                     else{
                         //substract the amount
-                        DayCashflow = DayCashflow - (int)Double.parseDouble(cashflow.getValue());
+
+                        DayCashflow = DayCashflow + (-(int)Double.parseDouble(cashflow.getValue()));
+                        /*
+                        if(DayCashflow < 0){
+                            DayCashflow = DayCashflow - (int)Double.parseDouble(cashflow.getValue());
+                        }
+                        else{
+                            DayCashflow = DayCashflow + (int)Double.parseDouble(cashflow.getValue());
+                        }*/
+
                     }
                     dataDays.put(""+daysSinceFirstEntry, DayCashflow);
 

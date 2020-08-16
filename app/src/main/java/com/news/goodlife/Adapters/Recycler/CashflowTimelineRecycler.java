@@ -20,6 +20,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class CashflowTimelineRecycler extends RecyclerView.Adapter<CashflowTimelineRecycler.ViewHolder> {
 
@@ -28,7 +29,12 @@ public class CashflowTimelineRecycler extends RecyclerView.Adapter<CashflowTimel
     List<CashflowModel> cashflows;
     CashflowModel cashflow;
     SimpleDateFormat sdf = new SimpleDateFormat("d MMM YY");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     String reformattedDate;
+    String last_itemDate = "";
+    String current_itemDate = "";
+    String next_itemDate = "";
+    int tillNextDate = 0;
 
     public CashflowTimelineRecycler(Context context, List<CashflowModel> data, RecyclerViewClickListener listener) {
     this.context = context;
@@ -39,12 +45,91 @@ public class CashflowTimelineRecycler extends RecyclerView.Adapter<CashflowTimel
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item, parent, false), mListener, viewType);
+
+
+        //Check if last item hast the same Date
+        if(last_itemDate.equals(current_itemDate)){
+            //Check if next item has the same Date
+            if(next_itemDate.equals(current_itemDate)){
+                return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_center, parent, false), mListener, viewType);
+            }
+            else{
+
+                if(tillNextDate > 1 & tillNextDate < 4){
+                    return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_bottom_long, parent, false), mListener, viewType);
+                }
+                if(tillNextDate >= 4){
+                    return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_verylong, parent, false), mListener, viewType);
+                }
+
+                return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_bottom, parent, false), mListener, viewType);
+
+
+
+            }
+
+        }
+        else{
+            if(next_itemDate.equals(current_itemDate)){
+                return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_top, parent, false), mListener, viewType);
+            }
+            else{
+                return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item, parent, false), mListener, viewType);
+            }
+        }
+        //return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_top, parent, false), mListener, viewType);
+
     }
+
+    Date CurrentDate, NextDate;
 
     @Override
     public int getItemViewType(int position) {
+
+        // Gt Dates of next and Previous Cashflows
+
         cashflow = cashflows.get(position);
+
+        Date d;
+
+        //Current Item Date
+        try {
+            d = dateFormat.parse(cashflow.getDate());
+            CurrentDate = d;
+            current_itemDate = sdf.format(d);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        //Last Item Date
+        if(position != 0){
+            try {
+                d = dateFormat.parse(cashflows.get(position - 1).getDate());
+                last_itemDate = sdf.format(d);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            last_itemDate = "";
+        }
+
+        //Next Item Date
+        if(position != cashflows.size() - 1){
+            try {
+                d = dateFormat.parse(cashflows.get(position + 1).getDate());
+                NextDate = d;
+                next_itemDate = sdf.format(d);
+
+                long diff = NextDate.getTime() - CurrentDate.getTime();
+                tillNextDate = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            next_itemDate = "";
+        }
 
         return position;
     }
@@ -60,7 +145,7 @@ public class CashflowTimelineRecycler extends RecyclerView.Adapter<CashflowTimel
         String value = ident+" "+cashflow.value+" €";
         holder.cashflowValueTW.setText(value);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
         Date d;
         try {
             d = dateFormat.parse(cashflow.getDate());
@@ -71,11 +156,18 @@ public class CashflowTimelineRecycler extends RecyclerView.Adapter<CashflowTimel
             holder.cashflowDateTW.setText("-");
         }
         holder.cashflowDescTW.setText(cashflow.description);
+
+        if(position == cashflows.size() - 1){
+            //Give it a margin
+            holder.parent.setPadding(0,0,0,200);
+        }
     }
 //"d MMM YYYY"
     @Override
     public int getItemCount() {
+
         return cashflows.size();
+
     }
 
     public class ViewHolder  extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -88,6 +180,7 @@ public class CashflowTimelineRecycler extends RecyclerView.Adapter<CashflowTimel
 
         public ViewHolder(@NonNull View itemView, RecyclerViewClickListener listener, int i) {
             super(itemView);
+
 
             parent = itemView;
             parent.setId(i);

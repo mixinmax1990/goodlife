@@ -10,4 +10,5 @@
     <attr name="floatingButtonBGSecondary" format="color"/>
     <attr name="financialGraphTrendline" format="color"/>
     <attr name="financialGraphTrendlineGradEnd" format="color"/>
+    <attr name="cashflow_items_background" format="color"/>
 </resources>

@@ -15,6 +15,7 @@
         <item name="textColorPrimaryDisabled">@color/disabledBlack</item>
         <item name="financialGraphTrendline">@color/financialTrendLineColor</item>
         <item name="financialGraphTrendlineGradEnd">@color/financialTrendLineColoGradEnd</item>
+        <item name="cashflow_items_background">@color/cashflowItemBackgroundNight</item>
     </style>
 
     <style name="CustomTextAppearanceTab" parent="TextAppearance.Design.Tab">

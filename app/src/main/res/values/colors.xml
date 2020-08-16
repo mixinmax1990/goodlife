@@ -5,7 +5,7 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="backgroundColorNight">#191B1E</color>
     <color name="backgroundColor">#FFFFFF</color>
-    <color name="backgroundThirdlyNight">#0CFFFFFF</color>
+    <color name="backgroundThirdlyNight">#24262B</color>
     <color name="backgroundThirdly">#0D000000</color>
     <color name="backgroundColorSecodaryNight">#202125</color>
     <color name="backgroundColorSecodary">#EDEDED</color>
@@ -19,6 +19,9 @@
     <color name="floatingButtonPrimaryBG">#E3E3E3</color>
     <color name="floatingButtonSecodaryBGNight">#0E52B8</color>
     <color name="floatingButtonPrimaryBGNight">#333333</color>
+
+    <color name="cashflowItemBackgroundNight">#27292E</color>
+    <color name="cashflowItemBackground">#0D000000</color>
 
     <color name="button_healthNight">#057FDF</color>
     <color name="button_bodyNight">#12BC6C</color>

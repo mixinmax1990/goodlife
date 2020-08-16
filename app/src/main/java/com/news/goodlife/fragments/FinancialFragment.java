@@ -6,12 +6,15 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CalendarView;
 import android.widget.CompoundButton;
@@ -28,6 +31,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
@@ -37,6 +41,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.news.goodlife.Adapters.CashFlowPagerAdapter;
+import com.news.goodlife.CustomViews.BezierView;
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
 import com.news.goodlife.Data.Local.DatabaseHelper;
 import com.news.goodlife.Data.Local.Models.CashflowModel;
@@ -67,11 +72,24 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
     CashFlowPagerAdapter adapter;
     DatabaseController db;
     ConstraintLayout cashflowPopContainer;
+    ConstraintLayout financialContainer;
+    ConstraintLayout popCashflowContainer;
+    TextView timelineCashAmount;
+    TextView timelineCashDate;
+
+    //Constraints Animations;
+    ConstraintSet baseConstraint = new ConstraintSet();
+    ConstraintSet cashExpanded = new ConstraintSet();
+    ConstraintSet basePopCashflow = new ConstraintSet();
+    ConstraintSet showPopCashflow = new ConstraintSet();
+
+    boolean cashIsExpanded = false;
     boolean blurOn = false;
 
     //Charts
 
     HorizontalScrollView chartscrollWindow;
+    BezierView mainCashflowGraph;
 
     //BlurView
     BlurView blurView;
@@ -92,6 +110,8 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
         db = new DatabaseController(getContext());
 
 
+        financialContainer = root.findViewById(R.id.financial_fragment_constrainlayout);
+        popCashflowContainer = root.findViewById(R.id.cashflow_pop_container);
         cashflowTabs = root.findViewById(R.id.cashflow_tab);
         timeline_tab = root.findViewById(R.id.cashflow_upcoming_tab);
         once_tab = root.findViewById(R.id.cashflow_once_tab);
@@ -100,6 +120,9 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
         cashflowPopContainer = root.findViewById(R.id.cashflow_pop_container);
         cashflowAmount = root.findViewById(R.id.popCashAmount);
         cashflowDescription = root.findViewById(R.id.popCashDesc);
+        mainCashflowGraph = root.findViewById(R.id.bezier);
+        timelineCashAmount = root.findViewById(R.id.chartresult_amount);
+        timelineCashDate = root.findViewById(R.id.chartresult_date);
 
         //Cashflow Popup
         costSelector = root.findViewById(R.id.selectorCost);
@@ -108,13 +131,18 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
         cashflowPopNotifyOn = root.findViewById(R.id.cashflowPopNotifyON);
         cashflowPopNotifyOff = root.findViewById(R.id.cashflowPopNotifyOff);
         popCardSave = root.findViewById(R.id.popCardSave);
-        popCardDelete =root.findViewById(R.id.popCardDelete);
+        popCardDelete = root.findViewById(R.id.popCardDelete);
 
         calendarView = root.findViewById(R.id.popCalendarView);
-        popCashDate = root.findViewById(R.id.popCashDate);
         monthlySwitch = root.findViewById(R.id.monthlySwitch);
         cashflowPopCloseField = root.findViewById(R.id.cashflowPopCloseField);
         addCashFloatingButton = root.findViewById(R.id.add_cash);
+        expandCashFloatingButton = root.findViewById(R.id.expand_cash);
+
+        baseConstraint.clone(financialContainer);
+        cashExpanded.clone(getContext(), R.layout.finacial_fragment_cash_expanded);
+        basePopCashflow.clone(popCashflowContainer);
+        showPopCashflow.clone(getContext(), R.layout.popup_cashflow);
 
         blurView = root.findViewById(R.id.finance_blurview);
         startBlurring(5);
@@ -126,7 +154,14 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 
-                Log.i("Scroll", ""+scrollX);
+                //Log.i("Scroll", ""+scrollX);
+                String cashAmount = ""+mainCashflowGraph.updateScroll(scrollX)+"€";
+
+
+
+                //Log.i("Scroll", mainCashflowGraph.ScrollDay);
+                timelineCashDate.setText(mainCashflowGraph.ScrollDay);
+                timelineCashAmount.setText(cashAmount);
 
             }
         });
@@ -141,6 +176,7 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 cashflowViewPager.setCurrentItem(tab.getPosition());
+
 
             }
 
@@ -169,6 +205,21 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
 
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     private void listeners(){
+        ViewTreeObserver vto = mainCashflowGraph.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener (new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    mainCashflowGraph.getViewTreeObserver()
+                            .removeOnGlobalLayoutListener(this);
+                } else {
+                    mainCashflowGraph.getViewTreeObserver()
+                            .removeGlobalOnLayoutListener(this);
+                }
+                mainCashflowGraph.growGrafAnimation();
+
+            }
+        });
         incomeSelector.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -215,7 +266,7 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
 
 
                 cashflow_date = ""+simpleDateFormat.format(date);
-                popCashDate.setText(sdf.format(date));
+
                 toggleRemoveButtonScale(true);
 
             }
@@ -235,6 +286,7 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
             @Override
             public void onClick(View view) {
                 toogleAnimateBlur(false);
+
             }
         });
 
@@ -243,6 +295,37 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
             public void onClick(View view) {
                 resetCashflowInPopup();
                 toogleAnimateBlur(true);
+
+
+            }
+        });
+        expandCashFloatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Transition between Layout Constraint Sets
+                TransitionManager.beginDelayedTransition(financialContainer);
+
+                if(cashIsExpanded){
+                    //Collapse Cash
+                    baseConstraint.applyTo(financialContainer);
+                    cashIsExpanded = false;
+                    expandCashFloatingButton.setImageResource(R.drawable.ic_baseline_unfold_more_24);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            // Actions to do after 10 seconds
+                            mainCashflowGraph.growGrafAnimation();
+                        }
+                    }, 500);
+
+                }
+                else{
+                    //Expand Cash
+                    cashExpanded.applyTo(financialContainer);
+                    cashIsExpanded = true;
+                    expandCashFloatingButton.setImageResource(R.drawable.ic_baseline_unfold_less_24);
+                    mainCashflowGraph.flattenGrafAnimation();
+                }
             }
         });
 
@@ -370,6 +453,67 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
 
     public void toogleAnimateBlur(final boolean blur){
 
+        TransitionManager.beginDelayedTransition(popCashflowContainer);
+        float from, to;
+        if(blur){
+            //Collapse Cash
+            blurView.setVisibility(View.VISIBLE);
+            from = 0f;
+            to = 1f;
+            showPopCashflow.applyTo(popCashflowContainer);
+            blurOn = true;
+            mainCashflowGraph.flattenGrafAnimation();
+        }
+        else{
+            //Expand Cash
+            from = 1f;
+            to = 0f;
+            basePopCashflow.applyTo(popCashflowContainer);
+            blurOn = false;
+            mainCashflowGraph.growGrafAnimation();
+        }
+
+        ValueAnimator va = ValueAnimator.ofFloat(from, to);
+        int mDuration = 200; //in millis
+        va.setDuration(mDuration);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+                float animValue = (float) animation.getAnimatedValue();
+
+                blurView.setAlpha(animValue);
+            }
+        });
+
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                if(!blur){
+                    blurView.setVisibility(View.GONE);
+                    //popCardDelete.setScaleX(1f);
+                    //popCardDelete.setScaleY(1f);
+                    toggleRemoveShow(false);
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        //va.setRepeatCount(5);
+        va.start();
+        /*
         float from, to, fromScale, toScale;
         if(blur){
             blurView.setVisibility(View.VISIBLE);
@@ -437,7 +581,7 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
 
             }
         });
-        vaScalePop.start();
+        vaScalePop.start();*/
 
 
 
@@ -461,8 +605,8 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
             public void onAnimationUpdate(ValueAnimator animation) {
 
                 float animValue = (float) animation.getAnimatedValue();
-                popCardDelete.setScaleX(animValue);
-                popCardDelete.setScaleY(animValue);
+                //popCardDelete.setScaleX(animValue);
+                //popCardDelete.setScaleY(animValue);
             }
         });
         //va.setRepeatCount(5);
@@ -472,10 +616,10 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
 
     public void toggleRemoveShow(boolean show){
         if(show){
-            popCardDelete.setVisibility(View.VISIBLE);
+            //popCardDelete.setVisibility(View.VISIBLE);
         }
         else{
-            popCardDelete.setVisibility(View.GONE);
+            //popCardDelete.setVisibility(View.GONE);
         }
 
     }
@@ -540,8 +684,8 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
             db.Cashflow.deleteCashflow(""+cashflowID);
             instantiateViewPager();
             toogleAnimateBlur(false);
-            popCardDelete.setScaleX(1f);
-            popCardDelete.setScaleX(1f);
+            //popCardDelete.setScaleX(1f);
+            //popCardDelete.setScaleX(1f);
         }
 
     }
@@ -656,11 +800,11 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
     CardView popCardDelete;
 
     CalendarView calendarView;
-    TextView popCashDate;
     Switch monthlySwitch;
     TextView cashflowPopCloseField;
 
-    CardView addCashFloatingButton;
+    FloatingActionButton addCashFloatingButton;
+    FloatingActionButton expandCashFloatingButton;
 
 
 

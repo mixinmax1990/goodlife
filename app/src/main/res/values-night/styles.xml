@@ -17,6 +17,7 @@
         <item name="colorControlHighlight">#2C2C2C</item>
         <item name="financialGraphTrendline">@color/financialTrendLineColorNight</item>
         <item name="financialGraphTrendlineGradEnd">@color/financialTrendLineColoGradEnd</item>
+        <item name="cashflow_items_background">@color/cashflowItemBackgroundNight</item>
     </style>
 
     <style name="CustomTextAppearanceTab" parent="TextAppearance.Design.Tab">
