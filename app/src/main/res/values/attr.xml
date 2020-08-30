@@ -11,4 +11,7 @@
     <attr name="financialGraphTrendline" format="color"/>
     <attr name="financialGraphTrendlineGradEnd" format="color"/>
     <attr name="cashflow_items_background" format="color"/>
+    <declare-styleable name="BezierView">
+        <attr name="graphPosition" format="string"/>
+    </declare-styleable>
 </resources>

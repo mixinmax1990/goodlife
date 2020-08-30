@@ -24,7 +24,8 @@
                 android:layout_marginStart="80dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:orientation="horizontal"/>
+                android:orientation="horizontal"
+                app:graphPosition="Detail"/>
 
             <com.news.goodlife.CustomViews.GoalsBezierView
                 android:id="@+id/goalsBezier"

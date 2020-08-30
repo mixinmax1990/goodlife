@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -72,6 +73,18 @@ public class BezierView extends View {
     boolean allowVibrate = true;
     DatabaseController db;
 
+    public String getGraphPosition() {
+        return graphPosition;
+    }
+
+    public void setGraphPosition(String graphPosition) {
+        this.graphPosition = graphPosition;
+    }
+
+    //Attributes
+    private String graphPosition;
+
+
     int anc0X, anc0Y, anc1X, anc1Y;
 
     public BezierView(Context context, @Nullable AttributeSet attrs) {
@@ -106,6 +119,17 @@ public class BezierView extends View {
         scrollPath = new Path();
 
         db = new DatabaseController(context);
+
+        TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.BezierView);
+        CharSequence foo_cs = arr.getString(R.styleable.BezierView_graphPosition);
+        if (foo_cs != null) {
+            // Do something with foo_cs.toString()
+            setGraphPosition(foo_cs.toString());
+            Log.i("Custom Attribute",""+graphPosition);
+        }
+        arr.recycle();  // Do this when done.
+
+
 
     }
 
@@ -366,9 +390,17 @@ public class BezierView extends View {
     float frameMaxAmount = 2000;
     float factorAmount = 0.1f;
     float zeroMark;
+    boolean isOverview = false;
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        if(graphPosition.equals("Overview")){
+            factorTime = 5;
+            factorAmount = .05f;
+            isOverview = true;
+        }
 
 
 
@@ -381,10 +413,22 @@ public class BezierView extends View {
         lineZeroPaint = new Paint();
         linesAmountPaint = new Paint();
 
+        lineZeroPaint.setColor(Color.WHITE);
+
         //paint.setShader(new LinearGradient(0, 0, 0, 400, trendLineColorStart, trendLineColorEnd, Shader.TileMode.CLAMP));
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(trendLineColorStart);
-        paint.setStrokeWidth(8);
+        if(isOverview){
+            paint.setStrokeWidth(4);
+            lineZeroPaint.setAlpha(250);
+            lineZeroPaint.setTextSize(35);
+            canvas.drawText("5,456€",this.getWidth()/2 - 50, this.getHeight() - 20, lineZeroPaint);
+
+        }
+        else{
+            paint.setStrokeWidth(8);
+        }
+
         paint.setAlpha(200);
         paint.setAntiAlias(true);
 
@@ -399,13 +443,13 @@ public class BezierView extends View {
         outerpoints.setAntiAlias(true);
         outerpoints.setAlpha(200);
 
-        lineZeroPaint.setColor(Color.WHITE);
+        lineZeroPaint.setTextSize(30);
         lineZeroPaint.setAlpha(40);
 
         linesAmountPaint.setColor(Color.WHITE);
         linesAmountPaint.setAlpha(10);
 
-
+        zeroMark = this.getHeight()/2;
 
         //x is Time
         //y is Amount
@@ -418,7 +462,8 @@ public class BezierView extends View {
         int countPoints = 0;
 
 
-        zeroMark = this.getHeight()/2;
+
+
         int lines = 0;
 
 
@@ -470,25 +515,30 @@ public class BezierView extends View {
         canvas.drawPath(path, paint);
 
 
-        for(CashflowBezierPoint point: cashflowPath){
-            //get each individual point
-            x2 = point.getTime() * factorTime;
-            y2 = zeroMark - (point.getAmount() * factorAmount);
+        if(!isOverview){
+            for(CashflowBezierPoint point: cashflowPath){
+                //get each individual point
+                x2 = point.getTime() * factorTime;
+                y2 = zeroMark - (point.getAmount() * factorAmount);
 
-            canvas.drawCircle(x2, y2, 12, innerpoints);
-            canvas.drawCircle(x2, y2, 12, outerpoints);
+                canvas.drawCircle(x2, y2, 12, innerpoints);
+                canvas.drawCircle(x2, y2, 12, outerpoints);
+            }
+            //Drawing Lines
+            canvas.drawLine(0, (zeroMark/10)*8, this.getWidth(), (zeroMark/10)*8, linesAmountPaint);
+            canvas.drawLine(0, (zeroMark/10)*6, this.getWidth(), (zeroMark/10)*6, linesAmountPaint);
+            canvas.drawLine(0, (zeroMark/10)*4, this.getWidth(), (zeroMark/10)*4, linesAmountPaint);
+            canvas.drawLine(0, (zeroMark/10)*12, this.getWidth(), (zeroMark/10)*12, linesAmountPaint);
+            canvas.drawLine(0, (zeroMark/10)*14, this.getWidth(), (zeroMark/10)*14, linesAmountPaint);
+            canvas.drawLine(0, (zeroMark/10)*16, this.getWidth(), (zeroMark/10)*16, linesAmountPaint);
+            paint.setStrokeWidth(3);
 
+            canvas.drawLine(0, 0, 0, this.getHeight(), paint);
         }
-        paint.setStrokeWidth(3);
+
         //Drawing Lines
-        canvas.drawLine(0, 0, 0, this.getHeight(), paint);
         canvas.drawLine(0, zeroMark, this.getWidth(), zeroMark, lineZeroPaint);
-        canvas.drawLine(0, (zeroMark/10)*8, this.getWidth(), (zeroMark/10)*8, linesAmountPaint);
-        canvas.drawLine(0, (zeroMark/10)*6, this.getWidth(), (zeroMark/10)*6, linesAmountPaint);
-        canvas.drawLine(0, (zeroMark/10)*4, this.getWidth(), (zeroMark/10)*4, linesAmountPaint);
-        canvas.drawLine(0, (zeroMark/10)*12, this.getWidth(), (zeroMark/10)*12, linesAmountPaint);
-        canvas.drawLine(0, (zeroMark/10)*14, this.getWidth(), (zeroMark/10)*14, linesAmountPaint);
-        canvas.drawLine(0, (zeroMark/10)*16, this.getWidth(), (zeroMark/10)*16, linesAmountPaint);
+
         // Add amount
 
 
@@ -530,6 +580,10 @@ public class BezierView extends View {
     private void addMonths(Canvas canvas, String month, int x){
         lineZeroPaint.setTextSize(25f);
         lineZeroPaint.setAntiAlias(true);
+        Log.i("ZeroMark", ""+zeroMark);
+        if(isOverview){
+            lineZeroPaint.setAlpha(20);
+        }
         canvas.drawText(month,x, (float)zeroMark + 30, lineZeroPaint);
     }
 
@@ -681,7 +735,6 @@ public class BezierView extends View {
                 }
             }
 
-
         }
 
         //Log.i("JSONOBJ LENGTH", ""+dataDays.toString());
@@ -709,7 +762,13 @@ public class BezierView extends View {
         int cash = 0;
         for(int i = 0; i < graphSize; i++){
 
-            canvas.drawLine(i * factorTime, zeroMark -10, i * factorTime, zeroMark + 10, lineZeroPaint);
+            if(isOverview){
+                lineZeroPaint.setStrokeWidth(1f);
+                canvas.drawLine(i * factorTime, zeroMark - 4, i * factorTime, zeroMark + 4, lineZeroPaint);
+            }
+            else{
+                canvas.drawLine(i * factorTime, zeroMark -10, i * factorTime, zeroMark + 10, lineZeroPaint);
+            }
 
 
                 if(curDrawMonth == ""){
