@@ -90,6 +90,7 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
 
     HorizontalScrollView chartscrollWindow;
     BezierView mainCashflowGraph;
+    TextView maxAmount, minAmount;
 
     //BlurView
     BlurView blurView;
@@ -121,6 +122,10 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
         cashflowAmount = root.findViewById(R.id.popCashAmount);
         cashflowDescription = root.findViewById(R.id.popCashDesc);
         mainCashflowGraph = root.findViewById(R.id.bezier);
+        maxAmount = root.findViewById(R.id.frameMaxAmount);
+        minAmount = root.findViewById(R.id.frameMinAmount);
+        mainCashflowGraph.setMaxAmountTV(maxAmount);
+        mainCashflowGraph.setMinAmountTV(minAmount);
         timelineCashAmount = root.findViewById(R.id.chartresult_amount);
         timelineCashDate = root.findViewById(R.id.chartresult_date);
 

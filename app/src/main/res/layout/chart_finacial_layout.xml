@@ -14,19 +14,18 @@
         android:fillViewport="true">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">^
-
+            android:layout_height="match_parent">
             <com.news.goodlife.CustomViews.BezierView
                 android:id="@+id/bezier"
                 android:layout_width="5000dp"
                 android:layout_height="match_parent"
                 android:gravity="left"
+                android:transitionName="personal"
                 android:layout_marginStart="80dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:orientation="horizontal"
+                android:orientation="horizontal"/>
 
-                />
             <com.news.goodlife.CustomViews.GoalsBezierView
                 android:id="@+id/goalsBezier"
                 android:layout_width="0dp"

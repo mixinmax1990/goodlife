@@ -12,6 +12,7 @@
     <color name="rippleSecodary">#CACACA</color>
     <color name="rippleSecodaryNight">#000000</color>
     <color name="white">#ffff</color>
+    <color name="grey1">#DADADA</color>
     <color name="black">#000000</color>
     <color name="disabledWhite">#575757</color>
     <color name="disabledBlack">#535353</color>

@@ -14,8 +14,6 @@ import com.news.goodlife.Data.Local.Models.CashflowModel;
 import com.news.goodlife.Interfaces.RecyclerViewClickListener;
 import com.news.goodlife.R;
 
-import org.w3c.dom.Text;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,6 +44,7 @@ public class CashflowTimelineRecycler extends RecyclerView.Adapter<CashflowTimel
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
+        Log.i("less than 4","Desc:"+cashflow.getDescription()+" -- Days till Next"+tillNextDate);
 
         //Check if last item hast the same Date
         if(last_itemDate.equals(current_itemDate)){
@@ -54,17 +53,20 @@ public class CashflowTimelineRecycler extends RecyclerView.Adapter<CashflowTimel
                 return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_center, parent, false), mListener, viewType);
             }
             else{
+                //Last item of the Day
+                if(tillNextDate > 1){
+                    if(tillNextDate < 4){
 
-                if(tillNextDate > 1 & tillNextDate < 4){
-                    return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_bottom_long, parent, false), mListener, viewType);
+                        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_bottom_long, parent, false), mListener, viewType);
+                    }
+                    else{
+                        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_bottom_verylong, parent, false), mListener, viewType);
+                    }
+
                 }
-                if(tillNextDate >= 4){
-                    return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_verylong, parent, false), mListener, viewType);
+                else{
+                    return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_bottom, parent, false), mListener, viewType);
                 }
-
-                return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_bottom, parent, false), mListener, viewType);
-
-
 
             }
 
@@ -74,7 +76,21 @@ public class CashflowTimelineRecycler extends RecyclerView.Adapter<CashflowTimel
                 return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_top, parent, false), mListener, viewType);
             }
             else{
-                return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item, parent, false), mListener, viewType);
+                //SIngle entry on the Day
+                if(tillNextDate > 1){
+                    if(tillNextDate < 4){
+
+                        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_single_long, parent, false), mListener, viewType);
+                    }
+                    else{
+                        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_single_verylong, parent, false), mListener, viewType);
+                    }
+
+                }
+                else{
+                    return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item, parent, false), mListener, viewType);
+                }
+
             }
         }
         //return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_top, parent, false), mListener, viewType);
@@ -123,6 +139,7 @@ public class CashflowTimelineRecycler extends RecyclerView.Adapter<CashflowTimel
 
                 long diff = NextDate.getTime() - CurrentDate.getTime();
                 tillNextDate = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }

@@ -17,12 +17,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/topTab"
-        android:text="Financial"
+        android:text="Personal"
         android:paddingLeft="30dp"
         android:paddingRight="50dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:textSize="34sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/chart_container"
+        android:text="2000"
+        android:id="@+id/frameMaxAmount"
+        android:textSize="11sp"
+        android:alpha=".2"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="40dp"
+        android:outlineProvider="none"
+        android:elevation="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/chart_container"
+        android:text="-2000"
+        android:id="@+id/frameMinAmount"
+        android:textSize="11sp"
+        android:alpha=".2"
+        android:layout_marginStart="100dp"
+        android:layout_marginBottom="40dp"
+        android:outlineProvider="none"
+        android:elevation="10dp"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -45,28 +71,29 @@
     <FrameLayout
         android:id="@+id/casjflow_timeline_numbers_container"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintTop_toBottomOf="@id/chart_container"
         app:layout_constraintBottom_toTopOf="@id/cashflow_data_card_inplace"/>
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/casjflow_timeline_numbers_container"
         app:layout_constraintBottom_toBottomOf="@id/casjflow_timeline_numbers_container"
-        app:layout_constraintLeft_toLeftOf="@id/casjflow_timeline_numbers_container"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:cardCornerRadius="20dp"
         app:cardElevation="0dp"
-        android:layout_margin="8dp"
         android:id="@+id/numbers_card"
         app:cardBackgroundColor="?attr/backgroundThirdly">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="20sp"
             android:text="1400,95€"
             android:textColor="?attr/financialGraphTrendline"
             android:fontFamily="sans-serif-medium"
@@ -75,24 +102,26 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:paddingStart="20dp"
+            android:paddingEnd="20dp"
             />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="14 July 2020"
-            android:padding="8dp"
-            android:layout_marginEnd="12dp"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:alpha=".8"
-            android:elevation="0dp"
-            android:layout_gravity="center"
-            android:id="@+id/chartresult_date"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/chartresult_amount"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="14 July 2020"
+        android:padding="8dp"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:alpha=".8"
+        android:elevation="0dp"
+        android:layout_gravity="center"
+        android:id="@+id/chartresult_date"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/numbers_card"
+        app:layout_constraintBottom_toTopOf="@id/cashflow_data_card"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="300dp"
@@ -140,8 +169,8 @@
         android:clickable="true"
         android:focusable="true"
         android:foregroundGravity="center"
-        android:backgroundTint="#393B43"
-        android:foregroundTint="?attr/textColorPrimary"
+        android:tint="@color/black"
+        android:backgroundTint="@color/grey1"
         app:borderWidth="0dp"
         android:layout_margin="5dp"
         app:layout_constraintBottom_toBottomOf="@id/cashflow_data_card"
@@ -157,7 +186,8 @@
         app:fabSize="normal"
         app:cardElevation="30dp"
         android:focusable="true"
-        android:backgroundTint="#393B43"
+        android:tint="@color/black"
+        android:backgroundTint="@color/grey1"
         app:borderWidth="0dp"
         app:maxImageSize="36dp"
         app:cardCornerRadius="40dp"
@@ -175,7 +205,9 @@
         app:layout_constraintBottom_toTopOf="@id/add_cash"
         app:layout_constraintLeft_toLeftOf="@id/add_cash"
         app:layout_constraintRight_toRightOf="@id/add_cash"
-        android:backgroundTint="#393B43"
+        android:tint="@color/black"
+        android:visibility="gone"
+        android:backgroundTint="@color/grey1"
         android:layout_margin="10dp"/>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
@@ -188,7 +220,9 @@
         app:layout_constraintBottom_toTopOf="@id/scan_pdf"
         app:layout_constraintLeft_toLeftOf="@id/add_cash"
         app:layout_constraintRight_toRightOf="@id/add_cash"
-        android:backgroundTint="#393B43"
+        android:tint="@color/black"
+        android:visibility="gone"
+        android:backgroundTint="@color/grey1"
         android:layout_margin="10dp"/>
 <TextView
     android:id="@+id/scan_pdf_text"
@@ -199,10 +233,11 @@
     app:layout_constraintTop_toTopOf="@id/scan_pdf"
     app:layout_constraintBottom_toBottomOf="@id/scan_pdf"
     android:text="PDF"
+    android:visibility="gone"
     android:fontFamily="sans-serif-medium"
     android:textSize="12sp"
     android:elevation="10dp"
-    android:textColor="?attr/textColorPrimary"/>
+    android:textColor="@color/black"/>
 
 
     <eightbitlab.com.blurview.BlurView

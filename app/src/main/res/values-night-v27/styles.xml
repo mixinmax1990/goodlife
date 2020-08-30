@@ -19,5 +19,7 @@
         <item name="android:windowLightNavigationBar">false</item>
         <item name="financialGraphTrendline">@color/financialTrendLineColorNight</item>
         <item name="financialGraphTrendlineGradEnd">@color/financialTrendLineColoGradEnd</item>
+
+        <item name="android:windowContentTransitions">true</item>
     </style>
 </resources>

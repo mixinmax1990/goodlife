@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import com.news.goodlife.Interfaces.OnClickedCashflowItemListener;
 import com.news.goodlife.fragments.CashflowTimelineFragment;
 import com.news.goodlife.fragments.FinancialFragment;
+import com.news.goodlife.fragments.FinancialFragmentOverview;
 import com.news.goodlife.fragments.HealthFragment;
 import com.news.goodlife.fragments.MentalFragment;
 import com.news.goodlife.fragments.PhysicalFragment;
@@ -149,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
     private PhysicalFragment physicalFragment;
     private MentalFragment mentalFragment;
     private FinancialFragment financialFragment;
+    private FinancialFragmentOverview financialFragmentOverview;
 
     private void openFragment() {
         fragment_container.removeAllViews();
@@ -167,8 +169,8 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
                 ft.replace(fragment_container.getId(), mentalFragment);
                 break;
             case 4:
-                financialFragment = new FinancialFragment();
-                ft.replace(fragment_container.getId(), financialFragment);
+                financialFragmentOverview = new FinancialFragmentOverview();
+                ft.replace(fragment_container.getId(), financialFragmentOverview);
                 break;
         }
 
