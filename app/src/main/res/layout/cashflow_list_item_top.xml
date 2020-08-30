@@ -36,7 +36,7 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingTop="3dp"
-        android:paddingBottom="3dp"^
+        android:paddingBottom="3dp"
         android:gravity="center"
         android:textSize="12sp"
         android:layout_marginTop="0dp"
