@@ -14,4 +14,11 @@
     <declare-styleable name="BezierView">
         <attr name="graphPosition" format="string"/>
     </declare-styleable>
+    <declare-styleable name="GoalDrawView">
+        <attr name="goalProgress" format="string"/>
+        <attr name="startMoney" format="string"/>
+        <attr name="endMoney" format="string"/>
+    </declare-styleable>
+    <declare-styleable name="GoalChartView">
+    </declare-styleable>
 </resources>

@@ -33,4 +33,5 @@
     <color name="financialTrendLineColor">#8C248A</color>
     <color name="financialTrendLineColoGradEnd">#00DBAF</color>
     <color name="financialTrendLineColorNeg">#ff6859</color>
+    <color name="testCOlors">#4DD0E1</color>
 </resources>

@@ -516,80 +516,8 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
 
             }
         });
-        //va.setRepeatCount(5);
+
         va.start();
-        /*
-        float from, to, fromScale, toScale;
-        if(blur){
-            blurView.setVisibility(View.VISIBLE);
-            from = 0f;
-            to = 1f;
-            fromScale = .5f;
-            toScale = 1f;
-            blurOn = true;
-        }
-        else{
-            from = 1f;
-            to = 0f;
-            fromScale = 1f;
-            toScale = .5f;
-            blurOn = false;
-        }
-
-        ValueAnimator va = ValueAnimator.ofFloat(from, to);
-        int mDuration = 200; //in millis
-        va.setDuration(mDuration);
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public void onAnimationUpdate(ValueAnimator animation) {
-
-                float animValue = (float) animation.getAnimatedValue();
-
-                blurView.setAlpha(animValue);
-            }
-        });
-        //va.setRepeatCount(5);
-        va.start();
-
-        ValueAnimator vaScalePop = ValueAnimator.ofFloat(fromScale, toScale);
-        vaScalePop.setDuration(mDuration);
-        vaScalePop.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public void onAnimationUpdate(ValueAnimator animation) {
-
-                float animValue = (float) animation.getAnimatedValue();
-                cashflowPopContainer.setScaleX(animValue);
-                cashflowPopContainer.setScaleY(animValue);
-            }
-        });
-        vaScalePop.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                if(!blur){
-                    blurView.setVisibility(View.GONE);
-                    toggleRemoveShow(false);
-                    popCardDelete.setScaleX(1f);
-                    popCardDelete.setScaleY(1f);
-                }
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
-        });
-        vaScalePop.start();*/
-
-
-
     }
 
     public void toggleRemoveButtonScale(boolean small){

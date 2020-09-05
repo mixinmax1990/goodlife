@@ -52,40 +52,54 @@ import static android.content.Context.VIBRATOR_SERVICE;
 
 public class BezierView extends View {
 
-    Paint paint, outerpoints, innerpoints, scrollPointLine, scrollPoint;
+    DatabaseController db;
+    View parent;
+
+    Paint paint, outerpoints, innerpoints, scrollPointLine, scrollPoint,lineZeroPaint,linesAmountPaint;
     Path path, scrollPath;
-    Paint lineZeroPaint;
-    Paint linesAmountPaint;
     int trendLineColorStart, trendLineColorEnd;
-    TextView maxAmountTV;
-
-    public void setMaxAmountTV(TextView maxAmountTV) {
-        this.maxAmountTV = maxAmountTV;
-    }
-
-    public void setMinAmountTV(TextView minAmountTV) {
-        this.minAmountTV = minAmountTV;
-    }
-
-    TextView minAmountTV;
+    TextView maxAmountTV, minAmountTV;
 
     private Vibrator myVib;
     boolean allowVibrate = true;
-    DatabaseController db;
 
-    public String getGraphPosition() {
-        return graphPosition;
-    }
 
-    public void setGraphPosition(String graphPosition) {
-        this.graphPosition = graphPosition;
-    }
-
-    //Attributes
     private String graphPosition;
+    public String ScrollDay;
+    boolean defaultGraphGrow = true;
+    boolean scrollDraw = false;
 
 
-    int anc0X, anc0Y, anc1X, anc1Y;
+
+    float x0,y0,x1,y1,x2,y2;
+    CashflowBezierPoint lastPoint;
+    private List<CashflowBezierPoint> scrollPosData = new ArrayList<>();
+    int ScrollPoint = 0;
+    int numOfPoints;
+    int factorTime = 30;
+    float frameMaxAmount = 2000;
+    float factorAmount = 0.1f;
+    float zeroMark;
+    boolean isOverview = false;
+
+
+
+    int sizeInDays = 365;
+    int daysSinceFirstEntry, daysSinceFirstEntryToday;
+    public long firstEntry;
+    Calendar firstCalendarEntry = Calendar.getInstance();
+    Date firstEntryDate;
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+
+    String curDrawMonth = "";
+    String tempDrawMonth = "";
+    SimpleDateFormat sdfMonth = new SimpleDateFormat("MMM");
+    Calendar drawMonthsCalendar = Calendar.getInstance();
+    boolean monthOnCanvas = false;
+
+
+// Class Functions
 
     public BezierView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -128,277 +142,18 @@ public class BezierView extends View {
             Log.i("Custom Attribute",""+graphPosition);
         }
         arr.recycle();  // Do this when done.
-
-
-
     }
-
-    public String ScrollDay;
-    boolean hasAnim = false;
-
-    public void growGrafAnimation(){
-        allowVibrate = false;
-        ValueAnimator va = ValueAnimator.ofFloat(.0f, factorAmount);
-        va.setDuration(500);
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                factorAmount = (float) valueAnimator.getAnimatedValue();
-                invalidate();
-            }
-        });
-        va.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                allowVibrate = true;
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        if(defaultGraphGrow){
-            va.start();
-        }
-
-    }
-
-    boolean defaultGraphGrow = true;
-    public void resizeGraphAnimation(float newMaxAmount, boolean grow){
-        defaultGraphGrow = false;
-        float newFactorAmount;
-        if(grow){
-             newFactorAmount = (factorAmount / newMaxAmount) * frameMaxAmount;
-        }
-        else{
-             newFactorAmount = (frameMaxAmount / newMaxAmount) * factorAmount;
-        }
-
-        Log.i("newFactorAmount",""+newFactorAmount);
-        frameMaxAmount = newMaxAmount;
-        allowVibrate = false;
-        ValueAnimator va = ValueAnimator.ofFloat(factorAmount, newFactorAmount);
-        va.setDuration(500);
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                factorAmount = (float) valueAnimator.getAnimatedValue();
-                invalidate();
-            }
-        });
-        va.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                allowVibrate = true;
-                defaultGraphGrow = true;
-                maxAmountTV.setText("" + Math.round(frameMaxAmount));
-                minAmountTV.setText("- " + Math.round(frameMaxAmount));
-                lightsOutAmountChange();
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        va.start();
-
-    }
-    public void lightsOutAmountChange(){
-
-        ValueAnimator va = ValueAnimator.ofFloat(.8f, .2f);
-        va.setDuration(1000);
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                float animVal = (float) valueAnimator.getAnimatedValue();
-                minAmountTV.setAlpha(animVal);
-                maxAmountTV.setAlpha(animVal);
-            }
-        });
-
-        va.start();
-    }
-
-    public void flattenGrafAnimation(){
-        allowVibrate = false;
-        ValueAnimator va = ValueAnimator.ofFloat(.1f, .0f);
-        va.setDuration(500);
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                factorAmount = (float) valueAnimator.getAnimatedValue();
-                invalidate();
-            }
-        });
-        va.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                allowVibrate = true;
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        va.start();
-    }
-
-    boolean scrollDraw = false;
-
-    public void checkForVisibleGraph(int ScrollPos){
-        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
-        ConstraintLayout.LayoutParams LP = (ConstraintLayout.LayoutParams) this.getLayoutParams();
-        width = width - LP.leftMargin;
-
-
-        boolean inFrame = true;
-        int loopCount = 0;
-        float framePoint, frameEnd, amount, identifiedPeak = 0;
-        while(inFrame){
-            loopCount++;
-            framePoint = scrollPosData.get(ScrollPoint + loopCount).getTime();
-            frameEnd = ScrollPos + width;
-
-
-            if(framePoint < frameEnd){
-                amount = scrollPosData.get(ScrollPoint + loopCount).getAmount();
-                // The Point is visible in frame
-                // find the highest peak amount
-                if(amount > identifiedPeak){
-                    identifiedPeak = amount;
-                }
-
-            }
-            else{
-
-                //check if the highest peak amount is bigger then the current screen set amount
-                if(identifiedPeak > frameMaxAmount){
-                    //resize the Graph to fit the screen
-                    //Peak is higher than screen
-                    Log.i("Grow Peak",""+identifiedPeak);
-                    resizeGraphAnimation(identifiedPeak, true);
-                }
-                else{
-                    if(identifiedPeak < frameMaxAmount){
-                        //resize the Graph to fit Screen
-                        //Peak is to small for screen
-                        //resizeGraphAnimation(identifiedPeak, false);
-                        Log.i("Schrink Peak",""+identifiedPeak);
-                        resizeGraphAnimation(identifiedPeak, false);
-                    }
-
-
-                }
-                //Point is not visible quit Loop
-                inFrame = false;
-            }
-        }
-
-    }
-
-    public float updateScroll(int ScrollPos){
-        //scrollPosData;
-        //Checks if we have reached the last Point
-        if(ScrollPoint != numOfPoints - 1){
-            if(ScrollPos > scrollPosData.get(ScrollPoint + 1).getTime()){
-                ScrollPoint = ScrollPoint + 1;
-                scrollDraw = true;
-                invalidate();
-                checkForVisibleGraph(ScrollPos);
-
-            }
-
-        }
-        //Checks if we are at the First Point
-        if(ScrollPoint != 0){
-            if(ScrollPos < scrollPosData.get(ScrollPoint).getTime()){
-                ScrollPoint = ScrollPoint - 1;
-
-                scrollDraw = true;
-                invalidate();
-                checkForVisibleGraph(ScrollPos);
-
-            }
-        }
-
-
-        firstCalendarEntry.setTime(firstEntryDate);
-        drawMonthsCalendar = firstCalendarEntry;
-        firstCalendarEntry.add(Calendar.DATE, ScrollPos / factorTime);
-        SimpleDateFormat sdf1 = new SimpleDateFormat("d MMM YY");
-        ScrollDay = sdf1.format(firstCalendarEntry.getTime());
-
-        return scrollPosData.get(ScrollPoint).getAmount();
-
-    }
-
-    View parent;
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-
-        parent = (View) getParent();
-
-
-    }
-
     public BezierView(Context context) {
         super(context);
     }
-    float x0,y0,x1,y1,x2,y2;
-    CashflowBezierPoint lastPoint;
-    private List<CashflowBezierPoint> scrollPosData = new ArrayList<>();
-    int ScrollPoint = 0;
-    int numOfPoints;
-    int factorTime = 30;
-    float frameMaxAmount = 2000;
-    float factorAmount = 0.1f;
-    float zeroMark;
-    boolean isOverview = false;
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         if(graphPosition.equals("Overview")){
-            factorTime = 5;
-            factorAmount = .05f;
+            factorTime = 15;
+            factorAmount = .1f;
             isOverview = true;
         }
 
@@ -419,7 +174,7 @@ public class BezierView extends View {
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(trendLineColorStart);
         if(isOverview){
-            paint.setStrokeWidth(4);
+            paint.setStrokeWidth(8);
             lineZeroPaint.setAlpha(250);
             lineZeroPaint.setTextSize(35);
             canvas.drawText("5,456€",this.getWidth()/2 - 50, this.getHeight() - 20, lineZeroPaint);
@@ -460,10 +215,6 @@ public class BezierView extends View {
 
         //max points 3
         int countPoints = 0;
-
-
-
-
         int lines = 0;
 
 
@@ -576,7 +327,99 @@ public class BezierView extends View {
 
 
     }
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        parent = (View) getParent();
+    }
 
+// Custom Functions
+
+    public void checkForVisibleGraph(int ScrollPos){
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+        ConstraintLayout.LayoutParams LP = (ConstraintLayout.LayoutParams) this.getLayoutParams();
+        width = width - LP.leftMargin;
+
+
+        boolean inFrame = true;
+        int loopCount = 0;
+        float framePoint, frameEnd, amount, identifiedPeak = 0;
+        while(inFrame){
+            loopCount++;
+            framePoint = scrollPosData.get(ScrollPoint + loopCount).getTime();
+            frameEnd = ScrollPos + width;
+
+
+            if(framePoint < frameEnd){
+                amount = scrollPosData.get(ScrollPoint + loopCount).getAmount();
+                // The Point is visible in frame
+                // find the highest peak amount
+                if(amount > identifiedPeak){
+                    identifiedPeak = amount;
+                }
+
+            }
+            else{
+
+                //check if the highest peak amount is bigger then the current screen set amount
+                if(identifiedPeak > frameMaxAmount){
+                    //resize the Graph to fit the screen
+                    //Peak is higher than screen
+                    Log.i("Grow Peak",""+identifiedPeak);
+                    resizeGraphAnimation(identifiedPeak, true);
+                }
+                else{
+                    if(identifiedPeak < frameMaxAmount){
+                        //resize the Graph to fit Screen
+                        //Peak is to small for screen
+                        //resizeGraphAnimation(identifiedPeak, false);
+                        Log.i("Schrink Peak",""+identifiedPeak);
+                        resizeGraphAnimation(identifiedPeak, false);
+                    }
+
+
+                }
+                //Point is not visible quit Loop
+                inFrame = false;
+            }
+        }
+
+    }
+    public float updateScroll(int ScrollPos){
+        //scrollPosData;
+        //Checks if we have reached the last Point
+        if(ScrollPoint != numOfPoints - 1){
+            if(ScrollPos > scrollPosData.get(ScrollPoint + 1).getTime()){
+                ScrollPoint = ScrollPoint + 1;
+                scrollDraw = true;
+                invalidate();
+                checkForVisibleGraph(ScrollPos);
+
+            }
+
+        }
+        //Checks if we are at the First Point
+        if(ScrollPoint != 0){
+            if(ScrollPos < scrollPosData.get(ScrollPoint).getTime()){
+                ScrollPoint = ScrollPoint - 1;
+
+                scrollDraw = true;
+                invalidate();
+                checkForVisibleGraph(ScrollPos);
+
+            }
+        }
+
+
+        firstCalendarEntry.setTime(firstEntryDate);
+        drawMonthsCalendar = firstCalendarEntry;
+        firstCalendarEntry.add(Calendar.DATE, ScrollPos / factorTime);
+        SimpleDateFormat sdf1 = new SimpleDateFormat("d MMM YY");
+        ScrollDay = sdf1.format(firstCalendarEntry.getTime());
+
+        return scrollPosData.get(ScrollPoint).getAmount();
+
+    }
     private void addMonths(Canvas canvas, String month, int x){
         lineZeroPaint.setTextSize(25f);
         lineZeroPaint.setAntiAlias(true);
@@ -587,12 +430,7 @@ public class BezierView extends View {
         canvas.drawText(month,x, (float)zeroMark + 30, lineZeroPaint);
     }
 
-
-
-    private void drawBezier(Path path, Paint paint,Canvas canvas){
-        canvas.drawPath(path, paint);
-
-    }
+    // Data return Functions
 
     private CashflowBezierPoint addScrollData(float position, float amount){
 
@@ -600,13 +438,6 @@ public class BezierView extends View {
 
         return point;
     }
-
-    int sizeInDays = 365;
-    int daysSinceFirstEntry, daysSinceFirstEntryToday;
-    public long firstEntry;
-    Calendar firstCalendarEntry = Calendar.getInstance();
-    Date firstEntryDate;
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     private JSONObject getData(){
 
         JSONObject dataDays = new JSONObject();
@@ -742,14 +573,6 @@ public class BezierView extends View {
         return dataDays;
 
     }
-
-    String curDrawMonth = "";
-    String tempDrawMonth = "";
-    SimpleDateFormat sdfMonth = new SimpleDateFormat("MMM");
-    Calendar drawMonthsCalendar = Calendar.getInstance();
-    boolean monthOnCanvas = false;
-
-
     private List<CashflowBezierPoint> calculatedData(JSONObject cashflowData, Canvas canvas) {
 
 
@@ -761,7 +584,6 @@ public class BezierView extends View {
         CashflowBezierPoint cashflowLinePoint;
         int cash = 0;
         for(int i = 0; i < graphSize; i++){
-
             if(isOverview){
                 lineZeroPaint.setStrokeWidth(1f);
                 canvas.drawLine(i * factorTime, zeroMark - 4, i * factorTime, zeroMark + 4, lineZeroPaint);
@@ -808,6 +630,164 @@ public class BezierView extends View {
         return cashflowLinePath;
     }
 
+    //Animation Functions
+
+    public void growGrafAnimation(){
+        allowVibrate = false;
+        ValueAnimator va = ValueAnimator.ofFloat(.0f, factorAmount);
+        va.setDuration(500);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                factorAmount = (float) valueAnimator.getAnimatedValue();
+                invalidate();
+            }
+        });
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                allowVibrate = true;
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        if(defaultGraphGrow){
+            va.start();
+        }
+
+    }
+    public void resizeGraphAnimation(float newMaxAmount, boolean grow){
+        defaultGraphGrow = false;
+        float newFactorAmount;
+        if(grow){
+            newFactorAmount = (factorAmount / newMaxAmount) * frameMaxAmount;
+        }
+        else{
+            newFactorAmount = (frameMaxAmount / newMaxAmount) * factorAmount;
+        }
+
+        frameMaxAmount = newMaxAmount;
+        allowVibrate = false;
+        ValueAnimator va = ValueAnimator.ofFloat(factorAmount, newFactorAmount);
+        va.setDuration(500);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                factorAmount = (float) valueAnimator.getAnimatedValue();
+                invalidate();
+            }
+        });
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                allowVibrate = true;
+                defaultGraphGrow = true;
+                maxAmountTV.setText("" + Math.round(frameMaxAmount));
+                minAmountTV.setText("- " + Math.round(frameMaxAmount));
+                lightsOutAmountChange();
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        va.start();
+
+    }
+    public void flattenGrafAnimation(){
+        allowVibrate = false;
+        ValueAnimator va = ValueAnimator.ofFloat(.1f, .0f);
+        va.setDuration(500);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                factorAmount = (float) valueAnimator.getAnimatedValue();
+                invalidate();
+            }
+        });
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                allowVibrate = true;
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        va.start();
+    }
+    public void lightsOutAmountChange(){
+
+        ValueAnimator va = ValueAnimator.ofFloat(.8f, .2f);
+        va.setDuration(1000);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float animVal = (float) valueAnimator.getAnimatedValue();
+                minAmountTV.setAlpha(animVal);
+                maxAmountTV.setAlpha(animVal);
+            }
+        });
+
+        va.start();
+    }
+
+    //Setters and Getters
+
+    public void setMaxAmountTV(TextView maxAmountTV) {
+        this.maxAmountTV = maxAmountTV;
+    }
+    public void setMinAmountTV(TextView minAmountTV) {
+        this.minAmountTV = minAmountTV;
+    }
+
+    public String getGraphPosition() {
+        return graphPosition;
+    }
+    public void setGraphPosition(String graphPosition) {
+        this.graphPosition = graphPosition;
+    }
+
+//Inner Classes
     public class CashflowBezierPoint {
         Float amount, time;
         public CashflowBezierPoint(Float amount, Float time){

@@ -83,8 +83,6 @@ public class GoalsBezierView extends View {
         linesAmountPaint.setColor(Color.WHITE);
         linesAmountPaint.setAlpha(10);
 
-
-
         //x is Time
         //y is Amount
         List<CashflowBezierPoint> cashflowPath = testData();
