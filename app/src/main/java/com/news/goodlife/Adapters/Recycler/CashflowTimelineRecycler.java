@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.news.goodlife.Data.Local.Models.CashflowModel;
+import com.news.goodlife.Data.Local.Models.Financial.FinancialEventModel;
 import com.news.goodlife.Interfaces.RecyclerViewClickListener;
 import com.news.goodlife.R;
 
@@ -24,8 +24,8 @@ public class CashflowTimelineRecycler extends RecyclerView.Adapter<CashflowTimel
 
     Context context;
     RecyclerViewClickListener mListener;
-    List<CashflowModel> cashflows;
-    CashflowModel cashflow;
+    List<FinancialEventModel> cashflows;
+    FinancialEventModel cashflow;
     SimpleDateFormat sdf = new SimpleDateFormat("d MMM YY");
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     String reformattedDate;
@@ -34,7 +34,7 @@ public class CashflowTimelineRecycler extends RecyclerView.Adapter<CashflowTimel
     String next_itemDate = "";
     int tillNextDate = 0;
 
-    public CashflowTimelineRecycler(Context context, List<CashflowModel> data, RecyclerViewClickListener listener) {
+    public CashflowTimelineRecycler(Context context, List<FinancialEventModel> data, RecyclerViewClickListener listener) {
     this.context = context;
     this.mListener = listener;
     this.cashflows = data;

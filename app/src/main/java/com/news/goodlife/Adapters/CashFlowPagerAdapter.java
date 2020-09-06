@@ -3,10 +3,9 @@ package com.news.goodlife.Adapters;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import com.news.goodlife.Data.Local.Models.CashflowModel;
+
+import com.news.goodlife.Data.Local.Models.Financial.FinancialEventModel;
 import com.news.goodlife.fragments.CashflowOnceFragment;
 import com.news.goodlife.fragments.CashflowRegularFragment;
 import com.news.goodlife.fragments.CashflowTimelineFragment;
@@ -17,7 +16,7 @@ import java.util.List;
 public class CashFlowPagerAdapter extends FragmentStatePagerAdapter {
 
     private Fragment mCurrentFragment;
-    private List<CashflowModel> allCashFlowData;
+    private List<FinancialEventModel> allCashFlowData;
     public Fragment getCurrentFragment() {
         return mCurrentFragment;
     }
@@ -25,7 +24,7 @@ public class CashFlowPagerAdapter extends FragmentStatePagerAdapter {
     // tab titles
     private String[] tabTitles = new String[]{"All", "Pay", "Income"};
 
-    public CashFlowPagerAdapter(@NonNull FragmentManager fm, int numbOfTabs, List<CashflowModel> allCashflowData) {
+    public CashFlowPagerAdapter(@NonNull FragmentManager fm, int numbOfTabs, List<FinancialEventModel> allCashflowData) {
         super(fm);
         this.numbOfTabs = numbOfTabs;
         this.allCashFlowData = allCashflowData;
@@ -63,12 +62,12 @@ public class CashFlowPagerAdapter extends FragmentStatePagerAdapter {
         return numbOfTabs;
     }
 
-    List<CashflowModel> incomingCashflow;
-    List<CashflowModel> outgoingCashflow;
+    List<FinancialEventModel> incomingCashflow;
+    List<FinancialEventModel> outgoingCashflow;
 
     private void separateCashflows(){
 
-        for(CashflowModel cashflow : allCashFlowData){
+        for(FinancialEventModel cashflow : allCashFlowData){
 
             if(cashflow.getPositive().equals("true")){
                 incomingCashflow.add(cashflow);

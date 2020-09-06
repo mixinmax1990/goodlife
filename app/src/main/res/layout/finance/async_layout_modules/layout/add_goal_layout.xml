@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="test">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Intervals"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/add_goal_eventsSwitch"
+        app:layout_constraintBottom_toBottomOf="@id/add_goal_eventsSwitch"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="20dp"
+        android:id="@+id/add_goal_interval_text"/>
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/add_goal_eventsSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="20dp"
+        android:textOff="Once"
+        android:textOn="Regular"
+        android:thumb="@drawable/custom_switch_one"
+        app:track="@drawable/custom_switch_one_track"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toEndOf="@id/add_goal_interval_text"
+        app:layout_constraintTop_toBottomOf="@id/add_goal_dealinedate_text" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Once"
+        android:paddingStart="25dp"
+        app:layout_constraintLeft_toLeftOf="@id/add_goal_eventsSwitch"
+        app:layout_constraintTop_toTopOf="@id/add_goal_eventsSwitch"
+        app:layout_constraintBottom_toBottomOf="@id/add_goal_eventsSwitch"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Regular"
+        android:paddingEnd="15dp"
+        app:layout_constraintRight_toRightOf="@id/add_goal_eventsSwitch"
+        app:layout_constraintTop_toTopOf="@id/add_goal_eventsSwitch"
+        app:layout_constraintBottom_toBottomOf="@id/add_goal_eventsSwitch"/>
+    <TextView
+        android:id="@+id/add_goal_startdate_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Today"
+        android:alpha=".3"
+        android:textAlignment="textEnd"
+        android:textColor="#FFF"
+        app:layout_constraintLeft_toLeftOf="@id/add_goal_initial_value"
+        app:layout_constraintRight_toRightOf="@id/add_goal_initial_value"
+        app:layout_constraintTop_toBottomOf="@id/add_goal_initial_value" />
+
+    <TextView
+        android:id="@+id/add_goal_dealinedate_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="24 December 2021"
+        android:alpha=".3"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textAlignment="textStart"
+        android:textColor="#FFF"
+        app:layout_constraintLeft_toLeftOf="@id/add_goal_target_value"
+        app:layout_constraintRight_toRightOf="@id/add_goal_target_value"
+        app:layout_constraintTop_toBottomOf="@id/add_goal_target_value" />
+
+    <TextView
+        android:id="@+id/add_goal_headline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="60dp"
+        android:text="Add Goal"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/add_goal_store_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="20dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/add_goal_eventsSwitch">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#1E88E5"
+            android:text="Save"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
+            android:textAlignment="center"
+            android:textSize="14sp" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/add_goal_target_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="#2F3137"
+        app:layout_constraintLeft_toRightOf="@id/add_goal_initial_value"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/add_goal_name">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:hint="Goal €"
+            android:layout_marginStart="50dp"
+            android:inputType="number"
+            android:padding="15dp"
+            android:textAlignment="center"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:src="@drawable/ic_baseline_event_24"
+            android:background="@drawable/rounded_date_btn"
+            android:padding="10dp"
+            android:alpha="1"
+            android:scaleType="center"/>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/add_goal_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="#2F3137"
+        app:layout_constraintTop_toBottomOf="@id/add_goal_headline">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:hint="Goal Name"
+            android:padding="15dp"
+            android:textAlignment="center"
+            android:textSize="14sp"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/add_goal_initial_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="#2F3137"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/add_goal_target_value"
+        app:layout_constraintTop_toBottomOf="@id/add_goal_name">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:hint="Start €"
+            android:layout_marginEnd="50dp"
+            android:inputType="number"
+            android:padding="15dp"
+            android:textAlignment="center"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_baseline_event_24"
+            android:background="@drawable/rounded_date_btn"
+            android:padding="10dp"
+            android:alpha="1"
+            android:scaleType="center"/>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

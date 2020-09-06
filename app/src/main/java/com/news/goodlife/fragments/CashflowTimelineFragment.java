@@ -9,34 +9,28 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.news.goodlife.Adapters.Recycler.CashflowTimelineRecycler;
-import com.news.goodlife.Data.Local.Controller.DatabaseController;
-import com.news.goodlife.Data.Local.Models.CashflowModel;
+import com.news.goodlife.Data.Local.Models.Financial.FinancialEventModel;
 import com.news.goodlife.Interfaces.OnClickedCashflowItemListener;
 import com.news.goodlife.Interfaces.RecyclerViewClickListener;
 import com.news.goodlife.R;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class CashflowTimelineFragment extends Fragment{
 
     RecyclerView recyclerView;
-    List<CashflowModel> cashflows;
+    List<FinancialEventModel> cashflows;
 
     //callback Interface
     OnClickedCashflowItemListener callback;
 
-    public CashflowTimelineFragment(List<CashflowModel> allCashflows) {
+    public CashflowTimelineFragment(List<FinancialEventModel> allCashflows) {
         this.cashflows = allCashflows;
     }
 

@@ -2,7 +2,6 @@ package com.news.goodlife.fragments;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,13 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CalendarView;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
-import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -32,9 +29,7 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -43,21 +38,15 @@ import com.google.android.material.tabs.TabLayout;
 import com.news.goodlife.Adapters.CashFlowPagerAdapter;
 import com.news.goodlife.CustomViews.BezierView;
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
-import com.news.goodlife.Data.Local.DatabaseHelper;
-import com.news.goodlife.Data.Local.Models.CashflowModel;
+import com.news.goodlife.Data.Local.Models.Financial.FinancialEventModel;
 import com.news.goodlife.Interfaces.OnClickedCashflowItemListener;
-import com.news.goodlife.Interfaces.RecyclerViewClickListener;
 import com.news.goodlife.R;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
@@ -593,7 +582,7 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
 
         // Model the DATA
 
-        CashflowModel model = new CashflowModel();
+        FinancialEventModel model = new FinancialEventModel();
 
         model.setValue(cashflow_value);
         model.setPositive(cashflow_positiv);
@@ -602,7 +591,7 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
         model.setDate(cashflow_date);
         model.setCreated(cashflow_created);
 
-        db.Cashflow.newCashflow(model);
+        db.FinancialEvent.newCashflow(model);
 
         toogleAnimateBlur(false);
 
@@ -614,7 +603,7 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
     public int cashflowID = 0;
     public void deleteCashflow(){
         if(cashflowID != 0){
-            db.Cashflow.deleteCashflow(""+cashflowID);
+            db.FinancialEvent.deleteCashflow(""+cashflowID);
             instantiateViewPager();
             toogleAnimateBlur(false);
             //popCardDelete.setScaleX(1f);
@@ -638,8 +627,8 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
     }
 
     public void inputCashflowInPopup(int CashflowID){
-        CashflowModel model = new CashflowModel();
-        model = db.Cashflow.getCashflow(CashflowID);
+        FinancialEventModel model = new FinancialEventModel();
+        model = db.FinancialEvent.getCashflow(CashflowID);
 
         cashflowAmount.setText(model.getValue());
         cashflowDescription.setText(model.getDescription());
@@ -681,18 +670,18 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
 
     }
 
-    List<CashflowModel> allCashflow;
+    List<FinancialEventModel> allCashflow;
 
     private void testDatabase(){
 
         //Log.i("Success", ""+db.Cashflow.newCashflow(model));
 
-        allCashflow = db.Cashflow.getAllCashflow();
+        allCashflow = db.FinancialEvent.getAllCashflow();
 
         //Log.d("list", list.get(0).value.toString());
         //Log.d("size", ""+list.size());
 
-        for(CashflowModel cashflow: allCashflow){
+        for(FinancialEventModel cashflow: allCashflow){
             Log.i("CashflowID", ""+cashflow.getId());
 
         }
@@ -746,7 +735,7 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
 
 
 
-    private void showsCharts(List<CashflowModel> allCashflow) {
+    private void showsCharts(List<FinancialEventModel> allCashflow) {
 
 
 

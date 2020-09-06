@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.transition.Fade;
 
@@ -41,11 +42,12 @@ public class FinancialFragmentOverview extends Fragment {
 
     //TODO Add this View Dynamic
     LinearLayout goalContainer;
+    LinearLayout addGoalBtn;
 
     //BlurView
     BlurView blurView;
     ViewGroup blurContainer;
-    ConstraintLayout blurConstraintContainer;
+    Bundle savedInstanceState;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,12 +57,12 @@ public class FinancialFragmentOverview extends Fragment {
         financialFragment = new FinancialFragment();
         financeContainer = root.findViewById(R.id.finance_container);
         goalContainer = root.findViewById(R.id.goal1container);
+        addGoalBtn = root.findViewById(R.id.addGoal);
         doughnutChartView = root.findViewById(R.id.goal_progress_doughnut);
 
         blurView = root.findViewById(R.id.finance_main_blurview);
         startBlurring(20);
-        blurContainer = root.findViewById(R.id.blurContent);
-        blurConstraintContainer = (ConstraintLayout) blurContainer;
+        this.savedInstanceState = savedInstanceState;
 
 
 
@@ -107,7 +109,7 @@ public class FinancialFragmentOverview extends Fragment {
                 .setHasFixedTransformationMatrix(true);
     }
 
-    public void toggleAnimateBlur(final boolean blur, final float clickedProgress){
+    public void toggleAnimateBlur(final boolean blur){
 
 
         float from, to;
@@ -140,13 +142,7 @@ public class FinancialFragmentOverview extends Fragment {
         va.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
-                if(!blur){
-                    doughnutChartView.animateDoughnutShrink();
-                }
-                {
-                    doughnutChartView.setProgress((int)clickedProgress);
-                    doughnutChartView.animateDoughnutGrow();
-                }
+
 
             }
 
@@ -172,12 +168,76 @@ public class FinancialFragmentOverview extends Fragment {
         va.start();
     }
 
+    String blurChild = "";
+    private void clearBlurView(){
+        switch(blurChild){
+            case "blur_module":
+                doughnutChartView.animateDoughnutShrink();
+                break;
+            case "add_goal_module":
+                break;
+            default:
+                break;
+        }
+
+
+    }
+
     private void listeners(){
         goalContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GoalDrawView clickedV = v.findViewWithTag("goalSimple");
-                toggleAnimateBlur(true, clickedV.getGoalProgress());
+
+                final GoalDrawView clickedV = v.findViewWithTag("goalSimple");
+
+                AsyncLayoutInflater asyncLayoutInflater = new AsyncLayoutInflater(getContext());
+
+                asyncLayoutInflater.inflate(R.layout.goal_detail_layout, blurView, new AsyncLayoutInflater.OnInflateFinishedListener() {
+                    @Override
+                    public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
+                        // Layout Asynchronously Inflated
+                        Log.i("ASYNCLayoutInflated", "True");
+                        assert parent != null;
+                        parent.removeAllViews();
+                        parent.addView(view);
+                        //add Blur Child
+                        blurChild = "goal_module";
+
+                        doughnutChartView = parent.findViewById(R.id.goal_progress_doughnut);
+                        doughnutChartView.setProgress((int)clickedV.getGoalProgress());
+                        doughnutChartView.animateDoughnutGrow();
+
+                        onViewCreated(view, savedInstanceState);
+                    }
+                });
+
+                toggleAnimateBlur(true);
+            }
+        });
+
+        addGoalBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AsyncLayoutInflater asyncLayoutInflater = new AsyncLayoutInflater(getContext());
+
+                asyncLayoutInflater.inflate(R.layout.add_goal_layout, blurView, new AsyncLayoutInflater.OnInflateFinishedListener() {
+                    @Override
+                    public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
+                        // Layout Asynchronously Inflated
+                        Log.i("ASYNCLayoutInflated", "True");
+
+                        assert parent != null;
+                        parent.removeAllViews();
+                        parent.addView(view);
+
+                        //add Blur Child
+                        blurChild = "add_goal_module";
+
+                        onViewCreated(view, savedInstanceState);
+                    }
+                });
+
+                toggleAnimateBlur(true);
             }
         });
 
@@ -197,7 +257,8 @@ public class FinancialFragmentOverview extends Fragment {
         blurView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleAnimateBlur(false, 0f);
+                toggleAnimateBlur(false);
+                clearBlurView();
             }
 
         });

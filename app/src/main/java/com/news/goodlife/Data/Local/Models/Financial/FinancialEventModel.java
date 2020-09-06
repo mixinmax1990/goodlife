@@ -1,6 +1,6 @@
-package com.news.goodlife.Data.Local.Models;
+package com.news.goodlife.Data.Local.Models.Financial;
 
-public class CashflowModel {
+public class FinancialEventModel {
 
     public String id;
     public String value;
@@ -10,7 +10,7 @@ public class CashflowModel {
     public String date;
     public String created;
 
-    public CashflowModel() {
+    public FinancialEventModel() {
     }
 
     public String getValue() {

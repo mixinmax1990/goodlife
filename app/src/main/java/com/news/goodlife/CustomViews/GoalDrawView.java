@@ -50,7 +50,7 @@ public class GoalDrawView  extends ConstraintLayout {
             progressPaint.setColor(Color.parseColor("#26282C"));
         }
         else{
-            progressPaint.setColor(Color.parseColor("#35A753"));
+            progressPaint.setColor(Color.parseColor("#57D679"));
         }
         eventRadius = 15;
         progressViewWidth = (int)(((float)this.getWidth()/100) * goalProgress);

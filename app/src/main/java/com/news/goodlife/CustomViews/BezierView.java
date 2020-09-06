@@ -7,45 +7,31 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
-import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PointF;
-import android.graphics.Shader;
 import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
-import com.news.goodlife.Data.Local.Models.CashflowModel;
+import com.news.goodlife.Data.Local.Models.Financial.FinancialEventModel;
 import com.news.goodlife.R;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.VIBRATOR_SERVICE;
@@ -441,10 +427,10 @@ public class BezierView extends View {
     private JSONObject getData(){
 
         JSONObject dataDays = new JSONObject();
-        List<CashflowModel> data = db.Cashflow.getAllCashflow();
+        List<FinancialEventModel> data = db.FinancialEvent.getAllCashflow();
 
         boolean first = true;
-        for(CashflowModel cashflow: data){
+        for(FinancialEventModel cashflow: data){
 
             if(first){
                 String dateStr = cashflow.getDate();
