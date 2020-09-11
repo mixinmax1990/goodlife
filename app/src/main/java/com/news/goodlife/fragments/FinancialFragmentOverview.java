@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.transition.Fade;
 
@@ -16,7 +17,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -232,6 +235,55 @@ public class FinancialFragmentOverview extends Fragment {
 
                         //add Blur Child
                         blurChild = "add_goal_module";
+
+                        TextView startCalendar, goalCalendar;
+                        final CardView extraWindow;
+                        startCalendar = parent.findViewById(R.id.add_goal_startdate_text);
+                        goalCalendar = parent.findViewById(R.id.add_goal_dealinedate_text);
+                        extraWindow = parent.findViewById(R.id.extraWindow);
+
+                        startCalendar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                Log.i("Clicked", "True");
+                                AsyncLayoutInflater asyncLayoutInflater = new AsyncLayoutInflater(getContext());
+
+                                asyncLayoutInflater.inflate(R.layout.calendar_picker_layout, extraWindow, new AsyncLayoutInflater.OnInflateFinishedListener() {
+                                    @Override
+                                    public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
+                                        // Layout Asynchronously Inflated
+                                        TextView calendarTitle = parent.findViewById(R.id.calendar_module_title);
+                                        calendarTitle.setText("Start Date");
+                                        extraWindow.setVisibility(View.VISIBLE);
+
+
+                                        onViewCreated(view, savedInstanceState);
+                                    }
+                                });
+
+                            }
+                        });
+
+                        goalCalendar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AsyncLayoutInflater asyncLayoutInflater = new AsyncLayoutInflater(getContext());
+
+                                asyncLayoutInflater.inflate(R.layout.calendar_picker_layout, extraWindow, new AsyncLayoutInflater.OnInflateFinishedListener() {
+                                    @Override
+                                    public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
+                                        // Layout Asynchronously Inflated
+
+
+                                        onViewCreated(view, savedInstanceState);
+                                    }
+                                });
+
+                            }
+                        });
+
+
 
                         onViewCreated(view, savedInstanceState);
                     }
