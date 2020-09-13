@@ -37,14 +37,17 @@ import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.news.goodlife.Adapters.CashFlowPagerAdapter;
 import com.news.goodlife.CustomViews.BezierView;
+import com.news.goodlife.CustomViews.CustomIcons.SubSectionIcon;
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
 import com.news.goodlife.Data.Local.Models.Financial.FinancialEventModel;
 import com.news.goodlife.Interfaces.OnClickedCashflowItemListener;
 import com.news.goodlife.R;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -65,6 +68,14 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
     ConstraintLayout popCashflowContainer;
     TextView timelineCashAmount;
     TextView timelineCashDate;
+
+
+    //Account Tabs
+    //TODO For testing Purposes (these will have to be created dynamically)
+    SubSectionIcon account1, account2, account3;
+    TextView accountName1, accountName2, accountName3;
+    List<SubSectionIcon> tabList = new ArrayList<>();
+    List<TextView> tabNameList = new ArrayList<>();
 
     //Constraints Animations;
     ConstraintSet baseConstraint = new ConstraintSet();
@@ -117,6 +128,22 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
         mainCashflowGraph.setMinAmountTV(minAmount);
         timelineCashAmount = root.findViewById(R.id.chartresult_amount);
         timelineCashDate = root.findViewById(R.id.chartresult_date);
+
+        //Tab Sections
+        account1 = root.findViewById(R.id.account1tab);
+        account2 = root.findViewById(R.id.account2tab);
+        account3 = root.findViewById(R.id.account3tab);
+        tabList.add(account1);
+        tabList.add(account2);
+        tabList.add(account3);
+
+        accountName1 = root.findViewById(R.id.account1name);
+        accountName2 = root.findViewById(R.id.account2name);
+        accountName3 = root.findViewById(R.id.account3name);
+        tabNameList.add(accountName1);
+        tabNameList.add(accountName2);
+        tabNameList.add(accountName3);
+
 
         //Cashflow Popup
         costSelector = root.findViewById(R.id.selectorCost);
@@ -196,9 +223,39 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
 
         showsCharts(allCashflow);
     }
+    private void unselectAllTabs(){
+        int count = 0;
+        for(final SubSectionIcon tab : tabList){
+            tab.unSelectTab();
+            TextView name = tabNameList.get(count);
+            name.setAlpha(.2f);
+            count++;
+        }
+    }
 
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     private void listeners(){
+
+        for(final SubSectionIcon tab: tabList){
+            tab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    unselectAllTabs();
+                    tab.selectTab();
+
+                    //Select TabName
+                    for(TextView tabName : tabNameList){
+                        if(tabName.getTag() == tab.getTag()){
+                            tabName.setAlpha(1f);
+
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+
+
         ViewTreeObserver vto = mainCashflowGraph.getViewTreeObserver();
         vto.addOnGlobalLayoutListener (new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override

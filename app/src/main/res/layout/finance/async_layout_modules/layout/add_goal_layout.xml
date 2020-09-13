@@ -34,6 +34,7 @@
         android:text="Interval"
         android:paddingEnd="15dp"
         android:textSize="13sp"
+        android:alpha=".3"
         app:layout_constraintRight_toRightOf="@id/add_goal_eventsSwitch"
         app:layout_constraintTop_toTopOf="@id/add_goal_eventsSwitch"
         app:layout_constraintBottom_toBottomOf="@id/add_goal_eventsSwitch"/>
@@ -59,7 +60,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:text="Set Start Date"
-        android:alpha="1"
+        android:alpha=".5"
         android:textAlignment="center"
         android:textColor="#fff"
         android:textSize="13sp"
@@ -72,7 +73,7 @@
         android:id="@+id/add_goal_dealinedate_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:alpha="1"
+        android:alpha=".5"
         android:padding="10dp"
         android:text="Set Goal Date"
         android:textAlignment="center"
@@ -217,19 +218,16 @@
         android:alpha="1"
         android:scaleType="center"/>
 
-    <androidx.cardview.widget.CardView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/extraWindow"
+        android:background="@android:color/transparent"
         android:visibility="gone"
-        app:cardCornerRadius="10dp"
-        android:layout_margin="20dp"
-        app:cardBackgroundColor="#2F3137"
+        android:layout_margin="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent">
-        <include layout="@layout/calendar_picker_layout"/>
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

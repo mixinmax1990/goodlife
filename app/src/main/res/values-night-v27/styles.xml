@@ -15,11 +15,10 @@
         <item name="textColorPrimary">@color/white</item>
         <item name="textColorPrimaryDisabled">@color/disabledWhite</item>
         <item name="colorControlHighlight">#2C2C2C</item>
-        <item name="android:navigationBarColor">@color/backgroundColorSecodaryNight</item>
+        <item name="android:navigationBarColor">#26272B</item>
         <item name="android:windowLightNavigationBar">false</item>
         <item name="financialGraphTrendline">@color/financialTrendLineColorNight</item>
         <item name="financialGraphTrendlineGradEnd">@color/financialTrendLineColoGradEnd</item>
-
         <item name="android:windowContentTransitions">true</item>
     </style>
 </resources>

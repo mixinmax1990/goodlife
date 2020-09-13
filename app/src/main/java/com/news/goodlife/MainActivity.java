@@ -15,7 +15,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
+import com.news.goodlife.CustomViews.CustomIcons.HubIcon;
 import com.news.goodlife.Interfaces.OnClickedCashflowItemListener;
 import com.news.goodlife.fragments.CashflowTimelineFragment;
 import com.news.goodlife.fragments.FinancialFragment;
@@ -26,10 +28,12 @@ import com.news.goodlife.fragments.PhysicalFragment;
 
 public class MainActivity extends AppCompatActivity implements OnClickedCashflowItemListener {
 
-    ImageButton btn_health;
-    ImageButton btn_physical;
-    ImageButton btn_mental;
-    ImageButton btn_financial;
+    String appName = "My Finances";
+    HubIcon btn_health;
+    TextView btn_physical;
+    TextView btn_mental;
+    TextView btn_financial;
+    TextView app_titleTV;
     FrameLayout fragment_container;
 
     private Fragment fragment;
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
         btn_financial = findViewById(R.id.button_money);
         fragment_container = findViewById(R.id.fragment_container);
         statusbarspace = findViewById(R.id.statusspace);
+        app_titleTV = findViewById(R.id.app_title);
 
         DarkMode = true;
 
@@ -65,7 +70,8 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
             @Override
             public void onClick(View view) {
                 selectedFragment = 1;
-                changeSelectedColor(btn_health);
+                btn_health.animateSpin();
+                changeSelectedColor();
 
             }
         });
@@ -74,7 +80,8 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
             @Override
             public void onClick(View view) {
                 selectedFragment = 2;
-                changeSelectedColor(btn_physical);
+                changeSelectedColor();
+
             }
         });
 
@@ -82,7 +89,8 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
             @Override
             public void onClick(View view) {
                 selectedFragment = 3;
-                changeSelectedColor(btn_mental);
+                changeSelectedColor();
+
             }
         });
 
@@ -91,30 +99,31 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
             @Override
             public void onClick(View view) {
                 selectedFragment = 4;
-                changeSelectedColor(btn_financial);
+                changeSelectedColor();
+
             }
         });
 
     }
 
 
-    private void changeSelectedColor(ImageButton btn){
+    private void changeSelectedColor(){
         resetButtonTint();
         switch(selectedFragment){
             case 1:
-                btn.setImageTintList(getResources().getColorStateList(R.color.button_healthNight));
+                //btn.setImageTintList(getResources().getColorStateList(R.color.button_healthNight));
                 Log.i("Selected", ""+selectedFragment);
                 break;
             case 2:
-                btn.setImageTintList(getResources().getColorStateList(R.color.button_bodyNight));
+                //btn.setImageTintList(getResources().getColorStateList(R.color.button_bodyNight));
                 Log.i("Selected", ""+selectedFragment);
                 break;
             case 3:
-                btn.setImageTintList(getResources().getColorStateList(R.color.button_mindNight));
+                //btn.setImageTintList(getResources().getColorStateList(R.color.button_mindNight));
                 Log.i("Selected", ""+selectedFragment);
                 break;
             case 4:
-                btn.setImageTintList(getResources().getColorStateList(R.color.button_moneyNight));
+                //btn.setImageTintList(getResources().getColorStateList(R.color.button_moneyNight));
                 Log.i("Selected", ""+selectedFragment);
                 break;
         }
@@ -122,10 +131,7 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
     }
 
     private void resetButtonTint(){
-        btn_health.setImageTintList(getResources().getColorStateList(R.color.white));
-        btn_physical.setImageTintList(getResources().getColorStateList(R.color.white));
-        btn_mental.setImageTintList(getResources().getColorStateList(R.color.white));
-        btn_financial.setImageTintList(getResources().getColorStateList(R.color.white));
+
     }
 
     public void transparentStatus() {
@@ -148,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
 
     private HealthFragment healthFragment;
     private PhysicalFragment physicalFragment;
-    private MentalFragment mentalFragment;
     private FinancialFragment financialFragment;
     private FinancialFragmentOverview financialFragmentOverview;
 
@@ -159,21 +164,29 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
             case 1:
                 healthFragment = new HealthFragment();
                 ft.replace(fragment_container.getId(), healthFragment);
+                app_titleTV.setText("My Hub");
+                app_titleTV.setVisibility(View.GONE);
                 break;
             case 2:
-                physicalFragment = new PhysicalFragment();
-                ft.replace(fragment_container.getId(), physicalFragment);
+                financialFragmentOverview = new FinancialFragmentOverview(this.getBaseContext());
+                ft.replace(fragment_container.getId(), financialFragmentOverview);
+                app_titleTV.setText(appName);
+                app_titleTV.setVisibility(View.VISIBLE);
                 break;
             case 3:
-                mentalFragment = new MentalFragment();
-                ft.replace(fragment_container.getId(), mentalFragment);
+                financialFragment = new FinancialFragment();
+                ft.replace(fragment_container.getId(), financialFragment);
+                app_titleTV.setText(appName);
+                app_titleTV.setVisibility(View.VISIBLE);
                 break;
             case 4:
-                financialFragmentOverview = new FinancialFragmentOverview();
-                ft.replace(fragment_container.getId(), financialFragmentOverview);
+                physicalFragment = new PhysicalFragment();
+                ft.replace(fragment_container.getId(), physicalFragment);
+                app_titleTV.setText(appName);
+                app_titleTV.setVisibility(View.VISIBLE);
                 break;
         }
-
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
     }
 
@@ -190,7 +203,6 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
         statusbarspace = findViewById(R.id.statusspace);
         statusbarspace.setVisibility(View.VISIBLE);
         statusBarHeight = getStatusBarHeight();
-
         ConstraintLayout.LayoutParams sbsLP = (ConstraintLayout.LayoutParams) statusbarspace.getLayoutParams();
         sbsLP.height = statusBarHeight;
         statusbarspace.setLayoutParams(sbsLP);

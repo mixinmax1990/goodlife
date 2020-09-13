@@ -125,7 +125,6 @@ public class BezierView extends View {
         if (foo_cs != null) {
             // Do something with foo_cs.toString()
             setGraphPosition(foo_cs.toString());
-            Log.i("Custom Attribute",""+graphPosition);
         }
         arr.recycle();  // Do this when done.
     }
@@ -351,7 +350,6 @@ public class BezierView extends View {
                 if(identifiedPeak > frameMaxAmount){
                     //resize the Graph to fit the screen
                     //Peak is higher than screen
-                    Log.i("Grow Peak",""+identifiedPeak);
                     resizeGraphAnimation(identifiedPeak, true);
                 }
                 else{
@@ -359,7 +357,6 @@ public class BezierView extends View {
                         //resize the Graph to fit Screen
                         //Peak is to small for screen
                         //resizeGraphAnimation(identifiedPeak, false);
-                        Log.i("Schrink Peak",""+identifiedPeak);
                         resizeGraphAnimation(identifiedPeak, false);
                     }
 
@@ -409,7 +406,6 @@ public class BezierView extends View {
     private void addMonths(Canvas canvas, String month, int x){
         lineZeroPaint.setTextSize(25f);
         lineZeroPaint.setAntiAlias(true);
-        Log.i("ZeroMark", ""+zeroMark);
         if(isOverview){
             lineZeroPaint.setAlpha(20);
         }

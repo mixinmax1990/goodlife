@@ -2,6 +2,7 @@ package com.news.goodlife.fragments;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.transition.Fade;
 
 import android.transition.TransitionManager;
@@ -17,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +32,8 @@ import com.news.goodlife.CustomViews.BezierView;
 import com.news.goodlife.CustomViews.DoughnutChartView;
 import com.news.goodlife.CustomViews.GoalChartView;
 import com.news.goodlife.CustomViews.GoalDrawView;
+import com.news.goodlife.Modules.AddGoal;
+import com.news.goodlife.Modules.CalendarPicker;
 import com.news.goodlife.R;
 import com.news.goodlife.Transitions.DetailsTransition;
 
@@ -42,6 +47,7 @@ public class FinancialFragmentOverview extends Fragment {
     DoughnutChartView doughnutChartView;
     FinancialFragment financialFragment;
     ViewGroup financeContainer;
+    FragmentTransaction ft;
 
     //TODO Add this View Dynamic
     LinearLayout goalContainer;
@@ -50,6 +56,7 @@ public class FinancialFragmentOverview extends Fragment {
     //BlurView
     BlurView blurView;
     ViewGroup blurContainer;
+
     Bundle savedInstanceState;
     @Nullable
     @Override
@@ -62,7 +69,6 @@ public class FinancialFragmentOverview extends Fragment {
         goalContainer = root.findViewById(R.id.goal1container);
         addGoalBtn = root.findViewById(R.id.addGoal);
         doughnutChartView = root.findViewById(R.id.goal_progress_doughnut);
-
         blurView = root.findViewById(R.id.finance_main_blurview);
         startBlurring(20);
         this.savedInstanceState = savedInstanceState;
@@ -85,6 +91,11 @@ public class FinancialFragmentOverview extends Fragment {
 
 
         return root;
+    }
+
+    Context context;
+    public FinancialFragmentOverview(Context context) {
+        this.context = context;
     }
 
     @Override
@@ -113,7 +124,6 @@ public class FinancialFragmentOverview extends Fragment {
     }
 
     public void toggleAnimateBlur(final boolean blur){
-
 
         float from, to;
         if(blur){
@@ -169,6 +179,7 @@ public class FinancialFragmentOverview extends Fragment {
         });
 
         va.start();
+
     }
 
     String blurChild = "";
@@ -199,7 +210,6 @@ public class FinancialFragmentOverview extends Fragment {
                     @Override
                     public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
                         // Layout Asynchronously Inflated
-                        Log.i("ASYNCLayoutInflated", "True");
                         assert parent != null;
                         parent.removeAllViews();
                         parent.addView(view);
@@ -221,73 +231,14 @@ public class FinancialFragmentOverview extends Fragment {
         addGoalBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AsyncLayoutInflater asyncLayoutInflater = new AsyncLayoutInflater(getContext());
 
-                asyncLayoutInflater.inflate(R.layout.add_goal_layout, blurView, new AsyncLayoutInflater.OnInflateFinishedListener() {
-                    @Override
-                    public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
-                        // Layout Asynchronously Inflated
-                        Log.i("ASYNCLayoutInflated", "True");
+                AddGoal addGoalFragment = new AddGoal();
 
-                        assert parent != null;
-                        parent.removeAllViews();
-                        parent.addView(view);
-
-                        //add Blur Child
-                        blurChild = "add_goal_module";
-
-                        TextView startCalendar, goalCalendar;
-                        final CardView extraWindow;
-                        startCalendar = parent.findViewById(R.id.add_goal_startdate_text);
-                        goalCalendar = parent.findViewById(R.id.add_goal_dealinedate_text);
-                        extraWindow = parent.findViewById(R.id.extraWindow);
-
-                        startCalendar.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                Log.i("Clicked", "True");
-                                AsyncLayoutInflater asyncLayoutInflater = new AsyncLayoutInflater(getContext());
-
-                                asyncLayoutInflater.inflate(R.layout.calendar_picker_layout, extraWindow, new AsyncLayoutInflater.OnInflateFinishedListener() {
-                                    @Override
-                                    public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
-                                        // Layout Asynchronously Inflated
-                                        TextView calendarTitle = parent.findViewById(R.id.calendar_module_title);
-                                        calendarTitle.setText("Start Date");
-                                        extraWindow.setVisibility(View.VISIBLE);
-
-
-                                        onViewCreated(view, savedInstanceState);
-                                    }
-                                });
-
-                            }
-                        });
-
-                        goalCalendar.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                AsyncLayoutInflater asyncLayoutInflater = new AsyncLayoutInflater(getContext());
-
-                                asyncLayoutInflater.inflate(R.layout.calendar_picker_layout, extraWindow, new AsyncLayoutInflater.OnInflateFinishedListener() {
-                                    @Override
-                                    public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
-                                        // Layout Asynchronously Inflated
-
-
-                                        onViewCreated(view, savedInstanceState);
-                                    }
-                                });
-
-                            }
-                        });
-
-
-
-                        onViewCreated(view, savedInstanceState);
-                    }
-                });
+                ft = getChildFragmentManager().beginTransaction();
+                ft.replace(blurView.getId(), addGoalFragment);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                blurChild = "add_goal_module";
+                ft.commit();
 
                 toggleAnimateBlur(true);
             }
@@ -309,8 +260,8 @@ public class FinancialFragmentOverview extends Fragment {
         blurView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleAnimateBlur(false);
-                clearBlurView();
+                //toggleAnimateBlur(false);
+                //clearBlurView();
             }
 
         });

@@ -1,4 +1,6 @@
 package com.news.goodlife.CustomViews;
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -7,6 +9,8 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
+
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.news.goodlife.R;
@@ -20,12 +24,13 @@ public class GoalDrawView  extends ConstraintLayout {
     int eventRadius;
 
 
-    float goalProgress;
+    float goalProgress, animatedGoal;
     String showDetails;
     String startMoney, endMoney;
     int progressViewWidth;
     Context context;
     AttributeSet attrs;
+    boolean animated = false;
 
 
 
@@ -37,9 +42,57 @@ public class GoalDrawView  extends ConstraintLayout {
 
         setAttributes(attrs);
         initiatePaints();
+
+        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Log.i("LayoutVisible", "true");
+
+                ValueAnimator va = ValueAnimator.ofInt(0, (int)goalProgress);
+                va.setDuration(500);
+                va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        animatedGoal = (int) valueAnimator.getAnimatedValue();
+                        invalidate();
+                    }
+                });
+                va.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        animated = true;
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
+                });
+
+                if(!animated){
+                    va.start();
+                }
+
+            }
+        });
     }
     public GoalDrawView(Context context) {
         super(context);
+    }
+
+    @Override
+    public ViewTreeObserver getViewTreeObserver() {
+        return super.getViewTreeObserver();
     }
 
     @Override
@@ -53,7 +106,7 @@ public class GoalDrawView  extends ConstraintLayout {
             progressPaint.setColor(Color.parseColor("#57D679"));
         }
         eventRadius = 15;
-        progressViewWidth = (int)(((float)this.getWidth()/100) * goalProgress);
+        progressViewWidth = (int)(((float)this.getWidth()/100) * animatedGoal);
 
         canvas.drawRect(0, 0,progressViewWidth , this.getHeight(), progressPaint);
 
@@ -129,6 +182,8 @@ public class GoalDrawView  extends ConstraintLayout {
         eventTextPaint.setAntiAlias(true);
         eventTextPaint.setTextSize(10);
     }
+
+
 
     public float getGoalProgress() {
         return goalProgress;

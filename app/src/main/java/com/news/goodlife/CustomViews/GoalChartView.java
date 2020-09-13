@@ -184,7 +184,6 @@ public class GoalChartView extends ConstraintLayout {
         int events = 5;
         int widthE = this.getWidth() / events;
         int heightE = this.getHeight() / events;
-        Log.i("EP", ""+heightE);
         while(x < events){
 
             GoalChartView.GoalEventPoint eventPoint = new GoalChartView.GoalEventPoint((float)this.getHeight() - (heightE * x) , (float)widthE * x);

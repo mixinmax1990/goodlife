@@ -22,7 +22,8 @@
         android:paddingRight="50dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:textSize="34sp"/>
+        android:textSize="34sp"
+        android:visibility="gone"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -124,10 +125,100 @@
         app:layout_constraintBottom_toTopOf="@id/cashflow_data_card"/>
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="400dp"
         android:id="@+id/cashflow_data_card_inplace"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/accounts_overview"
         />
+    <FrameLayout
+        android:id="@+id/accounts_overview"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="#0A000000"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <com.news.goodlife.CustomViews.CustomIcons.SubSectionIcon
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/accounts_overview"
+        app:layout_constraintBottom_toBottomOf="@id/accounts_overview"
+        app:layout_constraintRight_toLeftOf="@id/account1name"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="60dp"
+        android:paddingBottom="2dp"
+        android:paddingStart="20dp"
+        android:tag="tab3"
+        android:outlineProvider="none"
+        android:id="@+id/account3tab"/>
+    <TextView
+        android:id="@+id/account3name"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:textSize="12sp"
+        android:text="+ Add Account"
+        android:gravity="center_vertical"
+        android:outlineProvider="none"
+        android:tag="tab3"
+        android:paddingBottom="2dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toTopOf="@id/account3tab"
+        app:layout_constraintBottom_toBottomOf="@id/account3tab"
+        app:layout_constraintStart_toStartOf="@id/account3tab"
+        app:layout_constraintEnd_toEndOf="@id/account3tab"/>
+
+    <com.news.goodlife.CustomViews.CustomIcons.SubSectionIcon
+        android:layout_width="120dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/accounts_overview"
+        app:layout_constraintBottom_toBottomOf="@id/accounts_overview"
+        app:layout_constraintRight_toLeftOf="@id/account1name"
+        android:layout_marginBottom="15dp"
+        android:tag="tab2"
+        android:outlineProvider="none"
+        android:paddingBottom="2dp"
+        android:paddingStart="20dp"
+        android:id="@+id/account2tab"/>
+
+    <TextView
+        android:id="@+id/account2name"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textSize="12sp"
+        android:outlineProvider="none"
+        android:text="Account Two"
+        android:gravity="center"
+        android:tag="tab2"
+        android:paddingBottom="2dp"
+        app:layout_constraintTop_toTopOf="@id/account2tab"
+        app:layout_constraintBottom_toBottomOf="@id/account2tab"
+        app:layout_constraintStart_toStartOf="@id/account2tab"
+        app:layout_constraintEnd_toEndOf="@id/account2tab"/>
+    <com.news.goodlife.CustomViews.CustomIcons.SubSectionIcon
+        android:layout_width="120dp"
+        android:layout_height="0dp"
+        android:tag="tab1"
+        app:layout_constraintTop_toTopOf="@id/accounts_overview"
+        app:layout_constraintBottom_toBottomOf="@id/accounts_overview"
+        app:layout_constraintRight_toRightOf="@id/accounts_overview"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="5dp"
+        android:paddingStart="20dp"
+        android:outlineProvider="none"
+        android:id="@+id/account1tab"/>
+    <TextView
+        android:id="@+id/account1name"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textSize="12sp"
+        android:text="Account One"
+        android:outlineProvider="none"
+        android:tag="tab1"
+        android:gravity="center"
+        android:paddingBottom="2dp"
+        app:layout_constraintTop_toTopOf="@id/account1tab"
+        app:layout_constraintBottom_toBottomOf="@id/account1tab"
+        app:layout_constraintStart_toStartOf="@id/account1tab"
+        app:layout_constraintEnd_toEndOf="@id/account1tab"/>
     <androidx.cardview.widget.CardView
         android:id="@+id/cashflow_data_card"
         android:layout_width="0dp"
@@ -135,9 +226,8 @@
         app:layout_constraintTop_toTopOf="@id/cashflow_data_card_inplace"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="25dp"
+        app:layout_constraintBottom_toBottomOf="@id/cashflow_data_card_inplace"
+        app:cardCornerRadius="0dp"
         android:elevation="50dp"
         android:alpha="1"
         app:cardBackgroundColor="?attr/backgroundThirdly"
@@ -153,7 +243,7 @@
         app:layout_constraintTop_toTopOf="@id/cashflow_data_card"
         app:layout_constraintBottom_toBottomOf="@id/cashflow_data_card"
         android:layout_marginStart="8dp"
-        app:cardCornerRadius="25dp"
+        app:cardCornerRadius="27dp"
         app:cardBackgroundColor="?attr/backgroundThirdly"
         app:cardElevation="0dp"
         android:layout_marginRight="8dp"
@@ -172,6 +262,7 @@
         android:tint="@color/black"
         android:backgroundTint="@color/grey1"
         app:borderWidth="0dp"
+        android:alpha=".03"
         android:layout_margin="5dp"
         app:layout_constraintBottom_toBottomOf="@id/cashflow_data_card"
         app:layout_constraintLeft_toLeftOf="@id/cashflow_data_card"
@@ -192,6 +283,7 @@
         app:maxImageSize="36dp"
         app:cardCornerRadius="40dp"
         android:layout_margin="5dp"
+        android:alpha=".03"
         app:layout_constraintBottom_toBottomOf="@id/cashflow_data_card"
         app:layout_constraintRight_toRightOf="@id/cashflow_data_card"
         />

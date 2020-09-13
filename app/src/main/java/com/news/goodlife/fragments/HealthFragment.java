@@ -10,9 +10,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.news.goodlife.CustomViews.CustomIcons.HubIcon;
 import com.news.goodlife.R;
 
 public class HealthFragment extends Fragment {
+
+    HubIcon spinIcon;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

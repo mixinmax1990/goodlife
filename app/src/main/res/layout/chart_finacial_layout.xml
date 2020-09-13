@@ -34,7 +34,8 @@
                 app:layout_constraintLeft_toLeftOf="@id/bezier"
                 app:layout_constraintTop_toTopOf="@id/bezier"
                 app:layout_constraintRight_toRightOf="@id/bezier"
-                app:layout_constraintBottom_toBottomOf="@id/bezier"/>
+                app:layout_constraintBottom_toBottomOf="@id/bezier"
+                android:visibility="gone"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </HorizontalScrollView>
 
