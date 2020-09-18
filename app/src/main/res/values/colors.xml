@@ -7,7 +7,7 @@
     <color name="backgroundColor">#FFFFFF</color>
     <color name="backgroundThirdlyNight">#24262B</color>
     <color name="backgroundThirdly">#0D000000</color>
-    <color name="backgroundColorSecodaryNight">#202125</color>
+    <color name="backgroundColorSecodaryNight">#1C1D20</color>
     <color name="backgroundColorSecodary">#EDEDED</color>
     <color name="rippleSecodary">#CACACA</color>
     <color name="rippleSecodaryNight">#000000</color>
@@ -34,5 +34,5 @@
     <color name="financialTrendLineColoGradEnd">#00DBAF</color>
     <color name="financialTrendLineColorNeg">#ff6859</color>
     <color name="testCOlors">#57D679</color>
-    <color name="testCOlors2">#212327</color>
+    <color name="testCOlors2">#212225</color>
 </resources>

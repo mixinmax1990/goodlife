@@ -69,7 +69,7 @@
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="450dp"
             app:cardBackgroundColor="#03FFFFFF"
             app:cardCornerRadius="10dp"
             android:layout_marginStart="10dp"
@@ -86,6 +86,11 @@
                 android:layout_marginTop="10sp"
                 android:textSize="14sp"
                 android:alpha=".7"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/charts"
+                android:scaleType="fitCenter"/>
         </androidx.cardview.widget.CardView>
 
     </com.google.android.flexbox.FlexboxLayout>

@@ -37,11 +37,9 @@ public class HubIcon extends androidx.appcompat.widget.AppCompatTextView {
 
         innercircle = new Paint();
         innercircle.setStyle(Paint.Style.FILL);
-        innercircle.setAntiAlias(true);
-        innercircle.setColor(Color.parseColor("#26272B"));
+        innercircle.setColor(Color.parseColor("#1C1D20"));
         innercircle.setAlpha(255);
-
-
+        innercircle.setAntiAlias(true);
 
         setWillNotDraw(false);
     }
@@ -54,12 +52,11 @@ public class HubIcon extends androidx.appcompat.widget.AppCompatTextView {
     @Override
     protected void onDraw(Canvas canvas) {
 
-
         int size = (getHeight() - 10) - stroke;
 
         RectF rectF = new RectF(getWidth()/2 - size / 2, getHeight()/2 - size / 2, getWidth()/2 + size / 2, getHeight()/2 + size / 2);
 
-        canvas.drawCircle(getWidth()/2, getHeight()/2, getWidth() / 2 - 40, innercircle);
+        //canvas.drawCircle(getWidth()/2, getHeight()/2, getWidth() / 2 - 40, innercircle);
 
         test.setStrokeWidth(stroke);
         test.setColor(Color.parseColor("#ffffff"));
@@ -80,7 +77,7 @@ public class HubIcon extends androidx.appcompat.widget.AppCompatTextView {
 
         test.setColor(Color.parseColor("#606060"));
         test.setStrokeWidth(1);
-        canvas.drawLine(getWidth(), getHeight() * .3f, getWidth(), getHeight(), test);
+        //canvas.drawLine(getWidth(), getHeight() * .3f, getWidth(), getHeight(), test);
 
         super.onDraw(canvas);
 

@@ -18,7 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class SubSectionIcon extends FrameLayout {
+public class SubSectionIcon extends androidx.appcompat.widget.AppCompatTextView {
 
     Paint linePaint = new Paint();
     Path vectorPath = new Path();
@@ -38,6 +38,7 @@ public class SubSectionIcon extends FrameLayout {
         linePaint.setAntiAlias(true);
         selected = true;
         linePaint.setStyle(Paint.Style.FILL);
+        linePaint.setColor(Color.parseColor("#202125"));
         this.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,11 +55,10 @@ public class SubSectionIcon extends FrameLayout {
 
     public void unSelectTab(){
 
-        linePaint.setColor(Color.parseColor("#212327"));
-        invalidate();
+        setAlpha(.2f);
     }
     public void selectTab(){
-        linePaint.setColor(Color.parseColor("#24262B"));
+        setAlpha(1f);
     }
 
 
@@ -79,7 +79,6 @@ public class SubSectionIcon extends FrameLayout {
 
 
         canvas.drawRoundRect(new RectF(0, 0, getWidth(), getHeight()), 20, 20, linePaint);
-        canvas.drawRect(new RectF(0,0, getWidth(), 50), linePaint);
 
         super.onDraw(canvas);
     }

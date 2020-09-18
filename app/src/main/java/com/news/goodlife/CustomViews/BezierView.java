@@ -11,7 +11,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Vibrator;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
@@ -793,5 +792,6 @@ public class BezierView extends View {
             this.time = time;
         }
     }
+
 }
 

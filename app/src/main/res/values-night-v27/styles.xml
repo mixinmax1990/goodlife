@@ -15,7 +15,8 @@
         <item name="textColorPrimary">@color/white</item>
         <item name="textColorPrimaryDisabled">@color/disabledWhite</item>
         <item name="colorControlHighlight">#2C2C2C</item>
-        <item name="android:navigationBarColor">#26272B</item>
+        <item name="android:navigationBarColor">#202125</item>
+        <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowLightNavigationBar">false</item>
         <item name="financialGraphTrendline">@color/financialTrendLineColorNight</item>
         <item name="financialGraphTrendlineGradEnd">@color/financialTrendLineColoGradEnd</item>
