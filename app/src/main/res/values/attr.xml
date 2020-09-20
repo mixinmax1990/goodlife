@@ -25,4 +25,10 @@
         <attr name="customRadius" format="string"/>
         <attr name="customBackgroundColor" format="string"/>
     </declare-styleable>
+    <declare-styleable name="BorderRoundView">
+        <attr name="strokeCustomSize" format="string"/>
+        <attr name="strokeCustomColor" format="string"/>
+        <attr name="backgroundCustomColor" format="string"/>
+        <attr name="borderCustomRadius" format="string"/>
+    </declare-styleable>
 </resources>

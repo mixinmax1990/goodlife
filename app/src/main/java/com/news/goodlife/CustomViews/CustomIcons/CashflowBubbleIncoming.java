@@ -45,7 +45,7 @@ public class CashflowBubbleIncoming extends androidx.appcompat.widget.AppCompatT
         name = getTag().toString();
 
         setWillNotDraw(false);
-        setPadding(100,15,160,65);
+        setPadding(70,15,100,65);
         listener();
 
     }
@@ -57,9 +57,9 @@ public class CashflowBubbleIncoming extends androidx.appcompat.widget.AppCompatT
 
         dottedLine.setPathEffect(new DashPathEffect(new float[]{5, 10, 15, 20}, animLineX));
 
-        canvas.drawRoundRect(new RectF(1, 1, getWidth()- 61, getHeight() - 1), 30, 30, paint);
-        canvas.drawLine(getWidth() - 60, getHeight() / 2, getWidth(), getHeight() / 2, dottedLine);
-        canvas.drawText(name, (getWidth() - 60)/2, getHeight() - 30, namePaint);
+        canvas.drawRoundRect(new RectF(1, 1, getWidth()- 31, getHeight() - 1), 30, 30, paint);
+        canvas.drawLine(getWidth() - 30, getHeight() / 2, getWidth(), getHeight() / 2, dottedLine);
+        canvas.drawText(name, (getWidth() - 30)/2, getHeight() - 30, namePaint);
 
         super.onDraw(canvas);
     }

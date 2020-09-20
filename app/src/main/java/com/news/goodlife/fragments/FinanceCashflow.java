@@ -1,5 +1,6 @@
 package com.news.goodlife.fragments;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,13 +24,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import eightbitlab.com.blurview.BlurView;
+import eightbitlab.com.blurview.RenderScriptBlur;
+
 public class FinanceCashflow extends Fragment {
 
     //Account Tabs
     //TODO For testing Purposes (these will have to be created dynamically)
-    SubSectionIcon account1, account2, account3;
 
-    List<SubSectionIcon> tabList = new ArrayList<>();
     FrameLayout cashflow_input_frame;
 
 
@@ -52,17 +54,10 @@ public class FinanceCashflow extends Fragment {
         View root = inflater.inflate(R.layout.finance_cashflow, container, false);
 
         //Tab Sections
-        account1 = root.findViewById(R.id.account1tab);
-        account2 = root.findViewById(R.id.account2tab);
-        account3 = root.findViewById(R.id.account3tab);
-        tabList.add(account1);
-        tabList.add(account2);
-        tabList.add(account3);
         cashflow_input_frame = root.findViewById(R.id.cashflow_input_frame);
         ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) cashflow_input_frame.getLayoutParams();
-        lp.setMargins(0,0,0, menuTop + 15);
+        lp.setMargins(0,0,0, menuTop);
         cashflow_input_frame.setLayoutParams(lp);
-
         cashflow_recycler = root.findViewById(R.id.cashflow_recycler);
         cashflowMainAdapter = new CashflowMainAdapter(getContext());
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
@@ -77,25 +72,11 @@ public class FinanceCashflow extends Fragment {
         return root;
     }
 
-    private void unselectAllTabs() {
 
-        for (final SubSectionIcon tab : tabList) {
-            tab.unSelectTab();
-        }
-    }
 
 
     private void listeners() {
 
-        for (final SubSectionIcon tab : tabList) {
-            tab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    unselectAllTabs();
-                    tab.selectTab();
-                }
-            });
-        }
 
     }
 }

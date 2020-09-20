@@ -11,6 +11,7 @@
         android:layout_height="40dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:background="#1C1D20"
         android:id="@+id/statusspace"/>
     <FrameLayout
         android:layout_width="match_parent"
@@ -18,9 +19,15 @@
         app:layout_constraintTop_toBottomOf="@id/app_title"
         app:layout_constraintBottom_toBottomOf="@id/menu_container"
         android:id="@+id/fragment_container"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:id="@+id/previewImage"/>
     <eightbitlab.com.blurview.BlurView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="#0CFFFFFF"
         app:layout_constraintTop_toTopOf="@id/menu_container"
         app:layout_constraintLeft_toLeftOf="@id/menu_container"
         app:layout_constraintRight_toRightOf="@id/menu_container"
@@ -29,6 +36,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#1C1D20"
             >
             <TextView
                 android:layout_width="0dp"
@@ -37,7 +45,7 @@
                 android:text="Hub"
                 android:gravity="center"
                 android:foregroundTint="#ffffff"
-                android:textColor="#FFFFFF"
+                android:textSize="12sp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/button_body"
@@ -59,7 +67,6 @@
                 android:gravity="center"
                 android:alpha="1"
                 android:textSize="12sp"
-                android:fontFamily="sans-serif-medium"
                 android:layout_marginBottom="40dp"
                 />
 
@@ -73,6 +80,7 @@
                 app:layout_constraintRight_toLeftOf="@id/button_money"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                android:textColor="#00A6FF"
                 android:alpha="1"
                 android:textSize="12sp"
                 android:fontFamily="sans-serif-medium"
@@ -94,6 +102,20 @@
                 android:fontFamily="sans-serif-medium"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:layout_marginBottom="40dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="Scan"
+                android:id="@+id/button_camerascan"
+                android:gravity="center"
+                app:layout_constraintLeft_toRightOf="@id/button_mind"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:visibility="visible"
+                android:textSize="12sp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_marginBottom="40dp"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </eightbitlab.com.blurview.BlurView>
 
@@ -105,7 +127,7 @@
         app:layout_constraintBottom_toTopOf="@id/menu_container"/>
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="90dp"
         android:background="#541C1D20"
         app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/menu_container"
@@ -120,7 +142,8 @@
         android:paddingRight="50dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:textSize="30sp"/>
+        android:textSize="30sp"
+        android:textColor="#fff"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
