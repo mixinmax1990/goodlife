@@ -37,7 +37,7 @@ public class CashflowBubbleOutgoing extends androidx.appcompat.widget.AppCompatT
         dottedLine = new Paint();
         dottedLine.setStyle(Paint.Style.STROKE);
         dottedLine.setColor(Color.WHITE);
-
+        dottedLine.setAlpha(50);
 
         namePaint = new Paint();
         namePaint.setColor(Color.parseColor("#2F9EC7"));
@@ -67,6 +67,7 @@ public class CashflowBubbleOutgoing extends androidx.appcompat.widget.AppCompatT
     @Override
     protected void onDraw(Canvas canvas) {
         dottedLine.setPathEffect(new DashPathEffect(new float[]{5, 10, 15, 20}, animLineX));
+
         canvas.drawLine(0, getHeight() / 2, 30, getHeight() / 2, dottedLine);
         canvas.drawRoundRect(new RectF(31, 1, getWidth(), getHeight() - 1), 30, 30, paint);
         canvas.drawText(name, (getWidth() / 2) + 30, getHeight() - 30, namePaint);

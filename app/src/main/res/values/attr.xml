@@ -31,4 +31,9 @@
         <attr name="backgroundCustomColor" format="string"/>
         <attr name="borderCustomRadius" format="string"/>
     </declare-styleable>
+    <declare-styleable name="SpectrumBar">
+        <attr name="negativeCash" format="string"/>
+        <attr name="positiveCash" format="string"/>
+        <attr name="daysBudget" format="string"/>
+    </declare-styleable>
 </resources>

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.news.goodlife.CustomViews.SpectrumBar;
 import com.news.goodlife.Interfaces.RecyclerViewClickListener;
 import com.news.goodlife.R;
 
@@ -39,8 +40,12 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
+        SpectrumBar spectrumBar;
+
         public ViewHolder(@NonNull View itemView, int viewType) {
             super(itemView);
+
+            spectrumBar = itemView.findViewById(R.id.spectrumBar);
         }
 
     }

@@ -36,7 +36,7 @@ public class CashflowGoalBubble extends androidx.appcompat.widget.AppCompatTextV
         dottedLine = new Paint();
         dottedLine.setStyle(Paint.Style.STROKE);
         dottedLine.setColor(Color.WHITE);
-
+        dottedLine.setAlpha(50);
 
         namePaint = new Paint();
         namePaint.setColor(Color.parseColor("#2F9EC7"));

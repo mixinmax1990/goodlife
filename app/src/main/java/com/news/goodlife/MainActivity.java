@@ -415,7 +415,6 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
 
     // Handle permission request Results
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){
@@ -505,7 +504,9 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
 
                         for(Text line: myItem.getComponents()){
 
+
                             int type = getTextType(line.getValue());
+                            Log.i("Line", " - " + line.getValue() + " TextType = "+ type +" - Top: " + line.getBoundingBox().top);
                             if(type == 1){
                                 //TODO is Money Out code
                                 RecognizedCashflow recognizedCashflow = new RecognizedCashflow(line, true);

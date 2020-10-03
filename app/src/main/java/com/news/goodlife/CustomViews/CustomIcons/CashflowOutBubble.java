@@ -1,9 +1,11 @@
 package com.news.goodlife.CustomViews.CustomIcons;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.RectF;
@@ -16,21 +18,28 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class CashflowBubbleIncoming extends androidx.appcompat.widget.AppCompatTextView {
-    Paint paint, dottedLine, namePaint;
+public class CashflowOutBubble extends androidx.appcompat.widget.AppCompatTextView {
+    Paint paint, dottedLine, namePaint, expandline;
     String name;
 
-    public CashflowBubbleIncoming(@NonNull Context context) {
+    public CashflowOutBubble(@NonNull Context context) {
         super(context);
     }
 
-    public CashflowBubbleIncoming(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public CashflowOutBubble(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+
         paint = new Paint();
-        paint.setColor(Color.parseColor("#054640"));
+        paint.setColor(Color.parseColor("#FFFFFF"));
         paint.setAntiAlias(true);
-        paint.setAlpha(200);
+        paint.setAlpha(10);
         paint.setStyle(Paint.Style.FILL);
+
+        expandline = new Paint();
+        expandline.setColor(Color.parseColor("#FFFFFF"));
+        expandline.setAntiAlias(true);
+        expandline.setStyle(Paint.Style.STROKE);
+        expandline.setPathEffect(new CornerPathEffect(20));
 
         dottedLine = new Paint();
         dottedLine.setStyle(Paint.Style.STROKE);
@@ -43,27 +52,15 @@ public class CashflowBubbleIncoming extends androidx.appcompat.widget.AppCompatT
         namePaint.setTextAlign(Paint.Align.CENTER);
         namePaint.setTextSize(30);
 
+        animateLine();
+
         name = getTag().toString();
 
         setWillNotDraw(false);
-        setPadding(70,15,100,65);
+        setPadding(100,15,70,65);
         listener();
-
     }
-
     int animLineX = 0;
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-
-        dottedLine.setPathEffect(new DashPathEffect(new float[]{5, 10, 15, 20}, animLineX));
-
-        canvas.drawRoundRect(new RectF(1, 1, getWidth()- 31, getHeight() - 1), 30, 30, paint);
-        canvas.drawLine(getWidth() - 30, getHeight() / 2, getWidth(), getHeight() / 2, dottedLine);
-        canvas.drawText(name, (getWidth() - 30)/2, getHeight() - 30, namePaint);
-
-        super.onDraw(canvas);
-    }
 
     private void listener() {
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -73,6 +70,19 @@ public class CashflowBubbleIncoming extends androidx.appcompat.widget.AppCompatT
             }
         });
     }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        dottedLine.setPathEffect(new DashPathEffect(new float[]{5, 10, 15, 20}, animLineX));
+
+        canvas.drawLine(0, getHeight() / 2, 30, getHeight() / 2, dottedLine);
+        canvas.drawRoundRect(new RectF(31, 1, getWidth(), getHeight() - 1), 30, 30, paint);
+        canvas.drawText(name, (getWidth() / 2) + 30, getHeight() - 30, namePaint);
+
+        //canvas.drawLine(getWidth() - 40, getHeight() - 40);
+        super.onDraw(canvas);
+    }
+
 
     private void animateLine(){
 
@@ -92,4 +102,11 @@ public class CashflowBubbleIncoming extends androidx.appcompat.widget.AppCompatT
         va.start();
 
     }
+
+    @Override
+    public ViewTreeObserver getViewTreeObserver() {
+        return super.getViewTreeObserver();
+    }
 }
+
+

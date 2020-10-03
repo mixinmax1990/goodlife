@@ -46,7 +46,6 @@ public class GoalDrawView  extends ConstraintLayout {
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                Log.i("LayoutVisible", "true");
 
                 ValueAnimator va = ValueAnimator.ofInt(0, (int)goalProgress);
                 va.setDuration(500);
