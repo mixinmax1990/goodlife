@@ -48,7 +48,6 @@ public class SpectrumBar extends FrameLayout {
 
         setWillNotDraw(false);
         this.context = context;
-        setAttributes(attrs);
     }
 
     int growthPercentage = 1;
@@ -94,24 +93,24 @@ public class SpectrumBar extends FrameLayout {
         if(!drawn){
             zeroMark = getWidth()/2;
             rectangleBG = new RectF(0, (int)(getHeight() * 0.66) , getWidth(), getHeight());
-            rectanglePos = new RectF(zeroMark, (int)(getHeight() * 0.66) , zeroMark, getHeight());
+            rectanglePos = new RectF(0, (int)(getHeight() * 0.66) , 0, getHeight());
             rectangleNeg = new RectF(zeroMark, (int)(getHeight() * 0.66) , zeroMark, getHeight());
             rectangleReachedBudget = new RectF(zeroMark, (int)(getHeight() * 0.66) , zeroMark, getHeight());
             rectangleBudget = new RectF(zeroMark, (int)(getHeight() * 0.66) , zeroMark, getHeight());
             drawn = true;
         }
         else{
-            rectanglePos.right = zeroMark + (300/100) * growthPercentage;
-            rectangleNeg.left = zeroMark - (300/100) * growthPercentage;
-            rectangleBudget.left = zeroMark - (400/100) * growthPercentage;
-            rectangleReachedBudget.left = zeroMark - (400/100) * growthPercentage;
+            rectanglePos.right = ((int)(getWidth() * 0.7)/100) * growthPercentage;
+            //rectangleNeg.left = zeroMark - (300/100) * growthPercentage;
+            //rectangleBudget.left = zeroMark - (400/100) * growthPercentage;
+            //rectangleReachedBudget.left = zeroMark - (400/100) * growthPercentage;
         }
 
         canvas.drawRoundRect(rectangleBG, radiusSize, radiusSize, backgroundPaint);
         canvas.drawRoundRect(rectanglePos, radiusSize, radiusSize, posPaint);
-        canvas.drawRoundRect(rectangleBudget, radiusSize, radiusSize, budgetPaint);
-        canvas.drawRoundRect(rectangleNeg, radiusSize, radiusSize, negPaint);
-        canvas.drawRoundRect(rectangleReachedBudget, radiusSize, radiusSize, reachedBudget);
+        //canvas.drawRoundRect(rectangleBudget, radiusSize, radiusSize, budgetPaint);
+        //canvas.drawRoundRect(rectangleNeg, radiusSize, radiusSize, negPaint);
+        //canvas.drawRoundRect(rectangleReachedBudget, radiusSize, radiusSize, reachedBudget);
 
 
     }
@@ -147,7 +146,7 @@ public class SpectrumBar extends FrameLayout {
         zeroLine.setAlpha(200);
 
         posPaint.setStyle(Paint.Style.FILL);
-        posPaint.setColor(Color.parseColor("#2F9EC7"));
+        posPaint.setColor(Color.parseColor("#FFFFFF"));
         posPaint.setAntiAlias(true);
 
         negPaint.setStyle(Paint.Style.FILL);
@@ -161,32 +160,6 @@ public class SpectrumBar extends FrameLayout {
 
     }
 
-    private void setAttributes(AttributeSet attrs){
-        TypedArray negArray = context.obtainStyledAttributes(attrs, R.styleable.SpectrumBar);
-        CharSequence neg_cs = negArray.getString(R.styleable.SpectrumBar_negativeCash);
-        if(neg_cs != null){
-            setNeg(Integer.parseInt(neg_cs.toString()));
-
-        }
-        negArray.recycle();
-
-        TypedArray posArray = context.obtainStyledAttributes(attrs, R.styleable.SpectrumBar);
-        CharSequence pos_cs = posArray.getString(R.styleable.SpectrumBar_positiveCash);
-        if(pos_cs != null){
-            setPos(Integer.parseInt(pos_cs.toString()));
-
-        }
-        posArray.recycle();
-
-        TypedArray budgetArray = context.obtainStyledAttributes(attrs, R.styleable.SpectrumBar);
-        CharSequence budget_cs = negArray.getString(R.styleable.SpectrumBar_daysBudget);
-        if(budget_cs != null){
-            setBudget(Integer.parseInt(budget_cs.toString()));
-
-        }
-        budgetArray.recycle();
-
-    }
 
     public int getPos() {
         return pos;

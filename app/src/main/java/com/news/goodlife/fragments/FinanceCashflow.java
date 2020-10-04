@@ -29,6 +29,7 @@ import com.news.goodlife.R;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
@@ -142,6 +143,11 @@ public class FinanceCashflow extends Fragment {
                 liquid.animateWave();
             }
         }
+    }
+    private int randomValue(int rangeStart, int rangeEnd){
+
+        int random = new Random().nextInt(rangeEnd) + rangeStart;
+        return random;
     }
 
 }

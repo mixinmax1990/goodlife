@@ -12,10 +12,11 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.news.goodlife.R;
 
-public class BorderRoundView extends FrameLayout {
+public class BorderRoundView extends ConstraintLayout {
     String strokeColor, backgroundColor;
     int strokeSize, borderRadius;
 

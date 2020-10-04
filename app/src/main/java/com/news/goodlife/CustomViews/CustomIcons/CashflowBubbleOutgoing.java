@@ -37,10 +37,12 @@ public class CashflowBubbleOutgoing extends androidx.appcompat.widget.AppCompatT
         dottedLine = new Paint();
         dottedLine.setStyle(Paint.Style.STROKE);
         dottedLine.setColor(Color.WHITE);
-        dottedLine.setAlpha(50);
+        dottedLine.setAlpha(200);
 
         namePaint = new Paint();
-        namePaint.setColor(Color.parseColor("#2F9EC7"));
+        namePaint.setColor(Color.parseColor("#FFFFFF"));
+        namePaint.setAlpha(160);
+        // #2F9EC7
         namePaint.setAntiAlias(true);
         namePaint.setTextAlign(Paint.Align.CENTER);
         namePaint.setTextSize(30);

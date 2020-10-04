@@ -85,12 +85,10 @@ public class CashflowTimelineRecycler extends RecyclerView.Adapter<CashflowTimel
                     else{
                         return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_single_verylong, parent, false), mListener, viewType);
                     }
-
                 }
                 else{
                     return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item, parent, false), mListener, viewType);
                 }
-
             }
         }
         //return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_list_item_top, parent, false), mListener, viewType);
@@ -100,7 +98,7 @@ public class CashflowTimelineRecycler extends RecyclerView.Adapter<CashflowTimel
     Date CurrentDate, NextDate;
 
     @Override
-    public int getItemViewType(int position) {
+    public int getItemViewType(int position){
 
         // Gt Dates of next and Previous Cashflows
 

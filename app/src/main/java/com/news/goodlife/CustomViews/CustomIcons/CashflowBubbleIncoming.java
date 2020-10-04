@@ -27,9 +27,9 @@ public class CashflowBubbleIncoming extends androidx.appcompat.widget.AppCompatT
     public CashflowBubbleIncoming(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         paint = new Paint();
-        paint.setColor(Color.parseColor("#054640"));
+        paint.setColor(Color.parseColor("#FFFFFF"));
         paint.setAntiAlias(true);
-        paint.setAlpha(200);
+        paint.setAlpha(10);
         paint.setStyle(Paint.Style.FILL);
 
         dottedLine = new Paint();
@@ -38,10 +38,11 @@ public class CashflowBubbleIncoming extends androidx.appcompat.widget.AppCompatT
         dottedLine.setAlpha(50);
 
         namePaint = new Paint();
-        namePaint.setColor(Color.parseColor("#2F9EC7"));
+        namePaint.setColor(Color.parseColor("#FFFFFF"));
         namePaint.setAntiAlias(true);
+        namePaint.setAlpha(130);
         namePaint.setTextAlign(Paint.Align.CENTER);
-        namePaint.setTextSize(30);
+        namePaint.setTextSize(13 * getResources().getDisplayMetrics().scaledDensity);
 
         name = getTag().toString();
 
