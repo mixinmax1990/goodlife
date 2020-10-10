@@ -136,11 +136,16 @@ public class FinanceCashflow extends Fragment {
 
         private void loopVisibleItems(RecyclerView recyclerView, int first, int last){
             for(int i = first; i <= last; i++){
-                ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(i);
-                SpectrumBar bar = vh.itemView.findViewById(R.id.spectrumBar);
-                LiquidView liquid = vh.itemView.findViewById(R.id.budget_liquid);
-                bar.animateCashflow();
-                liquid.animateWave();
+                try {
+                    ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(i);
+                    SpectrumBar bar = vh.itemView.findViewById(R.id.spectrumBar);
+                    LiquidView liquid = vh.itemView.findViewById(R.id.budget_liquid);
+                    bar.animateCashflow();
+                    liquid.animateWave();
+                }
+                catch (Exception e){
+
+                }
             }
         }
     }

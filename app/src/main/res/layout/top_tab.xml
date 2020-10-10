@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout
+        android:id="@+id/accounts_overview"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#1C1D20"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/accountsButton"
+        app:layout_constraintEnd_toStartOf="@id/accountsButton"
+        app:layout_constraintBottom_toBottomOf="@id/accountsButton"
+        android:text="My Account"
+        android:id="@+id/selected_account_title"
+        android:textSize="13sp"
+        android:layout_margin="10dp"
+        />
+    <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+        android:id="@+id/accountsButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="@id/accounts_overview"
+        app:layout_constraintBottom_toBottomOf="@id/accounts_overview"
+        app:layout_constraintEnd_toEndOf="@id/accounts_overview"
+        android:layout_margin="10dp"
+        app:borderCustomRadius="100"
+        app:strokeCustomSize="5"
+        app:strokeCustomColor="#FFFFFF"
+        app:backgroundCustomColor="#4DFFFFFF"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -162,12 +162,10 @@ public class BezierView extends View {
             lineZeroPaint.setAlpha(250);
             lineZeroPaint.setTextSize(35);
             canvas.drawText("5,456€",this.getWidth()/2 - 50, this.getHeight() - 20, lineZeroPaint);
-
         }
         else{
             paint.setStrokeWidth(8);
         }
-
         paint.setAlpha(200);
         paint.setAntiAlias(true);
 
@@ -184,14 +182,13 @@ public class BezierView extends View {
 
         lineZeroPaint.setTextSize(30);
         lineZeroPaint.setAlpha(40);
-
         linesAmountPaint.setColor(Color.WHITE);
         linesAmountPaint.setAlpha(10);
-
         zeroMark = this.getHeight()/2;
 
         //x is Time
         //y is Amount
+
         JSONObject jsob = getData();
         List<CashflowBezierPoint> cashflowPath = calculatedData(jsob, canvas);
         scrollPosData.clear();

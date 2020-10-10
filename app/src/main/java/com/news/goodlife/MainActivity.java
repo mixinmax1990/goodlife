@@ -297,11 +297,11 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
 
     public void setStatusbarspace() {
         statusbarspace = findViewById(R.id.statusspace);
-        statusbarspace.setVisibility(View.VISIBLE);
+        //statusbarspace.setVisibility(View.VISIBLE);
         statusBarHeight = getStatusBarHeight();
         ConstraintLayout.LayoutParams sbsLP = (ConstraintLayout.LayoutParams) statusbarspace.getLayoutParams();
         sbsLP.height = statusBarHeight;
-        statusbarspace.setLayoutParams(sbsLP);
+        //statusbarspace.setLayoutParams(sbsLP);
     }
 
     @Override
