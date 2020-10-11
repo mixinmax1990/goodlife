@@ -47,7 +47,7 @@ public class CashflowBubbleOutgoing extends androidx.appcompat.widget.AppCompatT
         namePaint.setTextAlign(Paint.Align.CENTER);
         namePaint.setTextSize(30);
 
-        animateLine();
+        //animateLine();
 
         name = getTag().toString();
 
@@ -92,7 +92,7 @@ public class CashflowBubbleOutgoing extends androidx.appcompat.widget.AppCompatT
 
         va.setRepeatCount(ValueAnimator.INFINITE);
         va.setInterpolator(new LinearInterpolator());
-        va.start();
+        //va.start();
 
     }
 

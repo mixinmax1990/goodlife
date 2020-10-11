@@ -1,5 +1,7 @@
 package com.news.goodlife.CustomViews.CustomIcons;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -33,7 +35,7 @@ public class DayViewIcon extends FrameLayout {
     public DayViewIcon(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         setWillNotDraw(false);
-        lineColor = "#393A3E";
+        lineColor = "#FFFFFF";
         listeners();
         setPaints();
 
@@ -44,32 +46,83 @@ public class DayViewIcon extends FrameLayout {
         radius = 30;
 
         setRect();
+        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                animateIcons();
+            }
+        });
 
     }
+
+    int anim;
 
     private void setRect() {
 
         box1.left = width * 0.2f;
-        box1.top = - 100;
-        box1.bottom = width * 0.15f;
+        box1.top = - 100 + anim;
+        box1.bottom = width * 0.15f + anim;
         box1.right = width * .8f;
 
         box2.left = width * 0.2f;
-        box2.top = width * 0.22f;
-        box2.bottom = width * 0.78f;
+        box2.top = width * 0.22f + anim;
+        box2.bottom = width * 0.78f + anim;
         box2.right = width * .8f;
 
         box3.left = width * 0.2f;
-        box3.top = width * 0.85f;
-        box3.bottom = width + 100;
+        box3.top = width * 0.85f + anim;
+        box3.bottom = width + 100 + anim;
         box3.right = width * .8f;
 
+    }
+
+    private void animateIcons(){
+        ValueAnimator va = ValueAnimator.ofInt(-100, 0);
+        va.setDuration(500);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                anim = (int) valueAnimator.getAnimatedValue();
+                invalidate();
+            }
+        });
+
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+                //waveEnergy = waveEnergy - 0.2f;
+                //if(waveEnergy < 0){
+                // waveEnergy = 0;
+                //}
+                //Log.i("Energy", ""+waveEnergy);
+
+            }
+        });
+
+        va.start();
     }
 
     private void setPaints() {
         linePaint = new Paint();
         linePaint.setStyle(Paint.Style.FILL);
         linePaint.setColor(Color.parseColor(lineColor));
+        linePaint.setAlpha(220);
         linePaint.setStrokeCap(Paint.Cap.ROUND);
         linePaint.setStrokeWidth(3);
         linePaint.setAntiAlias(true);

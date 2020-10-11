@@ -90,7 +90,7 @@ public class CashflowBubbleIncoming extends androidx.appcompat.widget.AppCompatT
 
         va.setRepeatCount(ValueAnimator.INFINITE);
         va.setInterpolator(new LinearInterpolator());
-        va.start();
+        //va.start();
 
     }
 }

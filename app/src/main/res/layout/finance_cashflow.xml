@@ -4,42 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.news.goodlife.CustomViews.ElasticEdgeView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="100dp"
+        android:outlineProvider="none"
+        android:id="@+id/elasticEdge"/>
+    <FrameLayout
+        android:id="@+id/elasticContentSkeleton"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        app:layout_constraintRight_toRightOf="parent"/>
+    <include
+        android:id="@+id/cashflow_display_menu"
+        layout="@layout/cashflow_display_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@id/elasticContentSkeleton"
+        app:layout_constraintStart_toStartOf="@id/elasticContentSkeleton"/>
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        app:layout_constraintDimensionRatio="1:1"
-        app:cardCornerRadius="20dp"
-        app:cardBackgroundColor="#27282C"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="10dp"
-        android:id="@+id/layou1"
-        >
-        <com.news.goodlife.CustomViews.CustomIcons.MonthViewIcon
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-           />
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        app:layout_constraintDimensionRatio="1:1"
-        app:cardCornerRadius="20dp"
-        app:cardBackgroundColor="#27282C"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layou1"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:id="@+id/layout2"
-        >
-        <com.news.goodlife.CustomViews.CustomIcons.DayViewIcon
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-    </androidx.cardview.widget.CardView>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="0dp"

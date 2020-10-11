@@ -100,7 +100,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                 itemday = itemView.findViewById(R.id.item_day);
 
             }
-            itemView.setOnClickListener(this);
+            //itemView.setOnClickListener(this);
         }
 
         @Override

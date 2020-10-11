@@ -95,10 +95,10 @@ public class LiquidView extends CardView {
         setPaints();
 
         baseline = 200;
-        waveNo = 5;
+        waveNo = 3;
 
-        minWaveHeight = 10;
-        maxWaveHeight = 50;
+        minWaveHeight = 5;
+        maxWaveHeight = 30;
 
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -131,7 +131,7 @@ public class LiquidView extends CardView {
         bgPaint.setAlpha(7);
 
         textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setTextSize(13 * getResources().getDisplayMetrics().scaledDensity);
+        textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setColor(Color.parseColor(getLiquidTextPaint()));
         textPaint.setAntiAlias(true);
 
@@ -162,14 +162,12 @@ public class LiquidView extends CardView {
 
         canvas.drawPath(liquidPath, liquidPaint);
         textPaint.setColor(Color.parseColor(getLiquidTextPaint()));
-        textPaint.setTextAlign(Paint.Align.LEFT);
-        textPaint.setAlpha(255);
-        canvas.drawText(remainingBudget, 50, baseline + 50 - (int)(randomWaveHeight(0) * waveMovementUp) , textPaint);
-        textPaint.setAlpha(120);
-        canvas.drawText("Day's Budget", 50,height - 30 - (int)(randomWaveHeight(0) * waveMovementUp) , textPaint );
+        textPaint.setTextSize(18 * getResources().getDisplayMetrics().scaledDensity);
+        canvas.drawText(remainingBudget, getWidth()/2, baseline + 50 - (int)(randomWaveHeight(0) * waveMovementUp) , textPaint);
+        textPaint.setTextSize(12 * getResources().getDisplayMetrics().scaledDensity);
+        canvas.drawText("Budget", getWidth()/2,height - 30 - (int)(randomWaveHeight(0) * waveMovementUp) , textPaint );
         textPaint.setColor(Color.parseColor("#FFFFFF"));
         textPaint.setAlpha(70);
-        textPaint.setTextAlign(Paint.Align.RIGHT);
         //canvas.drawText("-"+daysBudget, width - 50, baseline / 2, textPaint);
 
 
@@ -316,8 +314,8 @@ public class LiquidView extends CardView {
 
 
 
-               Log.i("enerydep", ""+movement);
-                Log.i("MoveUP", ""+waveMovementUp);
+               //Log.i("enerydep", ""+movement);
+                //Log.i("MoveUP", ""+waveMovementUp);
                 invalidate();
             }
         });

@@ -23,11 +23,13 @@ public class BorderRoundView extends ConstraintLayout {
     boolean stroke, background, radius, strokeCol;
     int radiusSize = 0;
 
-    Paint paintFill, paintStroke;
-    RectF roundedRectangle;
+    Paint paintFill, paintStroke, expandableArcPaint;
+    RectF roundedRectangle, expandEdgeRectangle;
 
     AttributeSet attrs;
     Context context;
+    private boolean expandable = true;
+
     public BorderRoundView(@NonNull Context context) {
         super(context);
     }
@@ -40,10 +42,12 @@ public class BorderRoundView extends ConstraintLayout {
     }
 
 
+    int expandMargin = 25;
 
     @Override
     protected void onDraw(Canvas canvas) {
         roundedRectangle = new RectF(0 + strokeSize, 0 + strokeSize, getWidth() - strokeSize, getHeight() - strokeSize);
+        expandEdgeRectangle = new RectF((int)(getWidth() - radiusSize * 1) - expandMargin, (int)(getHeight() - radiusSize * 1) - expandMargin, getWidth() - expandMargin, getHeight() - expandMargin);
         if(background){
 
             canvas.drawRoundRect(roundedRectangle, radiusSize, radiusSize, paintFill);
@@ -51,6 +55,10 @@ public class BorderRoundView extends ConstraintLayout {
         if(stroke){
 
             canvas.drawRoundRect(roundedRectangle, radiusSize, radiusSize, paintStroke);
+        }
+
+        if(expandable){
+            canvas.drawArc(expandEdgeRectangle,20,60,false, expandableArcPaint);
         }
         super.onDraw(canvas);
     }
@@ -86,8 +94,13 @@ public class BorderRoundView extends ConstraintLayout {
             radiusSize = getBorderRadius();
         }
 
-
-
+        expandableArcPaint = new Paint();
+        expandableArcPaint.setStyle(Paint.Style.STROKE);
+        expandableArcPaint.setStrokeWidth(3);
+        expandableArcPaint.setColor(Color.parseColor("#FFFFFF"));
+        expandableArcPaint.setAlpha(150);
+        expandableArcPaint.setAntiAlias(true);
+        expandableArcPaint.setStrokeCap(Paint.Cap.ROUND);
 
     }
 

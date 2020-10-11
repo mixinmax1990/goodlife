@@ -10,7 +10,6 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
@@ -19,21 +18,21 @@ import androidx.annotation.Nullable;
 
 import java.lang.reflect.Type;
 
-public class MonthViewIcon extends FrameLayout {
+public class DayDetailViewIcon extends FrameLayout {
 
     int width, height;
     String lineColor;
 
     Paint linePaint, textPaint;
-    RectF box1, box2, box3, box4;
+    RectF box1, box2, box3, box4, box5;
 
     int dp, radius;
 
-    public MonthViewIcon(@NonNull Context context) {
+    public DayDetailViewIcon(@NonNull Context context) {
         super(context);
     }
 
-    public MonthViewIcon(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public DayDetailViewIcon(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         setWillNotDraw(false);
         lineColor = "#FFFFFF";
@@ -43,12 +42,10 @@ public class MonthViewIcon extends FrameLayout {
         box1 = new RectF();
         box2 = new RectF();
         box3 = new RectF();
-        box4 = new RectF();
 
-        radius = 20;
+        radius = 30;
 
         setRect();
-
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -58,29 +55,67 @@ public class MonthViewIcon extends FrameLayout {
 
     }
 
-    int anim = 0;
+    int anim;
+
     private void setRect() {
 
         box1.left = width * 0.2f;
-        box1.top = width * 0.2f;
-        box1.bottom = width * 0.48f + anim;
-        box1.right = width * .48f + anim;
+        box1.top = - 100;
+        box1.bottom = width * 0.15f - anim;
+        box1.right = width * .8f;
 
-        box2.left = (width * 0.02f + width / 2) + anim;
-        box2.top = width * 0.2f;
-        box2.bottom = width * 0.48f + anim;
-        box2.right = (width * .8f)+ anim * 2;
+        box2.left = width * 0.2f;
+        box2.top = width * 0.22f - anim;
+        box2.bottom = width * 0.78f + anim;
+        box2.right = width * .8f;
 
         box3.left = width * 0.2f;
-        box3.top = (width * 0.02f + width / 2)+ anim;
-        box3.bottom = width * .8f + anim * 2;
-        box3.right = width * .48f + anim;
+        box3.top = width * 0.85f + anim;
+        box3.bottom = width + 100;
+        box3.right = width * .8f;
 
-        box4.left = (width * 0.02f + width / 2) + anim;
-        box4.top =  (width * 0.02f + width / 2)+ anim;
-        box4.bottom = width * .8f + anim * 2;
-        box4.right = width * .8f + anim * 2;
+    }
 
+    private void animateIcons(){
+        ValueAnimator va = ValueAnimator.ofInt(0, 20);
+        va.setDuration(500);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                anim = (int) valueAnimator.getAnimatedValue();
+                invalidate();
+            }
+        });
+
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+                //waveEnergy = waveEnergy - 0.2f;
+                //if(waveEnergy < 0){
+                // waveEnergy = 0;
+                //}
+                //Log.i("Energy", ""+waveEnergy);
+
+            }
+        });
+
+        va.start();
     }
 
     private void setPaints() {
@@ -115,61 +150,17 @@ public class MonthViewIcon extends FrameLayout {
         });
     }
 
-    int animRadius;
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         setRect();
-        animRadius = radius + (int)(anim * 0.25);
-        canvas.drawRoundRect(box1, animRadius, animRadius, linePaint);
-        canvas.drawRoundRect(box2, animRadius, animRadius, linePaint);
-        canvas.drawRoundRect(box3, animRadius, animRadius, linePaint);
-        canvas.drawRoundRect(box4, animRadius, animRadius, linePaint);
+        canvas.drawRoundRect(box1, radius, radius, linePaint);
+        canvas.drawRoundRect(box2, radius, radius, linePaint);
+        canvas.drawRoundRect(box3, radius, radius, linePaint);
+
         //canvas.drawText("Month", width/2, height - 20, textPaint);
 
-    }
-
-    private void animateIcons(){
-        ValueAnimator va = ValueAnimator.ofInt((int)(width * 0.8 / 2), 0);
-        va.setDuration(500);
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-               anim = (int) valueAnimator.getAnimatedValue();
-                invalidate();
-            }
-        });
-
-        va.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-                //waveEnergy = waveEnergy - 0.2f;
-                //if(waveEnergy < 0){
-                // waveEnergy = 0;
-                //}
-                //Log.i("Energy", ""+waveEnergy);
-
-            }
-        });
-
-        va.start();
     }
 
     @Override

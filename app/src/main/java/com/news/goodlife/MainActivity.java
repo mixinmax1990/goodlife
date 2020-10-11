@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -28,6 +29,7 @@ import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -45,6 +47,7 @@ import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.CustomViews.CustomIcons.HubIcon;
+import com.news.goodlife.CustomViews.ElasticEdgeView;
 import com.news.goodlife.Interfaces.OnClickedCashflowItemListener;
 import com.news.goodlife.Tools.CameraScan.CameraScanFragment;
 import com.news.goodlife.fragments.CashflowTimelineFragment;
@@ -89,6 +92,9 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
     BlurView blurViewMenu;
     TextView raffa;
 
+    ElasticEdgeView elasticEdgeView;
+    ConstraintLayout mainContainer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
         statusbarspace = findViewById(R.id.statusspace);
         app_titleTV = findViewById(R.id.app_title);
         blurViewMenu = findViewById(R.id.menu_blur_container);
+        elasticEdgeView = findViewById(R.id.elasticEdge);
+        mainContainer = findViewById(R.id.main_container);
 
         //Recognize Image
         cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -122,6 +130,11 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
     }
 
     private void loadTools() {
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
     }
 
     private void blur(float radius) {
