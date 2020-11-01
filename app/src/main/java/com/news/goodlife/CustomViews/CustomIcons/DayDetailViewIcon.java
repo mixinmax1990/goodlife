@@ -35,7 +35,7 @@ public class DayDetailViewIcon extends FrameLayout {
     public DayDetailViewIcon(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         setWillNotDraw(false);
-        lineColor = "#FFFFFF";
+        lineColor = "#000000";
         listeners();
         setPaints();
 
@@ -49,7 +49,7 @@ public class DayDetailViewIcon extends FrameLayout {
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                animateIcons();
+                //animateIcons();
             }
         });
 
@@ -120,9 +120,9 @@ public class DayDetailViewIcon extends FrameLayout {
 
     private void setPaints() {
         linePaint = new Paint();
-        linePaint.setStyle(Paint.Style.FILL);
+        linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setColor(Color.parseColor(lineColor));
-        linePaint.setAlpha(220);
+        linePaint.setAlpha(150);
         linePaint.setStrokeCap(Paint.Cap.ROUND);
         linePaint.setStrokeWidth(3);
         linePaint.setAntiAlias(true);

@@ -6,9 +6,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.news.goodlife.Data.Local.Models.Financial.FinancialEventModel;
-import com.news.goodlife.fragments.CashflowOnceFragment;
-import com.news.goodlife.fragments.CashflowRegularFragment;
-import com.news.goodlife.fragments.CashflowTimelineFragment;
+import com.news.goodlife.Fragments.CashflowOnceFragment;
+import com.news.goodlife.Fragments.CashflowRegularFragment;
+import com.news.goodlife.Fragments.CashflowTimelineFragment;
 
 import java.util.ArrayList;
 import java.util.List;

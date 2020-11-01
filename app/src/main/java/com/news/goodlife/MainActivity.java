@@ -2,22 +2,23 @@ package com.news.goodlife;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.transition.Fade;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -26,16 +27,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,17 +43,15 @@ import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
-import com.news.goodlife.CustomViews.CustomIcons.HubIcon;
 import com.news.goodlife.CustomViews.ElasticEdgeView;
 import com.news.goodlife.Interfaces.OnClickedCashflowItemListener;
 import com.news.goodlife.Tools.CameraScan.CameraScanFragment;
-import com.news.goodlife.fragments.CashflowTimelineFragment;
-import com.news.goodlife.fragments.FinanceCashflow;
-import com.news.goodlife.fragments.FinancialFragment;
-import com.news.goodlife.fragments.FinancialFragmentOverview;
-import com.news.goodlife.fragments.HealthFragment;
-import com.news.goodlife.fragments.MentalFragment;
-import com.news.goodlife.fragments.PhysicalFragment;
+import com.news.goodlife.Fragments.FinanceCashflow;
+import com.news.goodlife.Fragments.FinancialFragment;
+import com.news.goodlife.Fragments.FinancialFragmentOverview;
+import com.news.goodlife.Fragments.HealthFragment;
+import com.news.goodlife.Fragments.PhysicalFragment;
+import com.news.goodlife.Transitions.DetailsTransition;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -79,7 +74,8 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
     TextView btn_financial;
     TextView app_titleTV;
     TextView btn_scanCamera;
-    FrameLayout fragment_container;
+    public FrameLayout fragment_container;
+    FrameLayout fragment_pop_container;
 
     private Fragment fragment;
     int selectedFragment = 0;
@@ -90,10 +86,14 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
     FrameLayout statusbarspace;
 
     BlurView blurViewMenu;
-    TextView raffa;
+    FrameLayout menu_container;
+    FrameLayout menu_line;
 
     ElasticEdgeView elasticEdgeView;
     ConstraintLayout mainContainer;
+
+    //Menu Navigation
+    View analysisClickArea, goalsClickArea;
 
 
     @Override
@@ -109,11 +109,14 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
         btn_financial = findViewById(R.id.button_money);
         btn_scanCamera = findViewById(R.id.button_camerascan);
         fragment_container = findViewById(R.id.fragment_container);
+        fragment_pop_container = findViewById(R.id.popFragmentContainer);
         statusbarspace = findViewById(R.id.statusspace);
         app_titleTV = findViewById(R.id.app_title);
-        blurViewMenu = findViewById(R.id.menu_blur_container);
+
         elasticEdgeView = findViewById(R.id.elasticEdge);
         mainContainer = findViewById(R.id.main_container);
+        menu_container = findViewById(R.id.menu_container);
+        menu_line = findViewById(R.id.seperator_line_menu);
 
         //Recognize Image
         cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -121,12 +124,25 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
         previewImage = findViewById(R.id.previewImage);
 
 
+        //Navigation Section
+        analysisClickArea = findViewById(R.id.analysis_click_area);
+        goalsClickArea = findViewById(R.id.goals_click_area);
+
+
         DarkMode = true;
 
         listeners();
-        blur(15f);
+        //blur(15f);
         
         loadTools();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(!mainMenuVisible){
+            toggleMainMenuContainer();
+        }
     }
 
     private void loadTools() {
@@ -158,14 +174,6 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
 
     int menuTop = 0;
     private void listeners(){
-        blurViewMenu.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-
-                menuTop = blurViewMenu.getHeight();
-
-            }
-        });
 
         btn_health.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
             }
         });
 
-        btn_mental.setOnClickListener(new View.OnClickListener() {
+        analysisClickArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectedFragment = 3;
@@ -194,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
 
             }
         });
+
 
 
         btn_financial.setOnClickListener(new View.OnClickListener() {
@@ -262,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
     private HealthFragment healthFragment;
     private PhysicalFragment physicalFragment;
     private FinancialFragment financialFragment;
-    private FinanceCashflow financeCashflow;
+    public FinanceCashflow financeCashflow;
     private FinancialFragmentOverview financialFragmentOverview;
     private CameraScanFragment cameraScanFragment;
 
@@ -273,31 +282,100 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
             case 1:
                 healthFragment = new HealthFragment();
                 ft.replace(fragment_container.getId(), healthFragment);
+                ft.addToBackStack(healthFragment.getClass().getSimpleName());
                 app_titleTV.setText("My Hub");
                 app_titleTV.setVisibility(View.GONE);
                 break;
             case 2:
                 financialFragmentOverview = new FinancialFragmentOverview(this.getBaseContext());
                 ft.replace(fragment_container.getId(), financialFragmentOverview);
+                ft.addToBackStack(fragment_container.getClass().getSimpleName());
                 app_titleTV.setText(appName);
                 app_titleTV.setVisibility(View.VISIBLE);
+
                 break;
             case 3:
-                financeCashflow = new FinanceCashflow(menuTop);
+                financeCashflow = new FinanceCashflow(menuTop, fragment_container, menu_container);
+                //financeCashflow.setSharedElementReturnTransition(new DetailsTransition());
+                //financeCashflow.setExitTransition(new DetailsTransition());
                 ft.replace(fragment_container.getId(), financeCashflow);
+                ft.addToBackStack(financeCashflow.getClass().getSimpleName());
                 app_titleTV.setText(appName);
                 app_titleTV.setVisibility(View.GONE);
                 break;
             case 4:
                 physicalFragment = new PhysicalFragment();
                 ft.replace(fragment_container.getId(), physicalFragment);
+                ft.addToBackStack(physicalFragment.getClass().getSimpleName());
                 app_titleTV.setText(appName);
                 app_titleTV.setVisibility(View.VISIBLE);
                 break;
         }
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+
+        //ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
     }
+
+    public boolean mainMenuVisible = true;
+    public void toggleMainMenuContainer(){
+
+        final ViewGroup.LayoutParams lp = menu_container.getLayoutParams();
+        ValueAnimator va;
+        if(mainMenuVisible){
+            va = ValueAnimator.ofInt(dpToPx(100), 0);
+
+        }
+        else{
+            va = ValueAnimator.ofInt(0, dpToPx(100));
+
+        }
+
+        va.setDuration(350);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int animval = (int)valueAnimator.getAnimatedValue();
+
+                lp.height = animval;
+                menu_container.setLayoutParams(lp);
+            }
+
+        });
+
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+
+                if(mainMenuVisible){
+                    mainMenuVisible = false;
+                    menu_line.animate().alpha(0).setDuration(350);
+                }
+                else{
+                    mainMenuVisible = true;
+                    menu_line.animate().alpha(1).setDuration(350);
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+            }
+        });
+
+        va.start();
+
+    }
+
 
     public int getStatusBarHeight() {
         int result = 0;
@@ -720,7 +798,15 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
         }
 
     }
+    public static int dpToPx(int dp) {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
 
+    public void checkBackstack(){
+
+            Log.i("MainFragmentChildren", "--"+fragment_container.getChildCount());
+
+    }
 
 }
 class RecognizedData{
@@ -783,4 +869,5 @@ class RecognizedCashflow{
     public void setRecognizedDataList(List<RecognizedData> recognizedDataList) {
         this.recognizedDataList = recognizedDataList;
     }
+
 }

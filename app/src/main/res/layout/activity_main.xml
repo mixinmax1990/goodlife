@@ -15,12 +15,19 @@
         android:background="#1C1D20"
         android:visibility="gone"
         android:id="@+id/statusspace"/>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/app_title"
-        app:layout_constraintBottom_toTopOf="@id/menu_container"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/fragment_container"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/statusspace"
+        app:layout_constraintBottom_toTopOf="@id/menu_container"
+        android:id="@+id/popFragmentContainer"/>
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -33,93 +40,139 @@
         android:outlineProvider="none"
         android:id="@+id/elasticEdge"
         />
-    <androidx.cardview.widget.CardView
-        android:id="@+id/add_transactions"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        app:layout_constraintDimensionRatio="1:1"
-        app:cardCornerRadius="20dp"
-        app:cardBackgroundColor="#C8C8C8"
-        app:layout_constraintVertical_bias="459"
-        app:layout_constraintBottom_toBottomOf="@id/menu_container"
-        android:layout_marginBottom="45dp"
-        app:layout_constraintLeft_toLeftOf="@id/menu_container"
-        app:layout_constraintRight_toRightOf="@id/menu_container"
-
-        >
-        <!--#27282C-->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_baseline_add_24"
-            app:tint="#000000"
-            android:padding="15dp"/>
-    </androidx.cardview.widget.CardView>
-    <eightbitlab.com.blurview.BlurView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="#0CFFFFFF"
-        app:layout_constraintTop_toTopOf="@id/menu_container"
-        app:layout_constraintLeft_toLeftOf="@id/menu_container"
-        app:layout_constraintRight_toRightOf="@id/menu_container"
-        app:layout_constraintBottom_toBottomOf="@id/menu_container"
-        android:id="@+id/menu_blur_container">
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#1C1D20"
+        <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="@id/menu_container"
+            app:layout_constraintLeft_toLeftOf="@id/menu_container"
+            app:layout_constraintRight_toRightOf="@id/menu_container"
+            app:layout_constraintBottom_toBottomOf="@id/menu_container"
+            app:backgroundCustomColor="#17191C"
             >
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/add_transactions"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintDimensionRatio="1:1"
+                app:cardCornerRadius="40dp"
+                app:cardBackgroundColor="#C8C8C8"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="5dp"
+                >
+                <!--#27282C-->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_baseline_add_24"
+                    app:tint="#000000"
+                    android:padding="10dp"/>
+            </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="1:1"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_baseline_add_box_24"
+                app:layout_constraintStart_toStartOf="@id/button_all"
+                app:layout_constraintEnd_toEndOf="@id/button_all"
+                app:layout_constraintTop_toTopOf="@id/add_transactions"
+                android:alpha=".5"
+                android:layout_marginTop="5dp"
+                android:id="@+id/wallet_icon"/>
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/button_all"
                 android:text="Wallet"
                 android:gravity="center"
                 android:foregroundTint="#ffffff"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/button_body"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginBottom="40dp"
+                app:layout_constraintTop_toBottomOf="@id/wallet_icon"
+                android:layout_marginTop="5dp"
                 />
-
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="1:1"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_baseline_spa_24"
+                app:layout_constraintStart_toStartOf="@id/button_body"
+                app:layout_constraintEnd_toEndOf="@id/button_body"
+                app:layout_constraintTop_toTopOf="@id/add_transactions"
+                android:alpha=".5"
+                android:layout_marginTop="5dp"
+                android:id="@+id/goal_icon"
+                />
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/button_body"
                 app:layout_constraintLeft_toRightOf="@id/button_all"
-                app:layout_constraintRight_toLeftOf="@id/button_mind"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/add_transactions"
+                app:layout_constraintTop_toBottomOf="@id/goal_icon"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:text="Goals"
                 android:gravity="center"
                 android:alpha="1"
-                android:layout_marginEnd="30dp"
-                android:textSize="12sp"
-                android:layout_marginBottom="40dp"
+                android:textSize="11sp"
                 />
-
-            <TextView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/button_mind"
+                app:layout_constraintEnd_toEndOf="@id/button_mind"
+                android:id="@+id/goals_click_area"/>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="1:1"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_baseline_data_usage_24"
+                app:layout_constraintStart_toStartOf="@id/button_mind"
+                app:layout_constraintEnd_toEndOf="@id/button_mind"
+                app:layout_constraintTop_toTopOf="@id/add_transactions"
+                android:alpha=".5"
+                android:layout_marginTop="5dp"
+                app:tint="#00A6FF"
+                android:id="@+id/analysis_icon"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/button_mind"
                 android:text="Analysis"
                 android:gravity="center"
-                app:layout_constraintLeft_toRightOf="@id/button_body"
+                app:layout_constraintLeft_toRightOf="@id/add_transactions"
                 app:layout_constraintRight_toLeftOf="@id/button_money"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="20dp"
+                app:layout_constraintTop_toBottomOf="@id/analysis_icon"
                 android:textColor="#00A6FF"
                 android:alpha="1"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:fontFamily="sans-serif-medium"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_marginBottom="40dp"
-                android:layout_marginStart="30dp"/>
+               />
 
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/button_mind"
+                app:layout_constraintEnd_toEndOf="@id/button_mind"
+                android:id="@+id/analysis_click_area"/>
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -143,25 +196,23 @@
                 android:gravity="center"
                 app:layout_constraintLeft_toRightOf="@id/button_mind"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/add_transactions"
+                android:layout_marginTop="5dp"
+                app:layout_constraintBottom_toBottomOf="@id/add_transactions"
                 android:visibility="visible"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_marginBottom="40dp"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </eightbitlab.com.blurview.BlurView>
-
+                />
+        </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@android:color/black"
-        android:alpha="0"
+        android:background="#6FFFFFFF"
+        android:id="@+id/seperator_line_menu"
         app:layout_constraintBottom_toTopOf="@id/menu_container"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:background="#541C1D20"
         app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/menu_container"
         />

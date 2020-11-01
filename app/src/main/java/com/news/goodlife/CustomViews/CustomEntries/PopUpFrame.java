@@ -16,7 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.news.goodlife.R;
 
-public class BorderRoundView extends ConstraintLayout {
+public class PopUpFrame extends ConstraintLayout {
     String strokeColor, backgroundColor;
     int strokeSize, borderRadius;
 
@@ -30,15 +30,16 @@ public class BorderRoundView extends ConstraintLayout {
     Context context;
     private boolean expandable = true;
 
-    public BorderRoundView(@NonNull Context context) {
+    public PopUpFrame(@NonNull Context context) {
         super(context);
     }
-    public BorderRoundView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public PopUpFrame(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
         setAttributes(attrs);
         configurePaints();
         setWillNotDraw(false);
+        setBackgroundColor("#1C2125");
     }
 
 
@@ -48,10 +49,15 @@ public class BorderRoundView extends ConstraintLayout {
     protected void onDraw(Canvas canvas) {
         roundedRectangle = new RectF(0 + strokeSize, 0 + strokeSize, getWidth() - strokeSize, getHeight() - strokeSize);
         expandEdgeRectangle = new RectF((int)(getWidth() - radiusSize * 1) - expandMargin, (int)(getHeight() - radiusSize * 1) - expandMargin, getWidth() - expandMargin, getHeight() - expandMargin);
-        if(background){
 
+//#1C2125
+
+            paintFill.setColor(Color.parseColor(getBackgroundColor()));
             canvas.drawRoundRect(roundedRectangle, radiusSize, radiusSize, paintFill);
-        }
+            paintFill.setColor(Color.parseColor("#FFFFFF"));
+            paintFill.setAlpha(13);
+            canvas.drawRoundRect(roundedRectangle, radiusSize, radiusSize, paintFill);
+
         if(stroke){
 
             canvas.drawRoundRect(roundedRectangle, radiusSize, radiusSize, paintStroke);
@@ -83,13 +89,12 @@ public class BorderRoundView extends ConstraintLayout {
             // All Set Draw Border
         }
 
-        if(background){
+
             paintFill = new Paint();
             paintFill.setStyle(Paint.Style.FILL);
-            paintFill.setColor(Color.parseColor(getBackgroundColor()));
             paintFill.setAntiAlias(true);
 
-        }
+
         if(radius){
             radiusSize = getBorderRadius();
         }
@@ -167,6 +172,7 @@ public class BorderRoundView extends ConstraintLayout {
 
     public void setBackgroundColor(String backgroundColor) {
         this.backgroundColor = backgroundColor;
+        invalidate();
     }
 
     public int getBorderRadius() {
@@ -177,3 +183,4 @@ public class BorderRoundView extends ConstraintLayout {
         this.borderRadius = borderRadius;
     }
 }
+

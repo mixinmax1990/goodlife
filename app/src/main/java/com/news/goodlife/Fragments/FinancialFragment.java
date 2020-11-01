@@ -1,4 +1,4 @@
-package com.news.goodlife.fragments;
+package com.news.goodlife.Fragments;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
@@ -43,7 +43,6 @@ import com.news.goodlife.Data.Local.Models.Financial.FinancialEventModel;
 import com.news.goodlife.Interfaces.OnClickedCashflowItemListener;
 import com.news.goodlife.R;
 
-import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

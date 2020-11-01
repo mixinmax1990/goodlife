@@ -1,4 +1,4 @@
-package com.news.goodlife.fragments;
+package com.news.goodlife.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,13 +9,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.news.goodlife.CustomViews.CustomIcons.HubIcon;
 import com.news.goodlife.R;
 
-public class PhysicalFragment extends Fragment {
+public class HealthFragment extends Fragment {
+
+    HubIcon spinIcon;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View root = inflater.inflate(R.layout.physical_fragment, container, false);
+        final View root = inflater.inflate(R.layout.health_fragment, container, false);
 
         return root;
     }

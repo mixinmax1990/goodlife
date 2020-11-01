@@ -1,4 +1,4 @@
-package com.news.goodlife.fragments;
+package com.news.goodlife.Fragments;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
@@ -8,21 +8,13 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.transition.Fade;
 
-import android.transition.TransitionManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,10 +22,8 @@ import androidx.fragment.app.Fragment;
 
 import com.news.goodlife.CustomViews.BezierView;
 import com.news.goodlife.CustomViews.DoughnutChartView;
-import com.news.goodlife.CustomViews.GoalChartView;
 import com.news.goodlife.CustomViews.GoalDrawView;
 import com.news.goodlife.Modules.AddGoal;
-import com.news.goodlife.Modules.CalendarPicker;
 import com.news.goodlife.R;
 import com.news.goodlife.Transitions.DetailsTransition;
 
@@ -81,10 +71,10 @@ public class FinancialFragmentOverview extends Fragment {
 // are not in the support library and are only available in API 21+. The methods we are calling on the Fragment
 // ARE available in the support library (though they don't do anything on API < 21)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            financialFragment.setSharedElementEnterTransition(new DetailsTransition());
+            financialFragment.setSharedElementEnterTransition(new DetailsTransition(400));
             financialFragment.setEnterTransition(new Fade());
             setExitTransition(new Fade());
-            financialFragment.setSharedElementReturnTransition(new DetailsTransition());
+            financialFragment.setSharedElementReturnTransition(new DetailsTransition(400));
         }
 
         listeners();

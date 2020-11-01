@@ -1,4 +1,4 @@
-package com.news.goodlife.fragments;
+package com.news.goodlife.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;

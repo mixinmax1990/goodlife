@@ -12,41 +12,126 @@
         android:layout_margin="20dp"
         android:id="@+id/weekend_title"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/weekend_scroll"
         app:layout_constraintStart_toStartOf="parent"/>
     <HorizontalScrollView
+        android:id="@+id/weekend_scroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="false"
+        android:scrollbarThumbHorizontal="@android:color/transparent"
         app:layout_constraintTop_toBottomOf="@id/weekend_title"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintDimensionRatio="1:1">
+        >
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintDimensionRatio="1:1"
-                android:layout_margin="5dp"
-                app:layout_constraintTop_toTopOf="parent"
+            <TextView
+                android:id="@+id/weekend_chart_one_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weekend_chart_one"
+                app:layout_constraintEnd_toEndOf="@id/weekend_chart_one"
                 app:layout_constraintBottom_toBottomOf="parent"
+                android:text="Chart One"
+                android:padding="12dp"
+                android:textSize="16sp"/>
+            <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+                android:id="@+id/weekend_chart_one"
+                android:layout_height="0dp"
+                android:layout_width="200dp"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/weekend_chart_one_title"
                 app:layout_constraintStart_toStartOf="parent"
-                app:cardCornerRadius="15dp"
-                app:cardBackgroundColor="#0AFFFFFF"
-                app:cardElevation="0dp"
-                android:id="@+id/week_analysis_card1"/>
+                android:layout_marginStart="10dp"
+                app:borderCustomRadius="50"
+                app:strokeCustomSize="3"
+                app:strokeCustomColor="#656A73">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="70dp"
+                    android:src="@drawable/ic_baseline_bubble_chart_24"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:tint="#88B1F2"/>
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintDimensionRatio="1:1"
-                android:layout_margin="5dp"
-                app:layout_constraintTop_toTopOf="parent"
+            </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
+
+            <TextView
+                android:id="@+id/weekend_chart_two_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weekend_chart_two"
+                app:layout_constraintEnd_toEndOf="@id/weekend_chart_two"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/week_analysis_card1"
-                app:cardCornerRadius="15dp"
-                app:cardBackgroundColor="#0AFFFFFF"
-                app:cardElevation="0dp"
-                android:id="@+id/week_analysis_card2"/>
+                android:text="Chart Two"
+                android:padding="12dp"
+                android:textSize="16sp"/>
+            <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+                android:id="@+id/weekend_chart_two"
+                android:layout_height="0dp"
+                android:layout_width="200dp"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/weekend_chart_two_title"
+                app:layout_constraintStart_toEndOf="@id/weekend_chart_one"
+                android:layout_marginStart="10dp"
+                app:borderCustomRadius="50"
+                app:strokeCustomSize="3"
+                app:strokeCustomColor="#656A73">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="70dp"
+                    android:src="@drawable/ic_baseline_bubble_chart_24"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:tint="#88B1F2"/>
+
+            </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
+
+            <TextView
+                android:id="@+id/weekend_chart_three_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weekend_chart_three"
+                app:layout_constraintEnd_toEndOf="@id/weekend_chart_three"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="Chart Three"
+                android:padding="12dp"
+                android:textSize="16sp"/>
+            <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+                android:id="@+id/weekend_chart_three"
+                android:layout_height="0dp"
+                android:layout_width="200dp"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/weekend_chart_three_title"
+                app:layout_constraintStart_toEndOf="@id/weekend_chart_two"
+                android:layout_marginStart="10dp"
+                app:borderCustomRadius="50"
+                app:strokeCustomSize="3"
+                app:strokeCustomColor="#656A73">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="70dp"
+                    android:src="@drawable/ic_baseline_bubble_chart_24"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:tint="#88B1F2"/>
+
+            </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </HorizontalScrollView>

@@ -4,38 +4,51 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
      android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    app:layout_constraintDimensionRatio="1:1"
-    android:paddingTop="60dp">
+    android:paddingTop="0dp">
 <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
     android:id="@+id/budget_liquid_container"
     android:layout_width="0dp"
     android:layout_height="0dp"
-
     app:cardBackgroundColor="#00000000"
     app:borderCustomRadius="50"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toStartOf="@id/events_outgoing"
+    app:layout_constraintEnd_toStartOf="@id/right_up_frame"
     app:layout_constraintTop_toBottomOf="@id/item_date"
-    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintBottom_toBottomOf="@id/right_up_frame"
     app:strokeCustomColor="#00FFFFFF"
     app:strokeCustomSize="1"
-    app:backgroundCustomColor="#0AFFFFFF"
-android:layout_margin="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="5dp"
     app:cardElevation="0dp"
     >
     <com.news.goodlife.CustomViews.LiquidView
         android:id="@+id/budget_liquid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:cardBackgroundColor="#2C2C2C"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="15dp"
         app:cardElevation="0dp"
         />
 
 </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:id="@+id/right_up_frame"
+        app:layout_constraintStart_toEndOf="@id/budget_liquid_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_date"
+
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        />
 
         <!--<FrameLayout
             android:id="@+id/cashflow_split"
@@ -45,15 +58,14 @@ android:layout_margin="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>-->
-        <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+        <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="10dp"
+            android:layout_marginEnd="10dp"
             app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintStart_toEndOf="@id/budget_liquid_container"
+            app:layout_constraintStart_toStartOf="@id/right_up_frame"
             app:layout_constraintEnd_toStartOf="@id/events_incoming"
-            app:layout_constraintTop_toBottomOf="@id/item_date"
-            app:backgroundCustomColor="#0FFFFFFF"
+            app:layout_constraintTop_toTopOf="@id/right_up_frame"
             app:borderCustomRadius="50"
             android:id="@+id/events_outgoing"
             >
@@ -66,7 +78,7 @@ android:layout_margin="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_margin="5dp"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:id="@+id/outgoint_title"/>
             <TextView
                 android:id="@+id/outgoing_value"
@@ -77,21 +89,20 @@ android:layout_margin="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="-26,46€"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:alpha="1"
                 android:layout_margin="10dp"
                 />
-        </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
+        </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
 
-        <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+        <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="10dp"
             app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintTop_toBottomOf="@id/item_date"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/right_up_frame"
+            app:layout_constraintEnd_toEndOf="@id/right_up_frame"
             app:layout_constraintStart_toEndOf="@id/events_outgoing"
-            app:backgroundCustomColor="#0FFFFFFF"
+            app:backgroundCustomColor="#1a1b1c"
             app:borderCustomRadius="50"
             android:id="@+id/events_incoming"
             >
@@ -99,7 +110,7 @@ android:layout_margin="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Einnahmen"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 app:layout_constraintBottom_toTopOf="@id/incoming_value"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -115,37 +126,182 @@ android:layout_margin="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="+180,46€"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:alpha="1"
                 android:layout_margin="10dp"
                 />
-        </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
+        </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
 
-    <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+    <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintTop_toBottomOf="@id/events_incoming"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/right_up_frame"
         app:layout_constraintEnd_toEndOf="@id/events_incoming"
         app:layout_constraintStart_toStartOf="@id/events_outgoing"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
-        app:backgroundCustomColor="#37000000"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="0dp"
+        app:backgroundCustomColor="#000000"
         app:borderCustomRadius="50"
-        android:id="@+id/events_flow"
+        android:id="@+id/cashcat_frame"
         >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cashflow"
-            android:alpha=".5"
+        <com.news.goodlife.CustomViews.BubbleChartCategories
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <com.news.goodlife.CustomViews.DoughnutChartCategories
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_margin="15dp"
-            android:id="@+id/flow_title"/>
+            android:id="@+id/graph"
+            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone"
+            />
+            <com.google.android.flexbox.FlexboxLayout
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cashcat_flex"
+                app:flexDirection="column"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/graph"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
+
+    </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
+
+
+    <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:borderCustomRadius="50"
+        app:backgroundCustomColor="#1a1b1c"
+        android:id="@+id/casflow_activities_container"
+        app:layout_constraintTop_toBottomOf="@id/budget_liquid_container"
+        android:layout_margin="10dp">
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            app:flexDirection="column"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:paddingBottom="20dp"
+            android:alpha="1"
+            android:id="@+id/flex_cont"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="20dp"
+                android:paddingStart="10dp"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="-0.99€"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text="Playstore Subsription"
+                    android:alpha=".5"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="20dp"
+                android:paddingStart="10dp"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="-11,65€"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text="Mc Donald's Sundern"
+                    android:alpha=".5"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="20dp"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                >
+                <TextView
+                    android:textAlignment="textEnd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="+138,00€"/>
+                <TextView
+                    android:textAlignment="textEnd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text="Google AdSense"
+                    android:alpha=".5"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="20dp"
+                android:paddingStart="10dp"
+                android:layout_marginBottom="20dp"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="-45,00€"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text="Amazon Web Services"
+                    android:alpha=".5"/>
+            </LinearLayout>
+
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+    </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
+
+    <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:layout_margin="10dp"
+        app:strokeCustomSize="5"
+        app:strokeCustomColor="#27FFFFFF"
+        app:borderCustomRadius="50"
+        app:layout_constraintTop_toBottomOf="@id/casflow_activities_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        android:id="@+id/notes_field">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:padding="10dp"
+            android:textSize="14sp"/>
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
 
 
@@ -164,7 +320,7 @@ android:layout_margin="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Monday"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:alpha="1"
             android:id="@+id/item_day"
             android:layout_marginTop="60dp"

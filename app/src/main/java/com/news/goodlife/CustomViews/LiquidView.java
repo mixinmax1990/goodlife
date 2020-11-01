@@ -31,7 +31,7 @@ public class LiquidView extends CardView {
 
     int wave = 0;
     int animatedValue = 0;
-    String liquidColor = "#1a5a96";
+    String liquidColor = "#59a7ff";
     String liquidTextPaint = "#009cff";
     String daysBudget;
     boolean isNegative = false;
@@ -43,7 +43,7 @@ public class LiquidView extends CardView {
     public void setNegative(boolean negative) {
         isNegative = negative;
         setLiquidTextPaint("#ef335a");
-        setLiquidColor("#961a34");
+        setLiquidColor("#ff6859");
 
     }
 
@@ -95,22 +95,14 @@ public class LiquidView extends CardView {
         setPaints();
 
         baseline = 200;
-        waveNo = 3;
+        waveNo = 4;
+        textSize = 16;
 
-        minWaveHeight = 5;
-        maxWaveHeight = 30;
-
-        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-
-
-            }
-        });
-
+        minWaveHeight = 10;
+        maxWaveHeight = 40;
 
         setDaysBudget("200,00€");
-        setRemainingBudget("145,50€");
+        setRemainingBudget("152,45€");
     }
 
     int baseline, width, height, waveLength, x1,y1,x2,y2,x3,y3;
@@ -126,20 +118,42 @@ public class LiquidView extends CardView {
         liquidPaint.setAntiAlias(true);
 
         bgPaint.setStyle(Paint.Style.FILL);
-        bgPaint.setColor(Color.parseColor("#ffffff"));
+        bgPaint.setColor(Color.parseColor(getLiquidColor()));
         bgPaint.setAntiAlias(true);
-        bgPaint.setAlpha(7);
+        bgPaint.setAlpha(30);
 
+        if(textEnabled){
+            textPaint.setAlpha(255);
+        }
+        else{
+            textPaint.setAlpha(0);
+        }
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setColor(Color.parseColor(getLiquidTextPaint()));
         textPaint.setAntiAlias(true);
-
-
     }
 
+    public boolean isTextEnabled() {
+        return textEnabled;
+    }
+
+    public void setTextEnabled(boolean textEnabled) {
+        this.textEnabled = textEnabled;
+    }
+
+    boolean textEnabled;
     int waveOneHeight, waveTwoHeight, waveThreeHeight;
 
+    public int getTextSize() {
+        return textSize;
+    }
+
+    public void setTextSize(int textSize) {
+        this.textSize = textSize;
+    }
+
+    int textSize;
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -160,14 +174,16 @@ public class LiquidView extends CardView {
         liquidPath.lineTo(0, getHeight());
         liquidPath.close();
 
+        canvas.drawRoundRect(new RectF(0,0,getWidth(),getHeight()),50,50,bgPaint);
+
         canvas.drawPath(liquidPath, liquidPaint);
         textPaint.setColor(Color.parseColor(getLiquidTextPaint()));
-        textPaint.setTextSize(18 * getResources().getDisplayMetrics().scaledDensity);
-        canvas.drawText(remainingBudget, getWidth()/2, baseline + 50 - (int)(randomWaveHeight(0) * waveMovementUp) , textPaint);
-        textPaint.setTextSize(12 * getResources().getDisplayMetrics().scaledDensity);
-        canvas.drawText("Budget", getWidth()/2,height - 30 - (int)(randomWaveHeight(0) * waveMovementUp) , textPaint );
+        textPaint.setTextSize(textSize * getResources().getDisplayMetrics().scaledDensity);
         textPaint.setColor(Color.parseColor("#FFFFFF"));
-        textPaint.setAlpha(70);
+        canvas.drawText(remainingBudget, getWidth()/2, height / 2 - (int)(randomWaveHeight(0) * waveMovementUp) , textPaint);
+        textPaint.setTextSize(12 * getResources().getDisplayMetrics().scaledDensity);
+        //canvas.drawText("Budget", getWidth()/2,height - 30 - (int)(randomWaveHeight(0) * waveMovementUp) , textPaint );
+        textPaint.setColor(Color.parseColor("#FFFFFF"));
         //canvas.drawText("-"+daysBudget, width - 50, baseline / 2, textPaint);
 
 

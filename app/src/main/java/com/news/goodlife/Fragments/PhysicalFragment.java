@@ -1,4 +1,4 @@
-package com.news.goodlife.fragments;
+package com.news.goodlife.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,11 +11,11 @@ import androidx.fragment.app.Fragment;
 
 import com.news.goodlife.R;
 
-public class MentalFragment extends Fragment {
+public class PhysicalFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View root = inflater.inflate(R.layout.mental_fragment, container, false);
+        final View root = inflater.inflate(R.layout.physical_fragment, container, false);
 
         return root;
     }

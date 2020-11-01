@@ -1,10 +1,11 @@
-package com.news.goodlife.fragments;
+package com.news.goodlife.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -19,22 +20,20 @@ import com.news.goodlife.R;
 
 import java.util.List;
 
-public class CashflowOnceFragment extends Fragment {
-
+public class CashflowRegularFragment extends Fragment {
     RecyclerView recyclerView;
     List<FinancialEventModel> cashflows;
-
     OnClickedCashflowItemListener callback;
 
-    public CashflowOnceFragment(List<FinancialEventModel> outgoingCashflows) {
-        this.cashflows = outgoingCashflows;
+    public CashflowRegularFragment(List<FinancialEventModel> incomingCashflows) {
+        this.cashflows = incomingCashflows;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View root = inflater.inflate(R.layout.fragment_cashflow_once, container, false);
-        recyclerView = root.findViewById(R.id.cashflow_outgoing_recyclerview);
+        final View root = inflater.inflate(R.layout.fragment_cashflow_regular, container, false);
+        recyclerView = root.findViewById(R.id.cashflow_incoming_recyclerview);
         loadRecycler();
         return root;
     }
@@ -77,5 +76,4 @@ public class CashflowOnceFragment extends Fragment {
         super.onDetach();
         callback = null;
     }
-
 }
