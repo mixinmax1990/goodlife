@@ -8,13 +8,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.transition.Fade;
 
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,12 +26,15 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -43,15 +46,17 @@ import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
+import com.news.goodlife.CustomViews.CustomIcons.MenuIcons;
 import com.news.goodlife.CustomViews.ElasticEdgeView;
+import com.news.goodlife.Fragments.WalletCalendarFragment;
+import com.news.goodlife.Fragments.WalletTodayFragment;
 import com.news.goodlife.Interfaces.OnClickedCashflowItemListener;
 import com.news.goodlife.Tools.CameraScan.CameraScanFragment;
-import com.news.goodlife.Fragments.FinanceCashflow;
+import com.news.goodlife.Fragments.WalletMultiDaysFragment;
 import com.news.goodlife.Fragments.FinancialFragment;
 import com.news.goodlife.Fragments.FinancialFragmentOverview;
 import com.news.goodlife.Fragments.HealthFragment;
 import com.news.goodlife.Fragments.PhysicalFragment;
-import com.news.goodlife.Transitions.DetailsTransition;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -68,14 +73,9 @@ import eightbitlab.com.blurview.RenderScriptBlur;
 public class MainActivity extends AppCompatActivity implements OnClickedCashflowItemListener {
 
     String appName = "My Finances";
-    TextView btn_health;
-    TextView btn_physical;
-    TextView btn_mental;
-    TextView btn_financial;
     TextView app_titleTV;
-    TextView btn_scanCamera;
-    public FrameLayout fragment_container;
-    FrameLayout fragment_pop_container;
+    public FrameLayout fragment_container_one;
+    public FrameLayout fragment_container_two;
 
     private Fragment fragment;
     int selectedFragment = 0;
@@ -91,9 +91,21 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
 
     ElasticEdgeView elasticEdgeView;
     ConstraintLayout mainContainer;
+    private Vibrator vibrator;
+    //Fragment Navigation
+
+    //Overview Frame
+    TextView overviewTodayTitle, overviewCalendarTitle;
+
+
+    //MenuIcons
+    MenuIcons walletBTN, goalsBTN, analysisBTN, hubBTN;
 
     //Menu Navigation
-    View analysisClickArea, goalsClickArea;
+    View menuFloatingBtn;
+
+    //Metrics
+    int displayWidth, displayHeight;
 
 
     @Override
@@ -103,13 +115,16 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
         transparentStatus();
         setStatusbarspace();
 
-        btn_health = findViewById(R.id.button_all);
-        btn_physical = findViewById(R.id.button_body);
-        btn_mental = findViewById(R.id.button_mind);
-        btn_financial = findViewById(R.id.button_money);
-        btn_scanCamera = findViewById(R.id.button_camerascan);
-        fragment_container = findViewById(R.id.fragment_container);
-        fragment_pop_container = findViewById(R.id.popFragmentContainer);
+
+        walletBTN = findViewById(R.id.buttonWallet);
+        goalsBTN = findViewById(R.id.buttonGoals);
+        analysisBTN = findViewById(R.id.buttonAnalysis);
+        hubBTN = findViewById(R.id.buttonHub);
+
+
+
+        fragment_container_one = findViewById(R.id.fragment_container_one);
+        fragment_container_two = findViewById(R.id.fragment_container_two);
         statusbarspace = findViewById(R.id.statusspace);
         app_titleTV = findViewById(R.id.app_title);
 
@@ -117,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
         mainContainer = findViewById(R.id.main_container);
         menu_container = findViewById(R.id.menu_container);
         menu_line = findViewById(R.id.seperator_line_menu);
+        menuFloatingBtn = findViewById(R.id.main_menu_float_open_btn);
 
         //Recognize Image
         cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -125,9 +141,17 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
 
 
         //Navigation Section
-        analysisClickArea = findViewById(R.id.analysis_click_area);
-        goalsClickArea = findViewById(R.id.goals_click_area);
 
+
+        //Overview
+        overviewTodayTitle = findViewById(R.id.wallet_overview_today_title);
+        overviewCalendarTitle = findViewById(R.id.wallet_overview_calendar_title);
+
+        vibrator  = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+        //open Wallet First
+        selectedFragment = 3;
+        changeSelectedColor();
 
         DarkMode = true;
 
@@ -135,7 +159,230 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
         //blur(15f);
         
         loadTools();
+
+        fragment_container_one.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                displayWidth = fragment_container_one.getWidth();
+                displayHeight = fragment_container_one.getHeight();
+                fragment_container_two.setX(displayWidth);
+
+                overviewFragments();
+
+                //slideMechanism(0, true);
+
+                fragment_container_one.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
     }
+
+    //Slideing Fragments Mechanism
+
+    public boolean slideToday = false;
+    public boolean slideCalendar = false;
+    boolean vibratedSlideIn = false;
+    boolean vibratedSlideOut = false;
+
+    public void slideMechanism(int move, boolean open){
+        float moveScale;
+
+        float slideProgess;
+        if(open){
+            slideProgess = (float)(displayWidth - move) / displayWidth;
+            if(slideProgess > .7f){
+                if(!vibratedSlideIn){
+                    vibrator.vibrate(20);
+                    vibratedSlideIn = true;
+                }
+            }
+        }
+        else{
+            slideProgess = Math.abs((float)move / displayWidth);
+            if(slideProgess > .3f){
+                if(!vibratedSlideIn){
+                    vibrator.vibrate(20);
+                    vibratedSlideIn = true;
+                }
+            }
+        }
+
+        setSlideWidth(move, open);
+        float visibleScreen;
+        if(open){
+             visibleScreen = (float)(displayWidth - move) / displayWidth;
+
+             // Move the Indicator
+            try {
+                walletTodayFragment.moveIndicator((int)(displayWidth - dpToPx(8) - move * 1.5), displayWidth);
+            }
+            catch(Exception e){}
+        }
+        else{
+            visibleScreen = ((float)move / displayWidth);
+            walletCalendarFragment.moveIndicator((int)(dpToPx(2) + move), displayWidth);
+        }
+
+
+        moveScale = 0.5f + (visibleScreen/2);
+
+        setScaleNavigation(moveScale, 1f);
+
+        scrollHeightMenu((move / 20)*-1, true);
+
+    }
+
+    public void autoFinishSlide(int move,final boolean open, long velocity){
+
+
+        float slideProgess;
+        if(open){
+             slideProgess = (float)(displayWidth - move) / displayWidth;
+        }
+        else{
+            slideProgess = Math.abs((float)move / displayWidth);
+        }
+
+        boolean close = false;
+        ValueAnimator va;
+        //Opening Fragment Two
+        if(open){
+            if(slideProgess > .7f){
+                close = true;
+            }
+
+            if(close){
+                va = ValueAnimator.ofInt(move, 0);
+            }
+            else{
+                va = ValueAnimator.ofInt(move, displayWidth);
+            }
+        }
+        //Opening Fragment One
+        else{
+
+            //Log.i("SlideProg", ""+slideProgess);
+            if(slideProgess > .3f){
+                close = true;
+            }
+
+            if(close){
+                va = ValueAnimator.ofInt(Math.abs(move), displayWidth);
+            }
+            else{
+                va = ValueAnimator.ofInt(move, 0);
+            }
+        }
+
+
+
+        //Determin Velocity
+        Log.i("Velocity",""+velocity);
+        if(velocity > 350){
+            velocity = 350;
+        }
+
+
+        va.setDuration(velocity);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+
+                int animval = (int)valueAnimator.getAnimatedValue();
+                //Log.i("AnimVal", ""+animval);
+                slideMechanism(Math.abs(animval), open);
+            }
+
+        });
+
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+
+                vibratedSlideIn = false;
+                vibratedSlideOut = false;
+                walletCalendarFragment.resetIndicator(dpToPx(2));
+                walletTodayFragment.resetIndicator(displayWidth - dpToPx(8));
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+        va.start();
+
+    }
+
+
+    boolean overviewWallet = false;
+    int overviewFragTwoX;
+    //Overview Fragments
+    public void overviewFragments(){
+        overviewWallet = true;
+
+        float scale = 0.45f;
+        int centerScaledWidth = (int)(displayWidth * .5)/2;
+
+        setScaleNavigation(scale,scale);
+
+        //overviewFragTwoX = (int)(displayWidth /2.5);
+        //setSlideWidth(overviewFragTwoX, true);
+
+        fragment_container_one.setX(-centerScaledWidth);
+        fragment_container_two.setX(centerScaledWidth);
+
+        overviewCalendarTitle.setVisibility(View.VISIBLE);
+        overviewTodayTitle.setVisibility(View.VISIBLE);
+
+        overviewTodayTitle.setX(-centerScaledWidth);
+        overviewTodayTitle.setY(displayHeight/4 - dpToPx(10));
+        overviewCalendarTitle.setX(centerScaledWidth);
+        overviewCalendarTitle.setY(displayHeight/4 - dpToPx(10));
+
+
+    }
+
+    public void setScaleNavigation(float fragOneScale, float fragTwoScale){
+
+        fragment_container_one.setScaleX(fragOneScale);
+        fragment_container_one.setScaleY(fragOneScale);
+
+        fragment_container_two.setScaleX(fragTwoScale);
+        fragment_container_two.setScaleY(fragTwoScale);
+
+    }
+
+    public void setSlideWidth(int move, boolean open){
+        if(open){
+            fragment_container_two.setX(displayWidth - move);
+        }
+        else{
+            fragment_container_two.setX(move);
+        }
+
+    }
+    public void setSlideOverview(int move, boolean open){
+
+            fragment_container_two.setX(overviewFragTwoX - move);
+            //fragment_container_one.setX(-move);
+
+    }
+
+
 
     @Override
     public void onBackPressed() {
@@ -175,53 +422,125 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
     int menuTop = 0;
     private void listeners(){
 
-        btn_health.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectedFragment = 1;
-                //btn_health.animateSpin();
-                changeSelectedColor();
 
+        walletBTN.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                resetButtonTint();
+                switch(motionEvent.getActionMasked()){
+                    case MotionEvent.ACTION_DOWN:
+                        walletBTN.animateEnter();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        walletBTN.animateLeave();
+                        selectedFragment = 3;
+                        changeSelectedColor();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        break;
+                }
+
+                return true;
             }
         });
 
-        btn_physical.setOnClickListener(new View.OnClickListener() {
+        goalsBTN.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                selectedFragment = 2;
-                changeSelectedColor();
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                resetButtonTint();
+                switch(motionEvent.getActionMasked()){
+                    case MotionEvent.ACTION_DOWN:
+                        goalsBTN.animateEnter();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        goalsBTN.animateLeave();
+                        selectedFragment = 2;
+                        changeSelectedColor();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        break;
+                }
 
+                return true;
             }
         });
 
-        analysisClickArea.setOnClickListener(new View.OnClickListener() {
+        analysisBTN.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                selectedFragment = 3;
-                changeSelectedColor();
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                resetButtonTint();
+                switch(motionEvent.getActionMasked()){
+                    case MotionEvent.ACTION_DOWN:
+                        analysisBTN.animateEnter();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        analysisBTN.animateLeave();
+                        selectedFragment = 3;
+                        changeSelectedColor();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        break;
+                }
 
+                return true;
             }
         });
 
-
-
-        btn_financial.setOnClickListener(new View.OnClickListener() {
+        hubBTN.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                selectedFragment = 4;
-                changeSelectedColor();
+            public boolean onTouch(View view, MotionEvent motionEvent) {
 
+                resetButtonTint();
+                switch(motionEvent.getActionMasked()){
+                    case MotionEvent.ACTION_DOWN:
+                        hubBTN.animateEnter();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        hubBTN.animateLeave();
+                        selectedFragment = 1;
+                        changeSelectedColor();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        break;
+                }
+
+                return true;
             }
         });
-        btn_scanCamera.setOnClickListener(new View.OnClickListener() {
+
+        hubBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showImageImportDialog();
             }
         });
 
+        menuFloatingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleMainMenuContainer();
+            }
+        });
+
+
+        menu_container.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if(!menuDrawn){
+                    menu_containerLP = menu_container.getLayoutParams();
+                    menu_containerHeight = menu_container.getHeight();
+                    dynamicMenuHeight = menu_containerHeight;
+                    menuDrawn = true;
+                }
+            }
+        });
+
+
     }
 
+    boolean menuDrawn = false;
+    private ViewGroup.LayoutParams menu_containerLP;
+    int menu_containerHeight;
 
     private void changeSelectedColor(){
         resetButtonTint();
@@ -247,6 +566,10 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
     }
 
     private void resetButtonTint(){
+        walletBTN.unSelectMenu();
+        goalsBTN.unSelectMenu();
+        analysisBTN.unSelectMenu();
+        hubBTN.unSelectMenu();
 
     }
 
@@ -271,41 +594,53 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
     private HealthFragment healthFragment;
     private PhysicalFragment physicalFragment;
     private FinancialFragment financialFragment;
-    public FinanceCashflow financeCashflow;
+    public WalletMultiDaysFragment walletMultiDaysFragment;
+    public WalletTodayFragment walletTodayFragment;
+    public WalletCalendarFragment walletCalendarFragment;
     private FinancialFragmentOverview financialFragmentOverview;
     private CameraScanFragment cameraScanFragment;
 
     private void openFragment() {
-        fragment_container.removeAllViews();
+        fragment_container_one.removeAllViews();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
         switch(selectedFragment){
             case 1:
                 healthFragment = new HealthFragment();
-                ft.replace(fragment_container.getId(), healthFragment);
+                ft.replace(fragment_container_one.getId(), healthFragment);
                 ft.addToBackStack(healthFragment.getClass().getSimpleName());
                 app_titleTV.setText("My Hub");
                 app_titleTV.setVisibility(View.GONE);
                 break;
             case 2:
                 financialFragmentOverview = new FinancialFragmentOverview(this.getBaseContext());
-                ft.replace(fragment_container.getId(), financialFragmentOverview);
-                ft.addToBackStack(fragment_container.getClass().getSimpleName());
+                ft.replace(fragment_container_one.getId(), financialFragmentOverview);
+                ft.addToBackStack(fragment_container_one.getClass().getSimpleName());
                 app_titleTV.setText(appName);
                 app_titleTV.setVisibility(View.VISIBLE);
 
                 break;
             case 3:
-                financeCashflow = new FinanceCashflow(menuTop, fragment_container, menu_container);
+                //overviewFragments();
+                //Calendar Frame
+                walletMultiDaysFragment = new WalletMultiDaysFragment(menuTop, fragment_container_two, menu_container);
+                walletCalendarFragment = new WalletCalendarFragment();
+                walletTodayFragment = new WalletTodayFragment();
                 //financeCashflow.setSharedElementReturnTransition(new DetailsTransition());
                 //financeCashflow.setExitTransition(new DetailsTransition());
-                ft.replace(fragment_container.getId(), financeCashflow);
-                ft.addToBackStack(financeCashflow.getClass().getSimpleName());
+                ft.replace(fragment_container_one.getId(), walletTodayFragment);
+                //ft.addToBackStack(walletMultiDaysFragment.getClass().getSimpleName());
                 app_titleTV.setText(appName);
                 app_titleTV.setVisibility(View.GONE);
+
+                //Today Frame
+                ft.replace(fragment_container_two.getId(), walletCalendarFragment);
+
+
                 break;
             case 4:
                 physicalFragment = new PhysicalFragment();
-                ft.replace(fragment_container.getId(), physicalFragment);
+                ft.replace(fragment_container_one.getId(), physicalFragment);
                 ft.addToBackStack(physicalFragment.getClass().getSimpleName());
                 app_titleTV.setText(appName);
                 app_titleTV.setVisibility(View.VISIBLE);
@@ -316,10 +651,49 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
         ft.commit();
     }
 
+    int scrollDist = 0;
+    boolean scrollDirUp = true;
+    int dynamicMenuHeight;
+    float alpha = 1;
+    public void resetScrollDist(){
+        scrollDist = 0;
+    }
+    public void scrollHeightMenu(int scroll, boolean up){
+
+        //Log.i("Scroll", ""+scroll);
+
+        if(scrollDirUp != up){
+            resetScrollDist();
+            scrollDirUp = up;
+        }
+
+        scrollDist = scrollDist + scroll;
+
+        if(Math.abs(scrollDist) < menu_containerHeight){
+
+            //scrolling is within the menuRange
+
+                if(dynamicMenuHeight <= menu_containerHeight){
+                    //set the dynamic height
+
+                    dynamicMenuHeight = dynamicMenuHeight + scroll;
+                    if(dynamicMenuHeight > menu_containerHeight){dynamicMenuHeight = menu_containerHeight;}
+                    if(dynamicMenuHeight < 0){dynamicMenuHeight = 0;}
+
+                    alpha = (float)dynamicMenuHeight / menu_containerHeight;
+                    menu_containerLP.height = dynamicMenuHeight;
+                    menu_container.setLayoutParams(menu_containerLP);
+                    menuFloatingBtn.setAlpha(1-alpha);
+                    menu_line.setAlpha(alpha);
+
+                }
+        }
+
+    }
+
     public boolean mainMenuVisible = true;
     public void toggleMainMenuContainer(){
 
-        final ViewGroup.LayoutParams lp = menu_container.getLayoutParams();
         ValueAnimator va;
         if(mainMenuVisible){
             va = ValueAnimator.ofInt(dpToPx(100), 0);
@@ -337,8 +711,10 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 int animval = (int)valueAnimator.getAnimatedValue();
 
-                lp.height = animval;
-                menu_container.setLayoutParams(lp);
+                menu_containerLP.height = animval;
+                menu_container.setLayoutParams(menu_containerLP);
+                alpha = 1 - ((float)animval/menu_containerHeight);
+                menuFloatingBtn.setAlpha(alpha);
             }
 
         });
@@ -356,10 +732,12 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
                 if(mainMenuVisible){
                     mainMenuVisible = false;
                     menu_line.animate().alpha(0).setDuration(350);
+
                 }
                 else{
                     mainMenuVisible = true;
                     menu_line.animate().alpha(1).setDuration(350);
+
                 }
             }
 
@@ -394,6 +772,8 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
         sbsLP.height = statusBarHeight;
         //statusbarspace.setLayoutParams(sbsLP);
     }
+
+
 
     @Override
     public void onCashflowItemClicked(int position) {
@@ -804,7 +1184,7 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
 
     public void checkBackstack(){
 
-            Log.i("MainFragmentChildren", "--"+fragment_container.getChildCount());
+            Log.i("MainFragmentChildren", "--"+ fragment_container_one.getChildCount());
 
     }
 

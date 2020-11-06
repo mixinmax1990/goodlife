@@ -7,8 +7,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Weekend"
-        android:textSize="20sp"
+        android:text="Week Analysis"
+        android:textSize="18sp"
         android:layout_margin="20dp"
         android:id="@+id/weekend_title"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,9 +25,17 @@
         app:layout_constraintTop_toBottomOf="@id/weekend_title"
         app:layout_constraintLeft_toLeftOf="parent"
         >
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:backgroundCustomColor="#101315"
+            app:borderCustomRadius="80"
+            android:id="@+id/cashflow_weekend_container"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:paddingTop="15dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp">
             <TextView
                 android:id="@+id/weekend_chart_one_title"
                 android:layout_width="wrap_content"
@@ -38,7 +46,7 @@
                 android:text="Chart One"
                 android:padding="12dp"
                 android:textSize="16sp"/>
-            <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+            <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
                 android:id="@+id/weekend_chart_one"
                 android:layout_height="0dp"
                 android:layout_width="200dp"
@@ -46,22 +54,17 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/weekend_chart_one_title"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="10dp"
                 app:borderCustomRadius="50"
-                app:strokeCustomSize="3"
-                app:strokeCustomColor="#656A73">
-                <ImageView
+               >
+                <com.news.goodlife.CustomViews.BubbleChartCategories
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="70dp"
-                    android:src="@drawable/ic_baseline_bubble_chart_24"
+                    android:id="@+id/testthis"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:tint="#88B1F2"/>
+                    />
 
-            </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
+            </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
 
             <TextView
                 android:id="@+id/weekend_chart_two_title"
@@ -73,7 +76,7 @@
                 android:text="Chart Two"
                 android:padding="12dp"
                 android:textSize="16sp"/>
-            <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+            <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
                 android:id="@+id/weekend_chart_two"
                 android:layout_height="0dp"
                 android:layout_width="200dp"
@@ -83,8 +86,7 @@
                 app:layout_constraintStart_toEndOf="@id/weekend_chart_one"
                 android:layout_marginStart="10dp"
                 app:borderCustomRadius="50"
-                app:strokeCustomSize="3"
-                app:strokeCustomColor="#656A73">
+                >
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -96,7 +98,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:tint="#88B1F2"/>
 
-            </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
+            </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
 
             <TextView
                 android:id="@+id/weekend_chart_three_title"
@@ -108,7 +110,7 @@
                 android:text="Chart Three"
                 android:padding="12dp"
                 android:textSize="16sp"/>
-            <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+            <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
                 android:id="@+id/weekend_chart_three"
                 android:layout_height="0dp"
                 android:layout_width="200dp"
@@ -118,8 +120,7 @@
                 app:layout_constraintStart_toEndOf="@id/weekend_chart_two"
                 android:layout_marginStart="10dp"
                 app:borderCustomRadius="50"
-                app:strokeCustomSize="3"
-                app:strokeCustomColor="#656A73">
+                >
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -131,9 +132,9 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:tint="#88B1F2"/>
 
-            </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
+            </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
     </HorizontalScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

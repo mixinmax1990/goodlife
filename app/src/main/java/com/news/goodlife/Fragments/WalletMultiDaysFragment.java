@@ -2,7 +2,6 @@ package com.news.goodlife.Fragments;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -22,9 +21,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Explode;
-import androidx.transition.Fade;
 
 import com.news.goodlife.Adapters.Recycler.CashflowMainAdapter;
+import com.news.goodlife.CustomViews.BubbleChartCategories;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.CustomViews.ElasticEdgeView;
 import com.news.goodlife.CustomViews.LiquidView;
@@ -40,7 +39,7 @@ import java.util.Random;
 
 import static androidx.recyclerview.widget.RecyclerView.*;
 
-public class FinanceCashflow extends Fragment {
+public class WalletMultiDaysFragment extends Fragment {
 
     //Account Tabs
     //TODO For testing Purposes (these will have to be created dynamically)
@@ -62,22 +61,25 @@ public class FinanceCashflow extends Fragment {
     public MainActivity activity;
     TextView overflowDay;
 
+    BorderRoundView slideIndicator;
+
 
 
     public int menuTop;
-    public FinanceCashflow(int menuTop, FrameLayout popContainer, FrameLayout menu_container) {
+    public WalletMultiDaysFragment(int menuTop, FrameLayout popContainer, FrameLayout menu_container) {
         this.menuTop = menuTop;
         this.popContainer = popContainer;
         this.menu_container = menu_container;
 
-
-        Log.i("Menu Top", ""+menuTop);
     }
+    int firstElement = 10000;
+    int lastElement = 10001;
+    ViewHolder visibleViewHolder;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.finance_cashflow, container, false);
+        View root = inflater.inflate(R.layout.wallet_multi_days, container, false);
         activity = (MainActivity) getActivity();
 
         //Tab Sections
@@ -100,37 +102,71 @@ public class FinanceCashflow extends Fragment {
         //elasticContentSkeleton.setLayoutParams(skeletonLP);
         monthviewIcon = root.findViewById(R.id.monthview_icon);
         overflowDay = root.findViewById(R.id.overflow_day);
+        slideIndicator = root.findViewById(R.id.slide_indicator);
 
         final LiquidView[] countVisibleLiquid = new LiquidView[1];
         final TextView[] countVisibleDayNames = new TextView[1];
 
 
 
+
         cashflow_recycler.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                for(int i = llm.findFirstVisibleItemPosition(); i <= llm.findLastVisibleItemPosition(); i++){
-                    try {
-                        ViewHolder vh = cashflow_recycler.findViewHolderForAdapterPosition(i);
-                        countVisibleLiquid[0] = vh.itemView.findViewById(R.id.budget_liquid);
-                        countVisibleDayNames[0] = vh.itemView.findViewById(R.id.item_day);
-                        countVisibleDayNames[0].setTransitionName(i+"_dayname");
-                        countVisibleLiquid[0].setTransitionName(i+"_trans");
-                        countVisibleLiquid[0].getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                            @Override
-                            public void onGlobalLayout() {
-                                try {
-                                   // countVisibleLiquid[0].animateWave();
-                                }catch(Exception e){
 
-                                };
-                            }
-                        });
-                    }
-                    catch (Exception e){
+                //Log.i("FirstVisibleElement", ""+llm.findFirstVisibleItemPosition());
+                if(firstElement != llm.findFirstVisibleItemPosition()){
+                    firstElement = llm.findFirstVisibleItemPosition();
+                    //resetWave(firstElement);
 
+                    for(int i = llm.findFirstVisibleItemPosition(); i <= llm.findLastVisibleItemPosition(); i++){
+                        //Log.i("Visible Element Loop", "Runs"+i);
+                        final int x = i;
+                        try {
+                            visibleViewHolder = cashflow_recycler.findViewHolderForAdapterPosition(i);
+                            LiquidView liquid = visibleViewHolder.itemView.findViewById(R.id.budget_liquid);
+                            BubbleChartCategories bubbleChart = visibleViewHolder.itemView.findViewById(R.id.item_day_bubble_chart);
+                            TextView date = visibleViewHolder.itemView.findViewById(R.id.item_day);
+                            liquid.animateWave();
+                            bubbleChart.animateBubbles();
+                            liquid.setTransitionName(i + "_trans");
+                            date.setTransitionName(i + "_dayname");
+
+                        }catch(Exception e){
+
+                        }
+
+                        /*
+                        try {
+                            ViewHolder vh = cashflow_recycler.findViewHolderForAdapterPosition(i);
+                            countVisibleLiquid[0] = vh.itemView.findViewById(R.id.budget_liquid);
+                            countVisibleDayNames[0] = vh.itemView.findViewById(R.id.item_day);
+                            countVisibleDayNames[0].setTransitionName(i+"_dayname");
+                            countVisibleLiquid[0].setTransitionName(i+"_trans");
+                            countVisibleLiquid[0].getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                                @Override
+                                public void onGlobalLayout() {
+                                    try {
+                                        countVisibleLiquid[0].animateWave();
+                                        Log.i("Visible Element Loop", "Animate"+x);
+                                    }catch(Exception e){
+                                        Log.i("Visible Element Loop", "Error"+x);
+                                    };
+                                }
+                            });
+                        }
+                        catch (Exception e){
+
+                        }*/
                     }
                 }
+                /*
+                if(lastElement != llm.findLastVisibleItemPosition()){
+                    lastElement = llm.findLastVisibleItemPosition();
+                    //resetWave(lastElement);
+                }*/
+
+
             }
         });
 
@@ -139,11 +175,42 @@ public class FinanceCashflow extends Fragment {
         return root;
     }
 
+    float visibleScreen;
+    float scaleIndicator;
+    public void moveIndicator(int move, int displayWidth){
+        slideIndicator.setX(move);
+
+        visibleScreen = 1 + Math.abs((float)move / displayWidth);
+        Log.i("VisibleScreen", ""+(float)move / displayWidth);
+        slideIndicator.setAlpha(Math.abs(-1 + (float)move / displayWidth));
+
+        scaleIndicator = 1 + Math.abs(visibleScreen - 1)*5;
+        slideIndicator.setScaleX(scaleIndicator);
+        slideIndicator.setScaleY(scaleIndicator);
+
+    }
+    public void resetIndicator(int pos){
+
+        slideIndicator.setX(pos);
+        slideIndicator.setAlpha(1);
+        slideIndicator.setScaleY(1);
+        slideIndicator.setScaleX(1);
+    }
+
+    private void resetWave(int elementPos){
+        visibleViewHolder = cashflow_recycler.findViewHolderForAdapterPosition(elementPos);
+        assert visibleViewHolder != null;
+        LiquidView element = visibleViewHolder.itemView.findViewById(R.id.budget_liquid);
+        element.resetWaveEnergy();
+    }
+
     //Elastic Parameters
     float elTD, elDist, menDist;
     int elasticContWidth;
     boolean menuVisible = false;
     boolean openingMenu = false;
+
+    long slidevelocoty = 0;
 
     private void listeners() {
 
@@ -158,18 +225,30 @@ public class FinanceCashflow extends Fragment {
                         if(menuVisible) {
                             showDisplayMenu(false);
                         }
+
+                        slidevelocoty = System.currentTimeMillis();
                         //elasticEdgeView.setTouchDown((int)e.getY());
                         break;
                     case MotionEvent.ACTION_UP:
                         elasticEdgeView.animateCloseEdge();
+                        activity.resetScrollDist();
+                        if(openingMenu){
+                            //Check how far We are and animate the rest
+                            slidevelocoty = System.currentTimeMillis() - slidevelocoty;
+                            activity.autoFinishSlide((int)menDist, false, slidevelocoty);
+                        }
                         openingMenu = false;
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        menDist = (elTD - e.getX())/4;
-                        if(menDist >= 0){
+                        menDist = (elTD - e.getRawX());
+                        if(menDist < 0){
+                            activity.slideCalendar = true;
                             scrollingDist = 0;
                             //Opening Menu
                             openingMenu = true;
+                            //Log.i("Calendar", "Calendar");
+                            activity.slideMechanism((int)Math.abs(menDist), false);
+                            /*
 
                             if(!menuVisible){
                                 if(menDist > 100){
@@ -177,7 +256,7 @@ public class FinanceCashflow extends Fragment {
                                     showDisplayMenu(true);
                                 }
                                 elasticEdgeView.setPull((int)menDist);
-                            }
+                            }*/
                         }
 
                         break;
@@ -263,14 +342,14 @@ public class FinanceCashflow extends Fragment {
 
         Log.i("AllTransitionNamesCount", ""+allTransitionNames.size());
 
-        FinanceCashflowMonth financeCashflowMonth = new FinanceCashflowMonth(allTransitionNames);
+        WalletCalendarFragment walletCalendarFragment = new WalletCalendarFragment();
         FragmentTransaction ft = ((MainActivity)getContext()).getSupportFragmentManager().beginTransaction();
 
         //TODO Soffisticate Transition to MonthView
 
-        financeCashflowMonth.setSharedElementEnterTransition(new DetailsTransition(350));
-        financeCashflowMonth.setSharedElementReturnTransition(new DetailsTransition(350));
-        financeCashflowMonth.setEnterTransition(new Explode().setDuration(350));
+        walletCalendarFragment.setSharedElementEnterTransition(new DetailsTransition(350));
+        walletCalendarFragment.setSharedElementReturnTransition(new DetailsTransition(350));
+        walletCalendarFragment.setEnterTransition(new Explode().setDuration(350));
         //TODO GET EXIT TRANSITION ERROR FREE
         //setExitTransition(new Fade().setDuration(450));
 
@@ -283,10 +362,10 @@ public class FinanceCashflow extends Fragment {
         }
 
         // Replace the fragment.
-        ft.replace(popContainer.getId(), financeCashflowMonth);
+        ft.replace(popContainer.getId(), walletCalendarFragment);
 
         // Enable back navigation with shared element transitions.
-        ft.addToBackStack(financeCashflowMonth.getClass().getSimpleName());
+        ft.addToBackStack(walletCalendarFragment.getClass().getSimpleName());
 
         // Finally press play.
         ft.commit();
@@ -380,25 +459,26 @@ public class FinanceCashflow extends Fragment {
                 case RecyclerView.SCROLL_STATE_IDLE:
                     //System.out.println("The RecyclerView is not scrolling");
                     //Log.i("FirstVisible =", "View "+llm.findFirstVisibleItemPosition());
-                    animateVisibleWaves(recyclerView, llm.findFirstVisibleItemPosition(), llm.findLastVisibleItemPosition());
+
                     ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(llm.findFirstCompletelyVisibleItemPosition());
                     if(!activity.mainMenuVisible) {
-                        activity.toggleMainMenuContainer();
+                        //activity.toggleMainMenuContainer();
                     }
                     break;
                 case RecyclerView.SCROLL_STATE_DRAGGING:
                     //System.out.println("Scrolling now");
                     if(activity.mainMenuVisible) {
-                        activity.toggleMainMenuContainer();
+                        //activity.toggleMainMenuContainer();
                     }
                     //showDisplayMenu(false);
-
+                    //animateVisibleWaves(recyclerView, llm.findFirstVisibleItemPosition(), llm.findLastVisibleItemPosition());
 
                     //getTopDay();
                     //llm.findFirstVisibleItemPosition();
                     break;
                 case RecyclerView.SCROLL_STATE_SETTLING:
                    // System.out.println("Scroll Settling");
+                    //animateVisibleWaves(recyclerView, llm.findFirstVisibleItemPosition(), llm.findLastVisibleItemPosition());
 
                     break;
 
@@ -425,6 +505,7 @@ public class FinanceCashflow extends Fragment {
                 catch(Exception e){
 
                 };
+                activity.scrollHeightMenu(dy, false);
 
             } else if (dy < 0) {
                 //System.out.println("Scrolled Upwards - " +dy);
@@ -436,6 +517,8 @@ public class FinanceCashflow extends Fragment {
 
                 };
 
+                activity.scrollHeightMenu(dy, true);
+
             } else {
                 //System.out.println("No Vertical Scrolled");
             }
@@ -443,19 +526,28 @@ public class FinanceCashflow extends Fragment {
 
         }
 
-        private void animateVisibleWaves(RecyclerView recyclerView, int first, int last){
-            for(int i = first; i <= last; i++){
-                try {
-                    ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(i);
-                    SpectrumBar bar = vh.itemView.findViewById(R.id.spectrumBar);
-                    LiquidView liquid = vh.itemView.findViewById(R.id.budget_liquid);
-                    //bar.animateCashflow();
-                    liquid.animateWave();
-                }
-                catch (Exception e){
+        int prevFirst;
 
+        private void animateVisibleWaves(RecyclerView recyclerView, int first, int last){
+
+            Log.i("Runs", "animateVIsiFunction"+first);
+            if(prevFirst != first){
+                prevFirst = first;
+                for(int i = first; i <= last; i++){
+                    try {
+                        Log.i("Runs", "animateVisi");
+                        ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(i);
+                        SpectrumBar bar = vh.itemView.findViewById(R.id.spectrumBar);
+                        LiquidView liquid = vh.itemView.findViewById(R.id.budget_liquid);
+                        //bar.animateCashflow();
+                        liquid.animateWave();
+                    }
+                    catch (Exception e){
+
+                    }
                 }
             }
+
         }
     }
 

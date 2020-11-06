@@ -180,12 +180,19 @@ public class LiquidView extends CardView {
         textPaint.setColor(Color.parseColor(getLiquidTextPaint()));
         textPaint.setTextSize(textSize * getResources().getDisplayMetrics().scaledDensity);
         textPaint.setColor(Color.parseColor("#FFFFFF"));
-        canvas.drawText(remainingBudget, getWidth()/2, height / 2 - (int)(randomWaveHeight(0) * waveMovementUp) , textPaint);
+        if(!noNumber){
+            canvas.drawText(remainingBudget, getWidth()/2, height / 2 - (int)(randomWaveHeight(0) * waveMovementUp) , textPaint);
+        }
         textPaint.setTextSize(12 * getResources().getDisplayMetrics().scaledDensity);
         //canvas.drawText("Budget", getWidth()/2,height - 30 - (int)(randomWaveHeight(0) * waveMovementUp) , textPaint );
         textPaint.setColor(Color.parseColor("#FFFFFF"));
         //canvas.drawText("-"+daysBudget, width - 50, baseline / 2, textPaint);
 
+
+    }
+    boolean noNumber = false;
+    public void noText(boolean noNumber){
+        this.noNumber = noNumber;
 
     }
     int waveNo;
@@ -368,5 +375,14 @@ public class LiquidView extends CardView {
 
         va.start();
         }
+    }
+
+    public void resetWaveEnergy() {
+        this.waveMovementUp = -1;
+        this.waveMovementForward = 0;
+        this.energyDepreciation = 0.005f;
+        this.waveEnergy = 1f;
+        invalidate();
+        animated = false;
     }
 }

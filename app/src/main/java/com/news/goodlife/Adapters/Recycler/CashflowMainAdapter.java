@@ -2,48 +2,28 @@ package com.news.goodlife.Adapters.Recycler;
 
 import android.content.Context;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.fragment.app.Fragment;
-import androidx.transition.Explode;
-import androidx.transition.Fade;
-
-import android.graphics.Color;
-import android.text.Layout;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.Transition;
-import androidx.transition.TransitionValues;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.news.goodlife.CustomViews.BulletPointTextView;
-import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.CustomViews.CustomEntries.PopUpFrame;
 import com.news.goodlife.CustomViews.LiquidView;
-import com.news.goodlife.CustomViews.SpectrumBar;
-import com.news.goodlife.Fragments.FinanceCashflow;
+import com.news.goodlife.Fragments.WalletMultiDaysFragment;
 import com.news.goodlife.Fragments.PopFragments.CostCategoriesChart;
 import com.news.goodlife.Fragments.PopFragments.IncomingCashPopFragment;
 import com.news.goodlife.Fragments.PopFragments.OutgoingCashPopFragment;
-import com.news.goodlife.Interfaces.RecyclerViewClickListener;
-import com.news.goodlife.MainActivity;
 import com.news.goodlife.PopWindowData.CashCategoryData;
 import com.news.goodlife.R;
 import com.news.goodlife.Transitions.DetailsTransition;
-import com.news.goodlife.Transitions.WaitDelayTransition;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,9 +38,9 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
     int cat_count = 4;
 
     //PopFragment
-    FinanceCashflow parentFragmentClass;
+    WalletMultiDaysFragment parentFragmentClass;
 
-    public CashflowMainAdapter(Context context, FrameLayout popWindow, FinanceCashflow parentFragmentClass) {
+    public CashflowMainAdapter(Context context, FrameLayout popWindow, WalletMultiDaysFragment parentFragmentClass) {
 
         this.context = context;
         this.popWindow = popWindow;
@@ -127,7 +107,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        PopUpFrame costcat, cashout, cashin,budgetliquid, cashflow;
+        PopUpFrame costcat, cashout, cashin,budgetliquid, cashflow, weekendcontainer;
         FlexboxLayout cost_cat_flex;
         LiquidView liquidView;
         TextView itemday;
@@ -151,6 +131,9 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
             if(weekend){
                 isweekend = true;
+                weekendcontainer = itemView.findViewById(R.id.cashflow_weekend_container);
+                weekendcontainer.setBackgroundColor("#101315");
+
 
             }
             else {
@@ -208,6 +191,12 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                     @Override
                     public void onClick(View v) {
                         transitionPopWindow("CashOut");
+                    }
+                });
+                liquidView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //liquidView.resetWaveEnergy();
                     }
                 });
 

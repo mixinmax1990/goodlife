@@ -12,15 +12,15 @@
         app:layout_constraintBottom_toBottomOf="@id/datailicon_text"
         app:layout_constraintStart_toStartOf="@id/monthview_icon"
         app:layout_constraintEnd_toEndOf="@id/monthview_icon"
-        app:cardCornerRadius="24dp"
-        app:cardBackgroundColor="#25FFFFFF"
+        app:cardCornerRadius="80dp"
+        app:cardBackgroundColor="#191B1E"
         android:padding="0dp"/>
 
     <androidx.cardview.widget.CardView
         android:layout_width="55dp"
         android:layout_height="55dp"
         app:layout_constraintDimensionRatio="1:1"
-        app:cardCornerRadius="20dp"
+        app:cardCornerRadius="80dp"
         app:cardBackgroundColor="#E9EAEF"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -42,6 +42,8 @@
         app:layout_constraintStart_toStartOf="@id/monthview_icon"
         app:layout_constraintEnd_toEndOf="@id/monthview_icon"
         android:textSize="11sp"
+        android:elevation="20dp"
+        android:outlineProvider="none"
         android:id="@+id/monthicon_text"
         />
 
@@ -49,7 +51,7 @@
         android:layout_width="55dp"
         android:layout_height="55dp"
         app:layout_constraintDimensionRatio="1:1"
-        app:cardCornerRadius="20dp"
+        app:cardCornerRadius="80dp"
         app:cardBackgroundColor="#E9EAEF"
         app:layout_constraintRight_toRightOf="@id/monthview_icon"
         app:layout_constraintTop_toBottomOf="@id/monthicon_text"
@@ -69,13 +71,15 @@
         app:layout_constraintStart_toStartOf="@id/layout2"
         app:layout_constraintEnd_toEndOf="@id/layout2"
         android:textSize="11sp"
+        android:elevation="20dp"
+        android:outlineProvider="none"
         android:id="@+id/dayicon_text"
         />
     <androidx.cardview.widget.CardView
         android:layout_width="55dp"
         android:layout_height="55dp"
         app:layout_constraintDimensionRatio="1:1"
-        app:cardCornerRadius="20dp"
+        app:cardCornerRadius="80dp"
         app:cardBackgroundColor="#E9EAEF"
         app:layout_constraintRight_toRightOf="@id/monthview_icon"
         app:layout_constraintTop_toBottomOf="@id/dayicon_text"
@@ -95,5 +99,7 @@
         app:layout_constraintEnd_toEndOf="@id/layout3"
         android:textSize="11sp"
         android:id="@+id/datailicon_text"
+        android:elevation="20dp"
+        android:outlineProvider="none"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
