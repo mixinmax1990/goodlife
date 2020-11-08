@@ -3,11 +3,12 @@
     android:layout_width="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="8dp">
+    android:padding="8dp"
+    app:layout_wrapBefore="false">
 
    <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
-       android:layout_width="60dp"
-       android:layout_height="60dp"
+       android:layout_width="55dp"
+       android:layout_height="55dp"
        app:layout_constraintDimensionRatio="1:1"
        app:layout_constraintTop_toTopOf="parent"
        app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +24,7 @@
        app:cardCornerRadius="10dp"
        app:borderCustomRadius="200"
        app:strokeCustomSize="4"
-       app:strokeCustomColor="#8FFFFFFF"
+       app:strokeCustomColor="?attr/strokeColor"
        app:layout_constraintTop_toTopOf="parent"
        app:layout_constraintStart_toStartOf="parent"
        app:layout_constraintEnd_toEndOf="@id/wallet_day_button"
@@ -35,7 +36,7 @@
           app:cardCornerRadius="200dp"
           android:layout_margin="4px"
           android:alpha="1"
-          app:cardBackgroundColor="#2C2C2C"
+          app:cardBackgroundColor="?attr/liquidBackground"
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
    </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
@@ -51,14 +52,16 @@
        android:padding="5dp"
        android:alpha="1"
        android:textSize="12sp"
+       android:textColor="?attr/textColorPrimary"
        android:text="Mon"/>
    <TextView
        android:id="@+id/monthview_day_number"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
       android:text="21"
-       android:textSize="24sp"
+       android:textSize="20sp"
        android:alpha="1"
+       android:textColor="?attr/textColorPrimary"
        android:textAlignment="center"
        app:layout_constraintStart_toStartOf="@id/day_item_liquidcard"
        app:layout_constraintEnd_toEndOf="@id/wallet_day_button"

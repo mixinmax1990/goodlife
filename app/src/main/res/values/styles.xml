@@ -2,10 +2,26 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="baseBackground">@color/baseBackgroundDay</item>
+
+        <item name="baseContrast">@color/baseContrastDay</item>
+
+        <item name="standoutButton">@color/standoutButtonDay</item>
+
+        <item name="moduleBackground">@color/moduleBackgroundDay</item>
+
+        <item name="liquidBackground">@color/liquidBackgroundDay</item>
+
+        <item name="strokeColor">@color/strokeColorDay</item>
+
+        <item name="menuBackground">@color/menuColorDay</item>
+        <item name="menuIconSelected">@color/menuIconSelectedDay</item>
+        <item name="menuIconsUnselected">@color/menuIconUnselectedDay</item>
+
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="backgroundSecondary">@color/backgroundColorSecodary</item>
+        <item name="backgroundSecondary">@color/backgroundColorSecondary</item>
         <item name="backgroundPrimary">@color/backgroundColor</item>
         <item name="backgroundThirdly">@color/backgroundThirdly</item>
         <item name="rippleSecondary">@color/rippleSecodary</item>
@@ -16,6 +32,9 @@
         <item name="financialGraphTrendline">@color/financialTrendLineColor</item>
         <item name="financialGraphTrendlineGradEnd">@color/financialTrendLineColoGradEnd</item>
         <item name="cashflow_items_background">@color/cashflowItemBackgroundNight</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowLightStatusBar">true</item>
+
 
         <!--<item name="android:windowContentTransitions">true</item>-->
     </style>

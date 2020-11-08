@@ -23,10 +23,18 @@ import com.google.android.flexbox.JustifyContent;
 import com.news.goodlife.Adapters.Recycler.CashflowMonthAdapter;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.MainActivity;
+import com.news.goodlife.Models.CalendarLayout;
 import com.news.goodlife.Models.toCalendarViewTransition;
 import com.news.goodlife.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class WalletCalendarFragment extends Fragment {
 
@@ -61,8 +69,17 @@ public class WalletCalendarFragment extends Fragment {
 
         slideIndicator = root.findViewById(R.id.slide_indicator);
 
+
+        //Todo Get Data From DataBase and get First Entry Date
+
+        getCalendarRange(1);
+
+        for(CalendarLayout cl: allCalendarDates){
+            Log.i("DayCal", ""+cl.getCalendar().get(Calendar.DAY_OF_WEEK));
+        }
+
         //TODO ADD Dynamic Data to Adapter
-        CashflowMonthAdapter cashflowMonthAdapter = new CashflowMonthAdapter(getContext());
+        CashflowMonthAdapter cashflowMonthAdapter = new CashflowMonthAdapter(getContext(), allCalendarDates);
         monthRecycler.setAdapter(cashflowMonthAdapter);
         monthRecycler.setLayoutManager(flexLM);
 
@@ -74,6 +91,9 @@ public class WalletCalendarFragment extends Fragment {
         });
 
         listeners();
+
+
+
         return root;
     }
     float elTD, elDist, menDist;
@@ -164,6 +184,103 @@ public class WalletCalendarFragment extends Fragment {
         slideIndicator.setAlpha(1);
         slideIndicator.setScaleY(1);
         slideIndicator.setScaleX(1);
+    }
+
+    int forecastYears = 10;
+    public List<CalendarLayout> allCalendarDates = new ArrayList<>();
+
+    private void getCalendarRange(long Date){
+
+        //getToday
+        Calendar today = Calendar.getInstance();
+
+        //SetTime To Zero
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
+        today.set(Calendar.MILLISECOND, 0);
+        //clear TimeZone
+        today.clear(Calendar.ZONE_OFFSET);
+
+        //Todo make first da a Date - for now go 60 days back
+
+        int forecastDays = forecastYears * 365;// * 365
+
+        //Go X years back
+        Calendar loopDay = Calendar.getInstance();
+        loopDay.add(Calendar.DATE, - forecastDays);
+
+        //Calendar Obj of first day 10 Years back
+
+        // Add PastDays
+        for(int i = 0; i < forecastDays; i++){
+
+            loopDay.add(Calendar.DATE, 1);
+
+            //Set The Day Object
+            CalendarLayout calendarLayout = new CalendarLayout("day", loopDay);
+
+            //Check if WEEK,MONTH,YEAR ends
+            allCalendarDates.add(calendarLayout);
+            analysisPoints(loopDay);
+        }
+
+        
+        //add Future Days
+
+        for(int i = 0; i < forecastDays; i++){
+
+            loopDay.add(Calendar.DATE, 1);
+            //Set The Day Object
+            CalendarLayout calendarLayout = new CalendarLayout("day", loopDay);
+
+
+            //Check if WEEK,MONTH,YEAR ends
+            allCalendarDates.add(calendarLayout);
+            analysisPoints(loopDay);
+        }
+
+        //allCalendarDates.get(0).getTime();
+
+        //c.add(Calendar.DATE, 40);  // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE
+        //SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
+        //String output = sdf1.format(c.getTime());
+    }
+
+    int year, weekday, month;
+    private void analysisPoints(Calendar day) {
+
+        weekday = day.get(Calendar.DAY_OF_WEEK);
+        year = day.get(Calendar.YEAR);
+        month = day.get(Calendar.MONTH);
+
+
+
+        // get NextDay
+
+        day.add(Calendar.DATE, 1);
+        if(weekday == 1){
+            //ADD Weekend Analysis
+            CalendarLayout calendarLayout = new CalendarLayout("weekend", day);
+            allCalendarDates.add(calendarLayout);
+
+        }
+
+        if(year != day.get(Calendar.YEAR)){
+            //Add YearEnd Analaysis
+            CalendarLayout calendarLayout = new CalendarLayout("yearend", day);
+            allCalendarDates.add(calendarLayout);
+
+        }
+
+        if(month != day.get(Calendar.MONTH)){
+            //Add MonthEnd Analysis
+            CalendarLayout calendarLayout = new CalendarLayout("monthend", day);
+            allCalendarDates.add(calendarLayout);
+
+        }
+        day.add(Calendar.DATE, -1);
+
     }
 
 

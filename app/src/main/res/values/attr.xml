@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="baseBackground" format="color"/>
+    <attr name="baseContrast" format="color"/>
+    <attr name="standoutButton" format="color"/>
+    <attr name="moduleBackground" format="color"/>
+    <attr name="liquidBackground" format="color"/>
+    <attr name="strokeColor" format="color"/>
+    <attr name="menuBackground" format="color"/>
+    <attr name="menuIconSelected" format="color"/>
+    <attr name="menuIconsUnselected" format="color"/>
+
     <attr name="backgroundThirdly" type="color"/>
     <attr name="backgroundSecondary" format="color"/>
     <attr name="backgroundPrimary" format="color"/>

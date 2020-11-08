@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
@@ -13,7 +14,9 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.news.goodlife.CustomViews.BubbleChartCategories;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
+import com.news.goodlife.CustomViews.LiquidView;
 import com.news.goodlife.MainActivity;
 import com.news.goodlife.R;
 
@@ -23,9 +26,12 @@ public class WalletTodayFragment extends Fragment {
     public MainActivity activity;
     ScrollView todayScroll;
     BorderRoundView slideIndicator;
+    LiquidView liquidView;
+    BubbleChartCategories bubbleChartCategories;
 
 
     public WalletTodayFragment() {
+
     }
 
     @Nullable
@@ -34,6 +40,19 @@ public class WalletTodayFragment extends Fragment {
         View root = inflater.inflate(R.layout.wallet_main, container, false);
         todayScroll = root.findViewById(R.id.wallet_today_scroll);
         slideIndicator = root.findViewById(R.id.slide_indicator);
+        liquidView = root.findViewById(R.id.budget_liquid_day);
+        bubbleChartCategories = root.findViewById(R.id.item_day_bubble_chart);
+
+        liquidView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                liquidView.animateWave();
+                bubbleChartCategories.animateBubbles();
+
+                liquidView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
 
 
         listeners();

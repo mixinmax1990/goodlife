@@ -12,7 +12,7 @@
         android:layout_width="6dp"
         android:layout_height="6dp"
         app:borderCustomRadius="50"
-        app:backgroundCustomColor="#FFFFFF"
+        app:backgroundCustomColor="?attr/textColorPrimary"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="2dp"
         android:elevation="200dp"
@@ -22,7 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/month_recycler"
-        android:layout_margin="5dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         />
 </androidx.cardview.widget.CardView>
 

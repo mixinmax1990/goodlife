@@ -2,10 +2,26 @@
 <resources>
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="baseBackground">@color/baseBackgroundNight</item>
+
+        <item name="baseContrast">@color/baseContrastNight</item>
+
+        <item name="standoutButton">@color/standoutButtonNight</item>
+
+        <item name="moduleBackground">@color/moduleBackgroundNight</item>
+
+        <item name="liquidBackground">@color/liquidBackgroundNight</item>
+
+        <item name="strokeColor">@color/strokeColorNight</item>
+
+        <item name="menuBackground">@color/menuColorNight</item>
+        <item name="menuIconSelected">@color/menuIconSelectedNight</item>
+        <item name="menuIconsUnselected">@color/menuIconUnselectedNight</item>
+
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="backgroundSecondary">@color/backgroundColorSecodaryNight</item>
+        <item name="backgroundSecondary">@color/backgroundColorSecondaryNight</item>
         <item name="backgroundThirdly">@color/backgroundThirdlyNight</item>
         <item name="rippleSecondary">@color/rippleSecodaryNight</item>
         <item name="android:textColor">@color/white</item>

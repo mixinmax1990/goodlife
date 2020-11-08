@@ -140,6 +140,14 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
         previewImage = findViewById(R.id.previewImage);
 
 
+        if (getResources().getBoolean(R.bool.dark)) {
+            Log.i("Mode", "Night");
+        } else {
+            // Do night stuff here
+            Log.i("Mode", "Day");
+        }
+
+
         //Navigation Section
 
 
@@ -168,9 +176,9 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
                 displayHeight = fragment_container_one.getHeight();
                 fragment_container_two.setX(displayWidth);
 
-                overviewFragments();
+                //overviewFragments();
 
-                //slideMechanism(0, true);
+                slideMechanism(0, true);
 
                 fragment_container_one.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }

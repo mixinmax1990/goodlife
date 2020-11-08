@@ -1,6 +1,7 @@
 package com.news.goodlife.CustomViews.CustomEntries;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,8 +9,10 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.widget.FrameLayout;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -19,6 +22,7 @@ import com.news.goodlife.R;
 public class BorderRoundView extends ConstraintLayout {
     String strokeColor, backgroundColor;
     int strokeSize, borderRadius;
+    @ColorInt int expandDotColor;
 
     boolean stroke, background, radius, strokeCol;
     int radiusSize = 0;
@@ -37,8 +41,17 @@ public class BorderRoundView extends ConstraintLayout {
         super(context, attrs);
         this.context = context;
         setAttributes(attrs);
-        configurePaints();
+
         setWillNotDraw(false);
+
+        //Get Color Attributes
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+
+        //Pick Attribute Colors
+        theme.resolveAttribute(R.attr.textColorPrimary, typedValue, true);
+        expandDotColor = typedValue.data;
+        configurePaints();
     }
 
 
@@ -97,7 +110,7 @@ public class BorderRoundView extends ConstraintLayout {
         expandableArcPaint = new Paint();
         expandableArcPaint.setStyle(Paint.Style.FILL);
         expandableArcPaint.setStrokeWidth(3);
-        expandableArcPaint.setColor(Color.parseColor("#FFFFFF"));
+        expandableArcPaint.setColor(expandDotColor);
         expandableArcPaint.setAlpha(100);
         expandableArcPaint.setAntiAlias(true);
         expandableArcPaint.setStrokeCap(Paint.Cap.ROUND);

@@ -3,6 +3,7 @@ package com.news.goodlife.CustomViews.CustomIcons;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,10 +11,12 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -27,8 +30,10 @@ public class MenuIcons extends FrameLayout {
     Drawable menuIcon;
     String menuName;
 
-    MenuIconColors dayColors = new MenuIconColors("#00A6FF", "#000000");
-    MenuIconColors nightColors = new MenuIconColors("#00A6FF", "#FFFFFF");
+    @ColorInt int selectedIcon, unselectedIcon;
+
+
+    MenuIconColors nightColors;
     MenuIconColors colors;
 
     float margin = .2f;
@@ -42,6 +47,21 @@ public class MenuIcons extends FrameLayout {
 
     public MenuIcons(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+
+        //Get Color Attributes
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+
+        //Pick Attribute Colors
+        theme.resolveAttribute(R.attr.menuIconSelected, typedValue, true);
+        selectedIcon = typedValue.data;
+
+        theme.resolveAttribute(R.attr.menuIconsUnselected, typedValue, true);
+        unselectedIcon = typedValue.data;
+
+        nightColors = new MenuIconColors(selectedIcon, unselectedIcon);
+
+
 
 
 
@@ -61,7 +81,7 @@ public class MenuIcons extends FrameLayout {
 
         menuText = new Paint();
         menuText.setStyle(Paint.Style.FILL);
-        menuText.setColor(Color.parseColor(colors.unselected));
+        menuText.setColor(colors.unselected);
 
 
 
@@ -219,8 +239,8 @@ public class MenuIcons extends FrameLayout {
     }
     public void unSelectMenu(){
 
-        DrawableCompat.setTint(menuIcon, Color.parseColor(colors.unselected));
-        menuText.setColor(Color.parseColor(colors.unselected));
+        DrawableCompat.setTint(menuIcon, colors.unselected);
+        menuText.setColor(colors.unselected);
         alpha = .5f;
         invalidate();
 
@@ -233,16 +253,16 @@ public class MenuIcons extends FrameLayout {
 
     private void selectMenu(){
 
-        DrawableCompat.setTint(menuIcon, Color.parseColor(colors.selected));
-        menuText.setColor(Color.parseColor(colors.selected));
+        DrawableCompat.setTint(menuIcon, colors.selected);
+        menuText.setColor(colors.selected);
 
     }
 
 
     class MenuIconColors{
-    String selected, unselected;
+        @ColorInt int selected, unselected;
 
-        public MenuIconColors(String selected, String unselected) {
+        public MenuIconColors(@ColorInt int selected, @ColorInt int unselected) {
             this.selected = selected;
             this.unselected = unselected;
             alpha = 0.5f;

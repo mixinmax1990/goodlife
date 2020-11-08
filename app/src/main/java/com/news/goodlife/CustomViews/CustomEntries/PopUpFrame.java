@@ -1,6 +1,7 @@
 package com.news.goodlife.CustomViews.CustomEntries;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,8 +9,10 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.widget.FrameLayout;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -18,6 +21,9 @@ import com.news.goodlife.R;
 
 public class PopUpFrame extends ConstraintLayout {
     String strokeColor, backgroundColor;
+    @ColorInt int color;
+    @ColorInt int expandDotColor;
+
     int strokeSize, borderRadius;
 
     boolean stroke, background, radius, strokeCol;
@@ -36,6 +42,21 @@ public class PopUpFrame extends ConstraintLayout {
     public PopUpFrame(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
+
+        //Get Color Attributes
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+
+        //Pick Attribute Colors
+        theme.resolveAttribute(R.attr.moduleBackground, typedValue, true);
+        color = typedValue.data;
+
+        theme.resolveAttribute(R.attr.textColorPrimary, typedValue, true);
+        expandDotColor = typedValue.data;
+
+        Log.i("WHite",""+expandDotColor);
+
+
         setAttributes(attrs);
         configurePaints();
         setWillNotDraw(false);
@@ -52,7 +73,7 @@ public class PopUpFrame extends ConstraintLayout {
 
 //#1C2125
 
-            paintFill.setColor(Color.parseColor(getBackgroundColor()));
+            paintFill.setColor(color);
             canvas.drawRoundRect(roundedRectangle, radiusSize, radiusSize, paintFill);
             paintFill.setColor(Color.parseColor("#FFFFFF"));
             paintFill.setAlpha(13);
@@ -102,8 +123,14 @@ public class PopUpFrame extends ConstraintLayout {
         expandableArcPaint = new Paint();
         expandableArcPaint.setStyle(Paint.Style.FILL);
         expandableArcPaint.setStrokeWidth(3);
-        expandableArcPaint.setColor(Color.parseColor("#FFFFFF"));
-        expandableArcPaint.setAlpha(100);
+        expandableArcPaint.setColor(expandDotColor);
+        if(expandDotColor == -16777216){
+            expandableArcPaint.setAlpha(255);
+        }
+        else{
+            expandableArcPaint.setAlpha(100);
+        }
+
         expandableArcPaint.setAntiAlias(true);
         expandableArcPaint.setStrokeCap(Paint.Cap.ROUND);
 

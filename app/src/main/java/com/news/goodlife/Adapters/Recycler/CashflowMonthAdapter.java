@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,19 +13,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.flexbox.FlexboxLayoutManager;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.CustomViews.LiquidView;
+import com.news.goodlife.Models.CalendarLayout;
 import com.news.goodlife.R;
 
+import java.util.List;
 import java.util.Random;
 
 public class CashflowMonthAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     Context context;
+    List<CalendarLayout> allCalendarLayouts;
     //List<toCalendarViewTransition> allTransitionNames;
 
-    public CashflowMonthAdapter(Context context) {
+    public CashflowMonthAdapter(Context context, List<CalendarLayout> allCalendarLayouts) {
         this.context = context;
+        this.allCalendarLayouts = allCalendarLayouts;
         //this.allTransitionNames = allTransitionNames;
     }
 
@@ -39,29 +44,24 @@ public class CashflowMonthAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         switch(viewType){
             case 1:
-                //Inflate Space
-                View v1 = inflater.inflate(R.layout.month_cashflow_space_item, parent, false);
-                viewHolder = new ViewHolderTopSpace(v1);
+                //inflate Day
+                View v1 = inflater.inflate(R.layout.month_wallet_day_item, parent, false);
+                viewHolder = new ViewHolderData(v1);
                 break;
             case 2:
-                //Inflate MonthName
-                View v2 = inflater.inflate(R.layout.month_wallet_monthstart_item, parent, false);
-                viewHolder = new ViewHolderMonthStart(v2);
+                //Inflate Monthend
+                View v2 = inflater.inflate(R.layout.month_wallet_monthend_item, parent, false);
+                viewHolder = new ViewHolderMonthEnd(v2);
                 break;
             case 3:
                 //Inflate Weekend
-                View v3 = inflater.inflate(R.layout.month_cashflow_weekened_item, parent, false);
+                View v3 = inflater.inflate(R.layout.month_wallet_weekened_item, parent, false);
                 viewHolder = new ViewHolderWeekEnd(v3);
                 break;
-            case 4:
-                //Inflate Monthend
-                View v4 = inflater.inflate(R.layout.month_cashflow_monthend_item, parent, false);
-                viewHolder = new ViewHolderMonthEnd(v4);
-                break;
             default:
-                //inflate Day
-                View v5 = inflater.inflate(R.layout.month_wallet_day_item, parent, false);
-                viewHolder = new ViewHolderData(v5);
+                //Inflate Yearend
+                View v4 = inflater.inflate(R.layout.month_wallet_yearend_item, parent, false);
+                viewHolder = new ViewHolderYearEnd(v4);
                 break;
         }
 
@@ -74,83 +74,106 @@ public class CashflowMonthAdapter extends RecyclerView.Adapter<RecyclerView.View
     boolean newMonthStart = false;
     @Override
     public int getItemViewType(int position) {
-        if(position == 0){
-            return 1;
-        }
-        else if(position == 1){
-            return 2;
-        }
-        else{
-            //check if weekend
-            if(weekdaycount == 7){
-                weekdaycount = 0;
-                weekcount++;
-                return 3;
-            }
-            //check if monthend
-            if(weekcount == 4){
-              weekcount = 0;
-              newMonthStart = true;
-              return 4;
-            }
 
-            if(newMonthStart){
-                newMonthStart = false;
+        String type = allCalendarLayouts.get(position).getType();
+
+        switch(type){
+            case "day":
+                return 1;
+            case "monthend":
                 return 2;
-            }
-
-            weekdaycount++;
-            return 5;
+            case "weekend":
+                return 3;
+            default:
+                return 4;
 
         }
     }
+
+    boolean weekend = false;
+    boolean monthend = false;
+
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
 
+        CalendarLayout dayCal = allCalendarLayouts.get(position);
+
+
+
         if(holder instanceof ViewHolderData){
             //Cast the Holder ((ViewHolderData)holder).bla bla bla
-            //Log.i("ViewHolder Type", "DayStart");
+
+            if(weekend & !monthend){
+                //break the line of view somehoe
+
+
+                ViewGroup.LayoutParams lp = ((ViewHolderData)holder).itemView.getLayoutParams();
+                if (lp instanceof FlexboxLayoutManager.LayoutParams) {
+                    FlexboxLayoutManager.LayoutParams flexboxLp =
+                            (FlexboxLayoutManager.LayoutParams) ((ViewHolderData)holder).itemView.getLayoutParams();
+                    flexboxLp.setWrapBefore(true);
+                    ((ViewHolderData)holder).itemView.setLayoutParams(flexboxLp);
+
+                }
+
+
+                weekend = false;
+            }
+            else{
+                ViewGroup.LayoutParams lp = ((ViewHolderData)holder).itemView.getLayoutParams();
+                if (lp instanceof FlexboxLayoutManager.LayoutParams) {
+                    FlexboxLayoutManager.LayoutParams flexboxLp =
+                            (FlexboxLayoutManager.LayoutParams) ((ViewHolderData)holder).itemView.getLayoutParams();
+                    flexboxLp.setWrapBefore(false);
+                    ((ViewHolderData)holder).itemView.setLayoutParams(flexboxLp);
+
+                }
+                monthend = false;
+
+            }
+
             ((ViewHolderData)holder).dayLiquid.setBaseline(randomValue(0, 200));
-            ((ViewHolderData)holder).monthDayNumberTV.setText(""+position);
+            ((ViewHolderData)holder).dayMonthTextView.setText(dayCal.getMONTH_DAY_NUMBER());
+            ((ViewHolderData)holder).dayNameTextView.setText(dayCal.getDAY_OF_WEEK_NAME());
             ((ViewHolderData)holder).dayLiquid.getViewTreeObserver().addOnDrawListener(new ViewTreeObserver.OnDrawListener() {
                 @Override
                 public void onDraw() {
+
                    ((ViewHolderData)holder).dayLiquid.animateWave();
+
                 }
             });
-
-            if(position == 4){
-                //((ViewHolderData)holder).dayLiquid.setTransitionName(allTransitionNames.get(0).getLiquidView());
-                //((ViewHolderData)holder).dayNameTextView.setTransitionName(allTransitionNames.get(0).getDateDayName());
-            }
-            if(position == 5){
-                //((ViewHolderData)holder).dayLiquid.setTransitionName(allTransitionNames.get(1).getLiquidView());
-                //((ViewHolderData)holder).dayNameTextView.setTransitionName(allTransitionNames.get(1).getDateDayName());
-            }
-
-            /*if(allTransitionNames.size() > 2){
-                if(position == 6){
-                    ((ViewHolderData)holder).dayLiquid.setTransitionName(allTransitionNames.get(2).getLiquidView());
-                    ((ViewHolderData)holder).dayNameTextView.setTransitionName(allTransitionNames.get(2).getDateDayName());
-                }
-
-            }*/
 
             if(position == 13 || position == 4){
                 ((ViewHolderData)holder).dayLiquid.setNegative(true);
             }
-
         }
 
-        if(holder instanceof  ViewHolderMonthStart){
+        if(holder instanceof ViewHolderMonthEnd){
             //Log.i("ViewHolder Type", "MonthStart");
+            ((ViewHolderMonthEnd)holder).monthEndTextView.setText(dayCal.getMONTH_NAME());
+
+            monthend = true;
+
         }
+        if(holder instanceof ViewHolderWeekEnd){
+            //Log.i("ViewHolder Type", "MonthStart");
+            weekend = true;
+
+        }
+
+        if(holder instanceof ViewHolderYearEnd){
+            //Log.i("ViewHolder Type", "MonthStart");
+            ((ViewHolderYearEnd)holder).yearTXT.setText(dayCal.getYEAR());
+        }
+
+
     }
 
     @Override
     public int getItemCount() {
-        return 100;
+        return allCalendarLayouts.size();
     }
 
     public class ViewHolderData extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -158,14 +181,14 @@ public class CashflowMonthAdapter extends RecyclerView.Adapter<RecyclerView.View
         LiquidView dayLiquid;
         TextView dayNameTextView;
         BorderRoundView liquidContainer;
-        TextView monthDayNumberTV;
+        TextView dayMonthTextView;
 
         public ViewHolderData(@NonNull final View itemView) {
             super(itemView);
 
             dayLiquid = itemView.findViewById(R.id.day_liquid);
             dayNameTextView = itemView.findViewById(R.id.day_name);
-            monthDayNumberTV = itemView.findViewById(R.id.monthview_day_number);
+            dayMonthTextView = itemView.findViewById(R.id.monthview_day_number);
             liquidContainer = itemView.findViewById(R.id.day_item_liquidcard);
             dayLiquid.setTextSize(12);
             dayLiquid.noText(true);
@@ -176,7 +199,6 @@ public class CashflowMonthAdapter extends RecyclerView.Adapter<RecyclerView.View
                     itemView.setElevation(200);
                     animateDayClick(itemView);
 
-                    Log.i("Testing","Click Runs");
                 }
             });
         }
@@ -199,7 +221,7 @@ public class CashflowMonthAdapter extends RecyclerView.Adapter<RecyclerView.View
                     if(animVal > 1.5f){
                         animVal = 3 - animVal;
                     }
-                    Log.i("ValAn", ""+animVal);
+
 
                     itemView.setScaleX(animVal);
                     itemView.setScaleY(animVal);
@@ -235,40 +257,31 @@ public class CashflowMonthAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         }
     }
-    public class ViewHolderTopSpace extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-
-
-        public ViewHolderTopSpace(@NonNull View itemView) {
-            super(itemView);
-
-        }
-
-        @Override
-        public void onClick(View v) {
-
-        }
-    }
-    public class ViewHolderMonthStart extends RecyclerView.ViewHolder implements View.OnClickListener{
-
-
-
-        public ViewHolderMonthStart(@NonNull View itemView) {
-            super(itemView);
-
-        }
-
-        @Override
-        public void onClick(View v) {
-
-        }
-    }
     public class ViewHolderMonthEnd extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+        TextView monthEndTextView;
 
 
         public ViewHolderMonthEnd(@NonNull View itemView) {
             super(itemView);
+            monthEndTextView = itemView.findViewById(R.id.newmonth_text);
+
+        }
+
+        @Override
+        public void onClick(View v) {
+
+        }
+    }
+    public class ViewHolderYearEnd extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        TextView yearTXT;
+
+
+        public ViewHolderYearEnd(@NonNull View itemView) {
+            super(itemView);
+            yearTXT = itemView.findViewById(R.id.year_text);
 
         }
 
