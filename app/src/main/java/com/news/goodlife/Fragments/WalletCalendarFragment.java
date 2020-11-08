@@ -1,7 +1,6 @@
 package com.news.goodlife.Fragments;
 
-import android.animation.Animator;
-import android.animation.ValueAnimator;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,19 +21,15 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.news.goodlife.Adapters.Recycler.CashflowMonthAdapter;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
-import com.news.goodlife.MainActivity;
-import com.news.goodlife.Models.CalendarLayout;
-import com.news.goodlife.Models.toCalendarViewTransition;
-import com.news.goodlife.R;
+import com.news.goodlife.Interfaces.CalendarSelectDayListener;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
+import com.news.goodlife.Models.CalendarLayout;
+import com.news.goodlife.R;
+import com.news.goodlife.StartActivity;
+
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class WalletCalendarFragment extends Fragment {
 
@@ -42,7 +37,9 @@ public class WalletCalendarFragment extends Fragment {
     FlexboxLayoutManager flexLM;
     //List<toCalendarViewTransition> allTransitionNames;
     BorderRoundView slideIndicator;
-    public MainActivity activity;
+    public StartActivity activity;
+
+    CalendarSelectDayListener callbackCalendarSelectDayListener;
 
     public WalletCalendarFragment() {
 
@@ -58,7 +55,7 @@ public class WalletCalendarFragment extends Fragment {
         View root = inflater.inflate(R.layout.wallet_calendar, container, false);
 
         //setExitTransition(new Fade());
-        activity = (MainActivity) getActivity();
+        activity = (StartActivity) getActivity();
 
         monthRecycler = root.findViewById(R.id.month_recycler);
         flexLM = new FlexboxLayoutManager(getContext());
@@ -83,10 +80,16 @@ public class WalletCalendarFragment extends Fragment {
         monthRecycler.setAdapter(cashflowMonthAdapter);
         monthRecycler.setLayoutManager(flexLM);
 
+        //monthRecycler.scrollToPosition(1000);
+        //monthRecycler.smoothScrollToPosition(todayItemPosition);
+
         monthRecycler.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 setEnterTransition(null);
+                //monthRecycler.scrollBy(0, 80000);
+
+                monthRecycler.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
 
@@ -163,13 +166,27 @@ public class WalletCalendarFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        callbackCalendarSelectDayListener = (CalendarSelectDayListener) context;
+    }
+
+    @Override
+    public void onDetach() {
+
+        //ResetCallback
+        callbackCalendarSelectDayListener = null;
+        super.onDetach();
+    }
+
     float visibleScreen;
     float scaleIndicator;
     public void moveIndicator(int move, int displayWidth){
         slideIndicator.setX(move);
 
         visibleScreen = 1 + Math.abs((float)move / displayWidth);
-        Log.i("VisibleScreen", ""+(float)move / displayWidth);
         slideIndicator.setAlpha(Math.abs(-1 + (float)move / displayWidth));
 
         scaleIndicator = 1 + Math.abs(visibleScreen - 1)*5;
@@ -186,9 +203,10 @@ public class WalletCalendarFragment extends Fragment {
         slideIndicator.setScaleX(1);
     }
 
-    int forecastYears = 10;
+    int forecastYears = 2;
     public List<CalendarLayout> allCalendarDates = new ArrayList<>();
 
+    private int todayItemPosition;
     private void getCalendarRange(long Date){
 
         //getToday
@@ -205,6 +223,7 @@ public class WalletCalendarFragment extends Fragment {
         //Todo make first da a Date - for now go 60 days back
 
         int forecastDays = forecastYears * 365;// * 365
+
 
         //Go X years back
         Calendar loopDay = Calendar.getInstance();
@@ -225,6 +244,7 @@ public class WalletCalendarFragment extends Fragment {
             analysisPoints(loopDay);
         }
 
+        todayItemPosition = allCalendarDates.size();
         
         //add Future Days
 

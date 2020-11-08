@@ -28,9 +28,9 @@ import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.CustomViews.ElasticEdgeView;
 import com.news.goodlife.CustomViews.LiquidView;
 import com.news.goodlife.CustomViews.SpectrumBar;
-import com.news.goodlife.MainActivity;
 import com.news.goodlife.Models.toCalendarViewTransition;
 import com.news.goodlife.R;
+import com.news.goodlife.StartActivity;
 import com.news.goodlife.Transitions.DetailsTransition;
 
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public class WalletMultiDaysFragment extends Fragment {
     FrameLayout popContainer;
     FrameLayout menu_container;
     View monthviewIcon;
-    public MainActivity activity;
+    public StartActivity activity;
     TextView overflowDay;
 
     BorderRoundView slideIndicator;
@@ -80,7 +80,7 @@ public class WalletMultiDaysFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.wallet_multi_days, container, false);
-        activity = (MainActivity) getActivity();
+        activity = (StartActivity) getActivity();
 
         //Tab Sections
         cashflow_input_frame = root.findViewById(R.id.cashflow_input_frame);
@@ -181,7 +181,6 @@ public class WalletMultiDaysFragment extends Fragment {
         slideIndicator.setX(move);
 
         visibleScreen = 1 + Math.abs((float)move / displayWidth);
-        Log.i("VisibleScreen", ""+(float)move / displayWidth);
         slideIndicator.setAlpha(Math.abs(-1 + (float)move / displayWidth));
 
         scaleIndicator = 1 + Math.abs(visibleScreen - 1)*5;
@@ -209,7 +208,7 @@ public class WalletMultiDaysFragment extends Fragment {
     int elasticContWidth;
     boolean menuVisible = false;
     boolean openingMenu = false;
-
+    boolean slidingFragment;
     long slidevelocoty = 0;
 
     private void listeners() {
@@ -232,31 +231,20 @@ public class WalletMultiDaysFragment extends Fragment {
                     case MotionEvent.ACTION_UP:
                         elasticEdgeView.animateCloseEdge();
                         activity.resetScrollDist();
-                        if(openingMenu){
+                        if(slidingFragment){
                             //Check how far We are and animate the rest
                             slidevelocoty = System.currentTimeMillis() - slidevelocoty;
-                            activity.autoFinishSlide((int)menDist, false, slidevelocoty);
+                            activity.autoFinishSlide((int)menDist, true, slidevelocoty);
                         }
                         openingMenu = false;
                         break;
                     case MotionEvent.ACTION_MOVE:
                         menDist = (elTD - e.getRawX());
-                        if(menDist < 0){
-                            activity.slideCalendar = true;
-                            scrollingDist = 0;
-                            //Opening Menu
-                            openingMenu = true;
-                            //Log.i("Calendar", "Calendar");
-                            activity.slideMechanism((int)Math.abs(menDist), false);
-                            /*
+                        if(menDist >= 0){
+                            slidingFragment = true;
 
-                            if(!menuVisible){
-                                if(menDist > 100){
-                                    menDist = 100;
-                                    showDisplayMenu(true);
-                                }
-                                elasticEdgeView.setPull((int)menDist);
-                            }*/
+                            activity.slideMechanism((int)menDist, true);
+
                         }
 
                         break;
@@ -343,7 +331,7 @@ public class WalletMultiDaysFragment extends Fragment {
         Log.i("AllTransitionNamesCount", ""+allTransitionNames.size());
 
         WalletCalendarFragment walletCalendarFragment = new WalletCalendarFragment();
-        FragmentTransaction ft = ((MainActivity)getContext()).getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ft = ((StartActivity)getContext()).getSupportFragmentManager().beginTransaction();
 
         //TODO Soffisticate Transition to MonthView
 

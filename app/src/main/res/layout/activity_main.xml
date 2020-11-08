@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/baseBackground"
-    tools:context=".MainActivity">
+    tools:context=".StartActivity">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -64,14 +64,14 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/app_title"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/fragment_container_one"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/app_title"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/fragment_container_two"/>
     <ImageView
@@ -186,19 +186,7 @@
         app:layout_constraintBottom_toTopOf="@id/menu_container"
         app:layout_constraintStart_toStartOf="@id/menu_container"
         app:layout_constraintEnd_toEndOf="@id/menu_container"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/statusspace"
-        android:text="My Finances"
-        android:id="@+id/app_title"
-        android:paddingLeft="30dp"
-        android:paddingRight="50dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:textSize="30sp"
-        android:visibility="gone"
-        android:textColor="#2CFFFFFF"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

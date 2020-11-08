@@ -1,7 +1,6 @@
 package com.news.goodlife.Fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,19 +10,18 @@ import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.news.goodlife.CustomViews.BubbleChartCategories;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.CustomViews.LiquidView;
-import com.news.goodlife.MainActivity;
 import com.news.goodlife.R;
+import com.news.goodlife.StartActivity;
 
 public class WalletTodayFragment extends Fragment {
 
     //Todo garbage collect this on destroy
-    public MainActivity activity;
+    public StartActivity activity;
     ScrollView todayScroll;
     BorderRoundView slideIndicator;
     LiquidView liquidView;
@@ -56,7 +54,7 @@ public class WalletTodayFragment extends Fragment {
 
 
         listeners();
-        activity = (MainActivity) getActivity();
+        activity = (StartActivity) getActivity();
 
 
         return root;

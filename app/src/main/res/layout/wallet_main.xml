@@ -290,27 +290,40 @@
                 android:id="@+id/flex_cont"
                 app:layout_constraintTop_toTopOf="parent"
                 >
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingTop="20dp"
+                    android:paddingTop="10dp"
                     android:paddingStart="10dp"
+                    android:paddingBottom="10dp"
                     >
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textColor="?attr/textColorPrimary"
-                        android:text="-0.99€"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp"
-                        android:textColor="?attr/textColorPrimary"
-                        android:text="Playstore Subsription"
-                        android:alpha=".5"/>
-                </LinearLayout>
+                    <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:borderCustomRadius="100"
+                        app:strokeCustomSize="4"
+                        app:strokeCustomColor="?attr/textColorPrimary"
+                        android:alpha=".1"
+                        android:id="@+id/add_cash_inday"
+                        />
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:src="@drawable/ic_baseline_add_24"
+                        android:alpha=".3"
+                        />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -2,15 +2,18 @@ package com.news.goodlife.CustomViews;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.news.goodlife.R;
@@ -32,13 +35,21 @@ public class GoalDrawView  extends ConstraintLayout {
     AttributeSet attrs;
     boolean animated = false;
 
-
-
+    @ColorInt int textColor;
+    //Get Color Attributes
 
 
     public GoalDrawView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
+
+        //Get Color Attributes
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+
+        theme.resolveAttribute(R.attr.textColorPrimary, typedValue, true);
+
+        textColor = typedValue.data;
 
         setAttributes(attrs);
         initiatePaints();
@@ -84,6 +95,9 @@ public class GoalDrawView  extends ConstraintLayout {
 
             }
         });
+
+
+
     }
     public GoalDrawView(Context context) {
         super(context);
@@ -106,7 +120,9 @@ public class GoalDrawView  extends ConstraintLayout {
         }
         eventRadius = 15;
         progressViewWidth = (int)(((float)this.getWidth()/100) * animatedGoal);
-
+        progressPaint.setAlpha(50);
+        canvas.drawRect(0,0, getWidth(), getHeight(), progressPaint);
+        progressPaint.setAlpha(255);
         canvas.drawRect(0, 0,progressViewWidth , this.getHeight(), progressPaint);
 
         eventTextPaint.setTextSize(35);
@@ -177,7 +193,7 @@ public class GoalDrawView  extends ConstraintLayout {
         pastEventCirclePaint.setAlpha(200);
 
         eventTextPaint = new Paint();
-        eventTextPaint.setColor(Color.WHITE);
+        eventTextPaint.setColor(textColor);
         eventTextPaint.setAntiAlias(true);
         eventTextPaint.setTextSize(10);
     }

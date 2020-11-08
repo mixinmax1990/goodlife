@@ -13,10 +13,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.CustomViews.LiquidView;
+import com.news.goodlife.Interfaces.CalendarSelectDayListener;
 import com.news.goodlife.Models.CalendarLayout;
 import com.news.goodlife.R;
 
@@ -27,11 +27,14 @@ public class CashflowMonthAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     Context context;
     List<CalendarLayout> allCalendarLayouts;
+
+    CalendarSelectDayListener callback;
     //List<toCalendarViewTransition> allTransitionNames;
 
     public CashflowMonthAdapter(Context context, List<CalendarLayout> allCalendarLayouts) {
         this.context = context;
         this.allCalendarLayouts = allCalendarLayouts;
+        callback = (CalendarSelectDayListener) context;
         //this.allTransitionNames = allTransitionNames;
     }
 
@@ -90,9 +93,17 @@ public class CashflowMonthAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
+
+
     boolean weekend = false;
     boolean monthend = false;
 
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        //callback = null;
+    }
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
@@ -209,6 +220,7 @@ public class CashflowMonthAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         }
 
+        private boolean animCenter = false;
         private void animateDayClick(final View view){
             ValueAnimator va = ValueAnimator.ofFloat(1, 2);
             va.setDuration(300);
@@ -220,6 +232,10 @@ public class CashflowMonthAdapter extends RecyclerView.Adapter<RecyclerView.View
                     float animVal  = ((float) valueAnimator.getAnimatedValue());
                     if(animVal > 1.5f){
                         animVal = 3 - animVal;
+
+                        if(animCenter){
+                            //Open Window One
+                        }
                     }
 
 
@@ -233,11 +249,17 @@ public class CashflowMonthAdapter extends RecyclerView.Adapter<RecyclerView.View
                 @Override
                 public void onAnimationStart(Animator animator) {
 
+                    //Load Multidays Fragment inisde Window One
+
+                    callback.calendarDaySelected(true);
+
                 }
 
                 @Override
                 public void onAnimationEnd(Animator animator) {
-                    view.setElevation(1f);
+
+                    view.setElevation(1);
+                    //Open Window One
                 }
 
                 @Override

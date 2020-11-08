@@ -30,7 +30,7 @@ import com.news.goodlife.Transitions.DetailsTransition;
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
 
-public class FinancialFragmentOverview extends Fragment {
+public class GoalsFragment extends Fragment {
 
     LinearLayout personalProfileView;
     BezierView bezierView;
@@ -51,7 +51,7 @@ public class FinancialFragmentOverview extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View root = inflater.inflate(R.layout.financial_fragment_main, container, false);
+        final View root = inflater.inflate(R.layout.goals_fragment, container, false);
         personalProfileView = root.findViewById(R.id.financial_profiles);
         bezierView = root.findViewById(R.id.bezier_overview);
         financialFragment = new FinancialFragment();
@@ -84,7 +84,7 @@ public class FinancialFragmentOverview extends Fragment {
     }
 
     Context context;
-    public FinancialFragmentOverview(Context context) {
+    public GoalsFragment(Context context) {
         this.context = context;
     }
 

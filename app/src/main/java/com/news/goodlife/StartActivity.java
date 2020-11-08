@@ -28,7 +28,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.provider.MediaStore;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
@@ -51,10 +50,11 @@ import com.news.goodlife.CustomViews.ElasticEdgeView;
 import com.news.goodlife.Fragments.WalletCalendarFragment;
 import com.news.goodlife.Fragments.WalletTodayFragment;
 import com.news.goodlife.Interfaces.OnClickedCashflowItemListener;
+import com.news.goodlife.Interfaces.CalendarSelectDayListener;
 import com.news.goodlife.Tools.CameraScan.CameraScanFragment;
 import com.news.goodlife.Fragments.WalletMultiDaysFragment;
 import com.news.goodlife.Fragments.FinancialFragment;
-import com.news.goodlife.Fragments.FinancialFragmentOverview;
+import com.news.goodlife.Fragments.GoalsFragment;
 import com.news.goodlife.Fragments.HealthFragment;
 import com.news.goodlife.Fragments.PhysicalFragment;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -70,10 +70,10 @@ import java.util.regex.Pattern;
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
 
-public class MainActivity extends AppCompatActivity implements OnClickedCashflowItemListener {
+public class StartActivity extends AppCompatActivity implements OnClickedCashflowItemListener, CalendarSelectDayListener {
 
-    String appName = "My Finances";
-    TextView app_titleTV;
+
+
     public FrameLayout fragment_container_one;
     public FrameLayout fragment_container_two;
 
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
         fragment_container_one = findViewById(R.id.fragment_container_one);
         fragment_container_two = findViewById(R.id.fragment_container_two);
         statusbarspace = findViewById(R.id.statusspace);
-        app_titleTV = findViewById(R.id.app_title);
+
 
         elasticEdgeView = findViewById(R.id.elasticEdge);
         mainContainer = findViewById(R.id.main_container);
@@ -605,7 +605,7 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
     public WalletMultiDaysFragment walletMultiDaysFragment;
     public WalletTodayFragment walletTodayFragment;
     public WalletCalendarFragment walletCalendarFragment;
-    private FinancialFragmentOverview financialFragmentOverview;
+    private GoalsFragment goalsFragment;
     private CameraScanFragment cameraScanFragment;
 
     private void openFragment() {
@@ -617,41 +617,37 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
                 healthFragment = new HealthFragment();
                 ft.replace(fragment_container_one.getId(), healthFragment);
                 ft.addToBackStack(healthFragment.getClass().getSimpleName());
-                app_titleTV.setText("My Hub");
-                app_titleTV.setVisibility(View.GONE);
+
                 break;
             case 2:
-                financialFragmentOverview = new FinancialFragmentOverview(this.getBaseContext());
-                ft.replace(fragment_container_one.getId(), financialFragmentOverview);
+                goalsFragment = new GoalsFragment(this.getBaseContext());
+                ft.replace(fragment_container_one.getId(), goalsFragment);
                 ft.addToBackStack(fragment_container_one.getClass().getSimpleName());
-                app_titleTV.setText(appName);
-                app_titleTV.setVisibility(View.VISIBLE);
 
                 break;
             case 3:
                 //overviewFragments();
                 //Calendar Frame
-                walletMultiDaysFragment = new WalletMultiDaysFragment(menuTop, fragment_container_two, menu_container);
+
                 walletCalendarFragment = new WalletCalendarFragment();
                 walletTodayFragment = new WalletTodayFragment();
                 //financeCashflow.setSharedElementReturnTransition(new DetailsTransition());
                 //financeCashflow.setExitTransition(new DetailsTransition());
                 ft.replace(fragment_container_one.getId(), walletTodayFragment);
                 //ft.addToBackStack(walletMultiDaysFragment.getClass().getSimpleName());
-                app_titleTV.setText(appName);
-                app_titleTV.setVisibility(View.GONE);
-
                 //Today Frame
                 ft.replace(fragment_container_two.getId(), walletCalendarFragment);
-
 
                 break;
             case 4:
                 physicalFragment = new PhysicalFragment();
                 ft.replace(fragment_container_one.getId(), physicalFragment);
                 ft.addToBackStack(physicalFragment.getClass().getSimpleName());
-                app_titleTV.setText(appName);
-                app_titleTV.setVisibility(View.VISIBLE);
+                break;
+
+            case 5:
+                walletMultiDaysFragment = new WalletMultiDaysFragment(menuTop, fragment_container_one, menu_container);
+                ft.replace(fragment_container_one.getId(), walletMultiDaysFragment);
                 break;
         }
 
@@ -1196,6 +1192,74 @@ public class MainActivity extends AppCompatActivity implements OnClickedCashflow
 
     }
 
+
+    @Override
+    public void calendarDaySelected(boolean test) {
+
+        //openFragment();
+        if(selectedFragment != 5){
+            selectedFragment = 5;
+            openFragment();
+
+        }
+
+        autoSlide(true, 300);
+    }
+
+    public void autoSlide(final boolean open, int duration){
+
+        ValueAnimator va;
+
+
+        if(open){
+            va = ValueAnimator.ofInt(displayWidth, 0);
+        }
+        else{
+
+            va = ValueAnimator.ofInt(0, displayWidth);
+        }
+
+        va.setDuration(duration);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+
+                int animval = (int)valueAnimator.getAnimatedValue();
+                Log.i("AnimVal", ""+animval);
+                slideMechanism(Math.abs(animval), open);
+            }
+
+        });
+
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+                //empty Fragment and Show Progress Wheel
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+
+
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+        va.start();
+
+    }
 }
 class RecognizedData{
 
