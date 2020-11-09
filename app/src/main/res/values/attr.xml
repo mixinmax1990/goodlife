@@ -9,6 +9,8 @@
     <attr name="menuBackground" format="color"/>
     <attr name="menuIconSelected" format="color"/>
     <attr name="menuIconsUnselected" format="color"/>
+    <attr name="touchsliderBackground" format="color"/>
+    <attr name="touchsliderSelectedBackground" format="color"/>
 
     <attr name="backgroundThirdly" type="color"/>
     <attr name="backgroundSecondary" format="color"/>

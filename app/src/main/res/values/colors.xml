@@ -25,11 +25,17 @@
     <color name="menuColorNight">#383C42</color>
     <color name="menuColorDay">#E6E6E6</color>
 
-    <color name="menuIconSelectedNight">#00A6FF</color>
-    <color name="menuIconSelectedDay">#0066FF</color>
+    <color name="menuIconSelectedNight">#FBFBFB</color>
+    <color name="menuIconSelectedDay">#383838</color>
 
     <color name="menuIconUnselectedNight">#FFFFFF</color>
     <color name="menuIconUnselectedDay">#000000</color>
+
+    <color name="touchsliderBackgroundNight">#1EFFFFFF</color>
+    <color name="touchsliderBackgroundDay">#FFFFFF</color>
+
+    <color name="touchsliderSelectBackgroundNight">#85FFFFFF</color>
+    <color name="touchsliderSelectBackgroundDay">#000000</color>
 
 
     <color name="backgroundColorNight">#191B1E</color>
@@ -63,5 +69,5 @@
     <color name="financialTrendLineColoGradEnd">#00DBAF</color>
     <color name="financialTrendLineColorNeg">#ff6859</color>
     <color name="testCOlors">#57D679</color>
-    <color name="testCOlors2">#9F000000</color>
+    <color name="testCOlors2">#9FBABABA</color>
 </resources>

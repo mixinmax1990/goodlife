@@ -101,7 +101,7 @@
                 android:id="@+id/add_transactions"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:tag="Wallet"
+                android:tag="Add"
                 app:layout_constraintDimensionRatio="1:1"
                 app:cardCornerRadius="40dp"
                 app:cardBackgroundColor="?attr/standoutButton"

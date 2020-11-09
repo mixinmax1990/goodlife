@@ -18,6 +18,9 @@
         <item name="menuIconSelected">@color/menuIconSelectedDay</item>
         <item name="menuIconsUnselected">@color/menuIconUnselectedDay</item>
 
+        <item name="touchsliderBackground">@color/touchsliderBackgroundDay</item>
+        <item name="touchsliderSelectedBackground">@color/touchsliderSelectBackgroundDay</item>
+
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>

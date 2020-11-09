@@ -215,6 +215,8 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             }
         }
 
+        moveMenuButtonIndicator(slideProgess);
+
         setSlideWidth(move, open);
         float visibleScreen;
         if(open){
@@ -237,6 +239,15 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         setScaleNavigation(moveScale, 1f);
 
         //scrollHeightMenu((move / 20)*-1, true);
+
+    }
+
+    private void moveMenuButtonIndicator(float perc){
+
+        if(selectedFragment == 3 || selectedFragment == 5){
+           // Wallet is selected
+            walletBTN.moveIndicator(perc);
+        }
 
     }
 
@@ -285,7 +296,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
 
         //Determin Velocity
-        Log.i("Velocity",""+velocity);
+
         if(velocity > 350){
             velocity = 350;
         }
@@ -930,7 +941,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i("ResultCode", "" + resultCode);
+
         if (resultCode == RESULT_OK) {
 
 
@@ -981,7 +992,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
 
                             int type = getTextType(line.getValue());
-                            Log.i("Line", " - " + line.getValue() + " TextType = "+ type +" - Top: " + line.getBoundingBox().top);
+
                             if(type == 1){
                                 //TODO is Money Out code
                                 RecognizedCashflow recognizedCashflow = new RecognizedCashflow(line, true);
@@ -994,7 +1005,6 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                             }
 
 
-                            Log.i("Line", " - " + line.getValue() + " TextType = "+ type +" - Top: " + line.getBoundingBox().top);
 
 
 
@@ -1141,7 +1151,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
     private void sortDataByCashflows(List<RecognizedCashflow> cashflowList, List<RecognizedData> dataList){
         int dataTop, dataBottom, nextCashflowTop, currentCashflowTop;
         int margin = 10;
-        Log.i("RecognizedCashflows_B", " - "+cashflowList.get(1).getRecognizedDataList().size());
+
 
         for(RecognizedData data: dataList){
             dataTop = data.getText().getBoundingBox().top;
@@ -1171,12 +1181,12 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             }
         }
 
-        Log.i("Show Cashflow Results", " -----------------------------------------------------");
+
         for(RecognizedCashflow cashflow: cashflowList){
 
             for(RecognizedData data: cashflow.getRecognizedDataList()){
 
-                    Log.i("CashflowData", "Cash = "+cashflow.getCash().getValue()+" ; Date = "+data.getText().getValue());
+
 
             }
         }
@@ -1188,7 +1198,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
     public void checkBackstack(){
 
-            Log.i("MainFragmentChildren", "--"+ fragment_container_one.getChildCount());
+
 
     }
 
@@ -1226,7 +1236,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
 
                 int animval = (int)valueAnimator.getAnimatedValue();
-                Log.i("AnimVal", ""+animval);
+
                 slideMechanism(Math.abs(animval), open);
             }
 

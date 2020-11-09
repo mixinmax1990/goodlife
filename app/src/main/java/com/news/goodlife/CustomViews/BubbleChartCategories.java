@@ -38,7 +38,7 @@ public class BubbleChartCategories extends FrameLayout {
     @ColorInt int iconColor;
 
     float sizeSquared;
-    float marginPerc = 0.5f;
+    float marginPerc = .35f;
 
     public BubbleChartCategories(@NonNull Context context) {
         super(context);
@@ -79,7 +79,6 @@ public class BubbleChartCategories extends FrameLayout {
         //Pick Attribute Colors
         theme.resolveAttribute(R.attr.textColorPrimary, typedValue, true);
         iconColor = typedValue.data;
-        iconColor = Color.WHITE;
 
 
     }
@@ -355,12 +354,12 @@ public class BubbleChartCategories extends FrameLayout {
                             bubbleFillStroke.setColor(Color.parseColor(bubbleColor));
                         }
                         else{
-                            bubbleFillStroke.setColor(Color.BLACK);
+                            bubbleFillStroke.setColor(Color.TRANSPARENT);
                         }
 
                         bubbleFillStroke.setStrokeWidth(4 * anim);
                         if(darkMode){
-                            bubbleFill.setAlpha(50);
+                            bubbleFill.setAlpha(255);
                         }
                         else{
                             bubbleFill.setAlpha(255);
@@ -374,6 +373,7 @@ public class BubbleChartCategories extends FrameLayout {
                                 (int)(bubbleSurround.getCenterX() + ((bubbleSurround.getLength()/2) * marginPerc * anim)),
                                 (int)(bubbleSurround.getCenterY() + ((bubbleSurround.getLength()/2) * marginPerc * anim))
                         );
+                        bubbleIcon.setAlpha(200);
                         bubbleIcon.draw(canvas);
                     }
                 }

@@ -3,6 +3,7 @@ package com.news.goodlife.CustomViews;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -15,9 +16,12 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+
+import com.news.goodlife.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +39,8 @@ public class LiquidView extends CardView {
     String liquidTextPaint = "#009cff";
     String daysBudget;
     boolean isNegative = false;
+    Boolean darkMode;
+    @ColorInt int textColor;
 
     public boolean isNegative() {
         return isNegative;
@@ -42,7 +48,6 @@ public class LiquidView extends CardView {
 
     public void setNegative(boolean negative) {
         isNegative = negative;
-        setLiquidTextPaint("#ef335a");
         setLiquidColor("#ff6859");
 
     }
@@ -91,18 +96,28 @@ public class LiquidView extends CardView {
     public LiquidView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
+        darkMode = getResources().getBoolean(R.bool.dark);
         setWillNotDraw(false);
         setPaints();
 
         baseline = 200;
         waveNo = 4;
-        textSize = 16;
+        textSize = 22;
 
         minWaveHeight = 10;
         maxWaveHeight = 40;
 
         setDaysBudget("200,00€");
         setRemainingBudget("152,45€");
+
+        //Get Color Attributes
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+
+        //Pick Attribute Colors
+        theme.resolveAttribute(R.attr.textColorPrimary, typedValue, true);
+        textColor = typedValue.data;
+
     }
 
     int baseline, width, height, waveLength, x1,y1,x2,y2,x3,y3;
@@ -120,7 +135,7 @@ public class LiquidView extends CardView {
         bgPaint.setStyle(Paint.Style.FILL);
         bgPaint.setColor(Color.parseColor(getLiquidColor()));
         bgPaint.setAntiAlias(true);
-        bgPaint.setAlpha(30);
+        bgPaint.setAlpha(80);
 
         if(textEnabled){
             textPaint.setAlpha(255);
@@ -179,7 +194,8 @@ public class LiquidView extends CardView {
         canvas.drawPath(liquidPath, liquidPaint);
         textPaint.setColor(Color.parseColor(getLiquidTextPaint()));
         textPaint.setTextSize(textSize * getResources().getDisplayMetrics().scaledDensity);
-        textPaint.setColor(Color.parseColor("#FFFFFF"));
+
+        textPaint.setColor(textColor);
         if(!noNumber){
             canvas.drawText(remainingBudget, getWidth()/2, height / 2 - (int)(randomWaveHeight(0) * waveMovementUp) , textPaint);
         }

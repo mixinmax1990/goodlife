@@ -12,8 +12,6 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.ColorInt;
@@ -26,9 +24,10 @@ import com.news.goodlife.R;
 public class MenuIcons extends FrameLayout {
 
     boolean Night = true;
-    Paint menuText, menuBackground, shadowLayerPaint;
+    Paint menuText, menuBackground, shadowLayerPaint, pageIndicatorPaint;
     Drawable menuIcon;
     String menuName;
+    Boolean darkMode;
 
     @ColorInt int selectedIcon, unselectedIcon, menuBackgroundColor;
 
@@ -66,7 +65,7 @@ public class MenuIcons extends FrameLayout {
 
         //TODO Check for Theme than set
         colors = nightColors;
-
+        darkMode = getResources().getBoolean(R.bool.dark);
         setPaints();
 
         setWillNotDraw(false);
@@ -90,11 +89,16 @@ public class MenuIcons extends FrameLayout {
         //menuBackground.setShadowLayer(2, 0, 0, Color.parseColor("#9F000000"));
         setLayerType(LAYER_TYPE_SOFTWARE, menuBackground);
 
+        pageIndicatorPaint = new Paint();
+        pageIndicatorPaint.setStyle(Paint.Style.FILL);
+        pageIndicatorPaint.setAntiAlias(true);
+        pageIndicatorPaint.setColor(Color.WHITE);
+
 
         unSelectMenu();
     }
 
-    private int subMenus = 1;
+    private int subMenus = 0;
     public void setSubMenu(int n){
         this.subMenus = n;
     }
@@ -102,16 +106,42 @@ public class MenuIcons extends FrameLayout {
     int height, width;
     float anim = 1f;
     int padding = 10;
+    int move = 50;
+    int start, end;
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         // Draw Rounded Rect First
-
+        width = getWidth();
         canvas.drawRoundRect(new RectF(0 + padding,0 + padding,getWidth() - padding, getHeight() - padding), 40,40, menuBackground);
 
+        if(subMenus == 1){
+            start = 34;
+            end = width/2 + 10;
+            if(darkMode){
+                pageIndicatorPaint.setColor(Color.parseColor("#9FBABABA"));
+            }
+            else{
+                pageIndicatorPaint.setColor(Color.parseColor("#585858"));
+            }
+
+            canvas.drawRoundRect(new RectF(start,padding + 20,width/2 - 10, padding + 34), 50,50, pageIndicatorPaint);
+            canvas.drawRoundRect(new RectF(end,padding + 20,width -34, padding + 34), 50,50, pageIndicatorPaint);
+
+            if(darkMode){
+                pageIndicatorPaint.setColor(Color.parseColor("#000000"));
+            }
+            else{
+                pageIndicatorPaint.setColor(Color.parseColor("#FFFFFF"));
+            }
+
+            canvas.drawRoundRect(new RectF(34 + move,padding + 20,(width/2 - 10) + move, padding + 34), 50,50, pageIndicatorPaint);
+
+        }
+
         menuIcon.setAlpha(255);
-        width = getWidth();
+
         textMargin = width * margin;
         iconMargin = (width * margin) * anim;
         Log.i("AnimVal", ""+ iconMargin);
@@ -131,25 +161,41 @@ public class MenuIcons extends FrameLayout {
 
     }
 
+    int distance;
+    public void moveIndicator(float perc){
+        Log.i("PErcentage", ""+perc);
+        distance = end - start;
+        float revPerc = 1 - perc;
+        move = (int)(distance * revPerc);
+        invalidate();
+    }
+
     private void setMenu(String name){
 
         switch(name){
             case "Wallet":
                 menuName = "Wallet";
-                menuIcon = getResources().getDrawable(R.drawable.ic_baseline_add_box_24, null);
+                menuIcon = getResources().getDrawable(R.drawable.ic_baseline_spa_24, null);
+                setSubMenu(1);
                 break;
             case "Goals":
                 menuName = "Goals";
                 menuIcon = getResources().getDrawable(R.drawable.ic_baseline_spa_24, null);
+                setSubMenu(0);
                 break;
             case "Analysis":
                 menuName = "Analysis";
                 menuIcon = getResources().getDrawable(R.drawable.ic_baseline_data_usage_24, null);
+                setSubMenu(1);
                 break;
             case "Hub":
                 menuName = "Hub";
                 menuIcon = getResources().getDrawable(R.drawable.ic_baseline_apps_24, null);
+                setSubMenu(0);
                 break;
+            case "Add":
+                menuName = "";
+                menuIcon = getResources().getDrawable(R.drawable.ic_baseline_add_24, null);
             default:
                 break;
 
@@ -268,8 +314,17 @@ public class MenuIcons extends FrameLayout {
 
     private void selectMenu(){
 
-        DrawableCompat.setTint(menuIcon, colors.selected);
-        menuText.setColor(colors.selected);
+        if(darkMode){
+            DrawableCompat.setTint(menuIcon, Color.BLACK);
+            menuText.setColor(Color.BLACK);
+            menuBackground.setColor(colors.selected);
+        }
+        else{
+            DrawableCompat.setTint(menuIcon, Color.WHITE);
+            menuText.setColor(Color.WHITE);
+            menuBackground.setColor(colors.selected);
+        }
+
 
     }
 
