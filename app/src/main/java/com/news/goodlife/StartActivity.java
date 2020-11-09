@@ -236,7 +236,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
         setScaleNavigation(moveScale, 1f);
 
-        scrollHeightMenu((move / 20)*-1, true);
+        //scrollHeightMenu((move / 20)*-1, true);
 
     }
 
@@ -665,7 +665,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
     public void scrollHeightMenu(int scroll, boolean up){
 
         //Log.i("Scroll", ""+scroll);
-
+        /*
         if(scrollDirUp != up){
             resetScrollDist();
             scrollDirUp = up;
@@ -691,7 +691,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                     menu_line.setAlpha(alpha);
 
                 }
-        }
+        }*/
 
     }
 
@@ -754,7 +754,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             }
         });
 
-        va.start();
+        //va.start();
 
     }
 

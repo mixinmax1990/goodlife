@@ -22,11 +22,11 @@
     <color name="strokeColorNight">#8FFFFFFF</color>
     <color name="strokeColorDay">#8F000000</color>
 
-    <color name="menuColorNight">#0C0D0E</color>
-    <color name="menuColorDay">#FFFFFF</color>
+    <color name="menuColorNight">#383C42</color>
+    <color name="menuColorDay">#E6E6E6</color>
 
     <color name="menuIconSelectedNight">#00A6FF</color>
-    <color name="menuIconSelectedDay">#00A6FF</color>
+    <color name="menuIconSelectedDay">#0066FF</color>
 
     <color name="menuIconUnselectedNight">#FFFFFF</color>
     <color name="menuIconUnselectedDay">#000000</color>
@@ -63,5 +63,5 @@
     <color name="financialTrendLineColoGradEnd">#00DBAF</color>
     <color name="financialTrendLineColorNeg">#ff6859</color>
     <color name="testCOlors">#57D679</color>
-    <color name="testCOlors2">#0C0D0E</color>
+    <color name="testCOlors2">#9F000000</color>
 </resources>

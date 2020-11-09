@@ -26,17 +26,17 @@ import com.news.goodlife.R;
 public class MenuIcons extends FrameLayout {
 
     boolean Night = true;
-    Paint menuText;
+    Paint menuText, menuBackground, shadowLayerPaint;
     Drawable menuIcon;
     String menuName;
 
-    @ColorInt int selectedIcon, unselectedIcon;
+    @ColorInt int selectedIcon, unselectedIcon, menuBackgroundColor;
 
 
     MenuIconColors nightColors;
     MenuIconColors colors;
 
-    float margin = .2f;
+    float margin = .32f;
     float iconMargin;
     float textMargin;
 
@@ -59,11 +59,10 @@ public class MenuIcons extends FrameLayout {
         theme.resolveAttribute(R.attr.menuIconsUnselected, typedValue, true);
         unselectedIcon = typedValue.data;
 
+        theme.resolveAttribute(R.attr.menuBackground, typedValue, true);
+        menuBackgroundColor = typedValue.data;
+
         nightColors = new MenuIconColors(selectedIcon, unselectedIcon);
-
-
-
-
 
         //TODO Check for Theme than set
         colors = nightColors;
@@ -82,20 +81,36 @@ public class MenuIcons extends FrameLayout {
         menuText = new Paint();
         menuText.setStyle(Paint.Style.FILL);
         menuText.setColor(colors.unselected);
+        menuText.setAntiAlias(true);
 
 
+        menuBackground = new Paint(Paint.ANTI_ALIAS_FLAG);
+        menuBackground.setStyle(Paint.Style.FILL);
+        menuBackground.setColor(menuBackgroundColor);
+        //menuBackground.setShadowLayer(2, 0, 0, Color.parseColor("#9F000000"));
+        setLayerType(LAYER_TYPE_SOFTWARE, menuBackground);
 
 
         unSelectMenu();
     }
 
+    private int subMenus = 1;
+    public void setSubMenu(int n){
+        this.subMenus = n;
+    }
+
     int height, width;
     float anim = 1f;
+    int padding = 10;
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        setAlpha(alpha);
+        // Draw Rounded Rect First
+
+        canvas.drawRoundRect(new RectF(0 + padding,0 + padding,getWidth() - padding, getHeight() - padding), 40,40, menuBackground);
+
+        menuIcon.setAlpha(255);
         width = getWidth();
         textMargin = width * margin;
         iconMargin = (width * margin) * anim;
@@ -110,9 +125,9 @@ public class MenuIcons extends FrameLayout {
         menuIcon.setFilterBitmap(true);
         menuIcon.draw(canvas);
 
-        menuText.setTextSize((int)(width/5));
+        menuText.setTextSize(11 * getResources().getDisplayMetrics().scaledDensity);
         menuText.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText(menuName, (int)(width/2), (int)(width), menuText);
+        canvas.drawText(menuName, (int)(width/2), (int)(width) - (textMargin / 2), menuText);
 
     }
 
