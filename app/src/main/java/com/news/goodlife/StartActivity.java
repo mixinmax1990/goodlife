@@ -445,15 +445,16 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         walletBTN.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                resetButtonTint();
                 switch(motionEvent.getActionMasked()){
                     case MotionEvent.ACTION_DOWN:
+                        resetButtonTint();
                         walletBTN.animateEnter();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        walletBTN.animateLeave();
                         selectedFragment = 3;
                         changeSelectedColor();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        //walletBTN.animateLeave();
+
                         break;
                     case MotionEvent.ACTION_MOVE:
                         break;
@@ -466,15 +467,16 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         goalsBTN.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                resetButtonTint();
                 switch(motionEvent.getActionMasked()){
                     case MotionEvent.ACTION_DOWN:
+                        resetButtonTint();
                         goalsBTN.animateEnter();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        goalsBTN.animateLeave();
                         selectedFragment = 2;
                         changeSelectedColor();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        //goalsBTN.animateLeave();
+
                         break;
                     case MotionEvent.ACTION_MOVE:
                         break;
@@ -487,15 +489,16 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         analysisBTN.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                resetButtonTint();
                 switch(motionEvent.getActionMasked()){
                     case MotionEvent.ACTION_DOWN:
+                        resetButtonTint();
                         analysisBTN.animateEnter();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        analysisBTN.animateLeave();
                         selectedFragment = 3;
                         changeSelectedColor();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        //analysisBTN.animateLeave();
+
                         break;
                     case MotionEvent.ACTION_MOVE:
                         break;
@@ -508,16 +511,16 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         hubBTN.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                resetButtonTint();
                 switch(motionEvent.getActionMasked()){
                     case MotionEvent.ACTION_DOWN:
+                        resetButtonTint();
                         hubBTN.animateEnter();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        hubBTN.animateLeave();
                         selectedFragment = 1;
                         changeSelectedColor();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        //hubBTN.animateLeave();
+
                         break;
                     case MotionEvent.ACTION_MOVE:
                         break;
@@ -562,7 +565,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
     int menu_containerHeight;
 
     private void changeSelectedColor(){
-        resetButtonTint();
+
         switch(selectedFragment){
             case 1:
                 //btn.setImageTintList(getResources().getColorStateList(R.color.button_healthNight));

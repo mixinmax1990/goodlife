@@ -11,6 +11,7 @@
     <attr name="menuIconsUnselected" format="color"/>
     <attr name="touchsliderBackground" format="color"/>
     <attr name="touchsliderSelectedBackground" format="color"/>
+    <attr name="bubbleBackground" format="color"/>
 
     <attr name="backgroundThirdly" type="color"/>
     <attr name="backgroundSecondary" format="color"/>

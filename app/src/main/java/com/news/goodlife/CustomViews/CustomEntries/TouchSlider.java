@@ -1,15 +1,19 @@
 package com.news.goodlife.CustomViews.CustomEntries;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import androidx.annotation.ColorInt;
@@ -46,6 +50,14 @@ public class TouchSlider extends FrameLayout {
         touchsliderSelectBG = typedValue.data;
 
 
+        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                animateGrowSlider();
+
+                getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
 
         setWillNotDraw(false);
         setPaints();
@@ -79,17 +91,64 @@ public class TouchSlider extends FrameLayout {
     }
 
     int position = 600;
-
+    int paddingTop;
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        paddingTop = (int) (getHeight()/2 * paddingTopRatio);
 
-        canvas.drawRect(new RectF(0,0,getWidth(),getHeight()), backgroundPaint);
+        Log.i("ANimSLider",""+paddingTop);
 
-        canvas.drawRect(new RectF(0,0,position + touchMoveDist, getHeight()), selectedPaint);
+        canvas.drawRect(new RectF(0,(0 + paddingTop), getWidth(), (getHeight()) - paddingTop), backgroundPaint);
+
+        canvas.drawRect(new RectF(0,(0 + paddingTop),position + touchMoveDist, (getHeight() - paddingTop)), selectedPaint);
 
         canvas.drawLine(position,0, position, getHeight(), todayLine);
+    }
+
+    float paddingTopRatio;
+
+    private void animateGrowSlider(){
+        ValueAnimator va = ValueAnimator.ofFloat(1, 0);
+
+        va.setDuration(300);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                paddingTopRatio = (float) valueAnimator.getAnimatedValue();
+                invalidate();
+            }
+        });
+
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+        va.start();
+    }
+
+    @Override
+    public ViewTreeObserver getViewTreeObserver() {
+        return super.getViewTreeObserver();
     }
 
     public static int dpToPx(int dp) {
@@ -97,7 +156,6 @@ public class TouchSlider extends FrameLayout {
     }
 
     int TD, touchMoveDist = 0;
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 

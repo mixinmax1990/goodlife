@@ -37,6 +37,9 @@
     <color name="touchsliderSelectBackgroundNight">#85FFFFFF</color>
     <color name="touchsliderSelectBackgroundDay">#000000</color>
 
+    <color name="bubbleBackgroundNight">#3BFFFFFF</color>
+    <color name="bubbleBackgroundDay">#3BFFFFFF</color>
+
 
     <color name="backgroundColorNight">#191B1E</color>
     <color name="backgroundColor">#FFFFFF</color>

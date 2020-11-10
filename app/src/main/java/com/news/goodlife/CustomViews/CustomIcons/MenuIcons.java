@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -20,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.news.goodlife.R;
+
 
 public class MenuIcons extends FrameLayout {
 
@@ -207,17 +209,14 @@ public class MenuIcons extends FrameLayout {
     ValueAnimator vaEnter = ValueAnimator.ofFloat(1, 0);
     public void animateEnter(){
 
+        selectMenu();
 
-        unSelectMenu();
         vaEnter.setDuration(100);
         vaEnter.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 anim = ((float) valueAnimator.getAnimatedValue());
                 revAnim = 1 - anim;
-                if(revAnim > 0.5f){
-                    alpha = revAnim;
-                }
                 invalidate();
             }
         });
@@ -231,10 +230,9 @@ public class MenuIcons extends FrameLayout {
             @Override
             public void onAnimationEnd(Animator animator) {
 
-                if(autoleave){
+
                     animateLeaveAction();
-                    autoleave = false;
-                }
+
             }
 
             @Override
@@ -248,7 +246,14 @@ public class MenuIcons extends FrameLayout {
             }
         });
 
-        vaEnter.start();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                // Actions to do after 10 seconds
+                vaEnter.start();
+            }
+        }, 150);
+
     }
     boolean autoleave = false;
 
@@ -281,7 +286,7 @@ public class MenuIcons extends FrameLayout {
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                selectMenu();
+
             }
 
             @Override
@@ -300,11 +305,17 @@ public class MenuIcons extends FrameLayout {
     }
     public void unSelectMenu(){
 
-        DrawableCompat.setTint(menuIcon, colors.unselected);
-        menuText.setColor(colors.unselected);
-        alpha = .5f;
+        if(darkMode){
+            DrawableCompat.setTint(menuIcon, Color.WHITE);
+            menuText.setColor(Color.WHITE);
+            menuBackground.setColor(menuBackgroundColor);
+        }
+        else{
+            DrawableCompat.setTint(menuIcon, Color.BLACK);
+            menuText.setColor(Color.BLACK);
+            menuBackground.setColor(menuBackgroundColor);
+        }
         invalidate();
-
     }
 
     @Override
@@ -324,8 +335,6 @@ public class MenuIcons extends FrameLayout {
             menuText.setColor(Color.WHITE);
             menuBackground.setColor(colors.selected);
         }
-
-
     }
 
 

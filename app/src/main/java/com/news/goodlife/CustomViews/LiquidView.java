@@ -102,7 +102,7 @@ public class LiquidView extends CardView {
 
         baseline = 200;
         waveNo = 4;
-        textSize = 22;
+        textSize = 16;
 
         minWaveHeight = 10;
         maxWaveHeight = 40;
