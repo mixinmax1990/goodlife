@@ -1,19 +1,33 @@
 package com.news.goodlife.Fragments;
 
+import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
 import com.news.goodlife.CustomViews.BubbleChartCategories;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
+import com.news.goodlife.CustomViews.CustomEntries.LabeledEntryView;
 import com.news.goodlife.CustomViews.LiquidView;
 import com.news.goodlife.R;
 import com.news.goodlife.StartActivity;
@@ -27,19 +41,37 @@ public class WalletTodayFragment extends Fragment {
     LiquidView liquidView;
     BubbleChartCategories bubbleChartCategories;
 
+    View add_cashflow;
+    View new_cashflow_container, cashflow_pop_container;
+    ImageView add_plus, add_minus;
+    LabeledEntryView amount, description;
+    TextView addcashflowBTN;
+
+    @ColorInt int selectedStroke, unselectedStroke;
+
 
     public WalletTodayFragment() {
 
     }
 
+    private View root;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.wallet_main, container, false);
+        root = inflater.inflate(R.layout.wallet_main, container, false);
         todayScroll = root.findViewById(R.id.wallet_today_scroll);
         slideIndicator = root.findViewById(R.id.slide_indicator);
         liquidView = root.findViewById(R.id.budget_liquid_day);
         bubbleChartCategories = root.findViewById(R.id.item_day_bubble_chart);
+        add_cashflow = root.findViewById(R.id.day_item_add_cashflow);
+        new_cashflow_container = root.findViewById(R.id.add_cashflow_entry_container);
+        add_plus = root.findViewById(R.id.day_newentry_plus);
+        add_minus = root.findViewById(R.id.day_newentry_minus);
+        amount = root.findViewById(R.id.day_newentry_amount);
+        description = root.findViewById(R.id.day_newentry_description);
+        cashflow_pop_container = root.findViewById(R.id.cashflow_activities_container);
+        rootView = getActivity().getWindow().getDecorView();
+        addcashflowBTN = root.findViewById(R.id.add_cashflow_button);
 
         liquidView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -53,13 +85,26 @@ public class WalletTodayFragment extends Fragment {
         });
 
 
+
         listeners();
         activity = (StartActivity) getActivity();
+
+        //Get Color Attributes
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = getContext().getTheme();
+
+        //Pick Attribute Colors
+        theme.resolveAttribute(R.attr.entryBorder, typedValue, true);
+        selectedStroke = typedValue.data;
+
+        theme.resolveAttribute(R.attr.textColorPrimary, typedValue, true);
+        unselectedStroke = typedValue.data;
 
 
         return root;
     }
 
+    View rootView;
     float elTD, menDist;
     boolean slidingFragment;
     long slidevelocoty = 0;
@@ -95,6 +140,96 @@ public class WalletTodayFragment extends Fragment {
                 return false;
             }
         });
+
+        add_cashflow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Add entry fields
+                new_cashflow_container.setVisibility(View.VISIBLE);
+                new_cashflow_container.animate().alpha(1f).scaleX(1).scaleY(1);
+                add_cashflow.setVisibility(View.GONE);
+
+                toggleMinusPlus(true);
+                amount.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(amount, InputMethodManager.SHOW_IMPLICIT);
+
+                addcashflowBTN.setTextColor(selectedStroke);
+                addcashflowBTN.setAlpha(1f);
+           }
+        });
+
+        add_minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleMinusPlus(true);
+            }
+        });
+
+        add_plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleMinusPlus(false);
+            }
+        });
+
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+
+                Rect r = new Rect();
+                rootView.getWindowVisibleDisplayFrame(r);
+                if(fullDisplay == 0)
+                {
+                    fullDisplay = r.height();
+                }
+
+                Log.i("Display Size",""+fullDisplay);
+                Log.i("Height R",""+r.height());
+                int heightDiff = fullDisplay - r.height();
+
+
+                if(heightDiff != 0){
+                    //KeyBoard is visible
+
+                    int diff = fullDisplay - (cashflow_pop_container.getTop() + new_cashflow_container.getHeight());
+                    //diff = diff - (root.getHeight() - fullDisplay);
+
+                    Log.i("Math", ""+ diff);
+
+
+                    root.setY(- (heightDiff - diff));
+                }
+                else{
+                    root.setY(0);
+                }
+                Log.d("Keyboard Size Day", "Size: " + heightDiff);
+
+            }
+        });
+        addcashflowBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Save The Cashflow", "Set Cashflow");
+            }
+        });
+
+    }
+
+    int fullDisplay = 0;
+
+    private void toggleMinusPlus(boolean add) {
+
+        if(!add){
+            add_plus.setColorFilter(selectedStroke);
+            add_minus.setColorFilter(unselectedStroke);
+            //DrawableCompat.setTint(add_plus.getDrawable(), selectedStroke);
+        }
+        else{
+            add_minus.setColorFilter(selectedStroke);
+            add_plus.setColorFilter(unselectedStroke);
+        }
 
     }
 

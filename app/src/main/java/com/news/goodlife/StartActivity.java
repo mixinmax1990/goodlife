@@ -21,6 +21,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -81,6 +82,8 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
     int selectedFragment = 0;
     boolean DarkMode = false;
 
+
+
     //Statusbar Replacement
     int statusBarHeight;
     FrameLayout statusbarspace;
@@ -140,6 +143,8 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         previewImage = findViewById(R.id.previewImage);
 
 
+
+
         if (getResources().getBoolean(R.bool.dark)) {
             Log.i("Mode", "Night");
         } else {
@@ -160,6 +165,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         //open Wallet First
         selectedFragment = 3;
         changeSelectedColor();
+        
 
         DarkMode = true;
 
@@ -559,6 +565,8 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
 
     }
+
+
 
     boolean menuDrawn = false;
     private ViewGroup.LayoutParams menu_containerLP;

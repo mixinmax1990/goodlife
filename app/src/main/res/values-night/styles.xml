@@ -23,6 +23,8 @@
 
         <item name="bubbleBackground">@color/bubbleBackgroundNight</item>
 
+        <item name="entryBorder">@color/entryBorderNight</item>
+
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
