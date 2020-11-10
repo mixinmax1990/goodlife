@@ -165,7 +165,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         //open Wallet First
         selectedFragment = 3;
         changeSelectedColor();
-        
+
 
         DarkMode = true;
 
