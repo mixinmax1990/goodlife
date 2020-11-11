@@ -21,7 +21,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -52,6 +51,7 @@ import com.news.goodlife.Fragments.WalletCalendarFragment;
 import com.news.goodlife.Fragments.WalletTodayFragment;
 import com.news.goodlife.Interfaces.OnClickedCashflowItemListener;
 import com.news.goodlife.Interfaces.CalendarSelectDayListener;
+import com.news.goodlife.Models.CalendarLayoutDay;
 import com.news.goodlife.Tools.CameraScan.CameraScanFragment;
 import com.news.goodlife.Fragments.WalletMultiDaysFragment;
 import com.news.goodlife.Fragments.FinancialFragment;
@@ -146,10 +146,10 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
 
         if (getResources().getBoolean(R.bool.dark)) {
-            Log.i("Mode", "Night");
+
         } else {
             // Do night stuff here
-            Log.i("Mode", "Day");
+
         }
 
 
@@ -415,6 +415,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         if(!mainMenuVisible){
             toggleMainMenuContainer();
         }
+
     }
 
     private void loadTools() {
@@ -651,6 +652,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                 //overviewFragments();
                 //Calendar Frame
 
+
                 walletCalendarFragment = new WalletCalendarFragment();
                 walletTodayFragment = new WalletTodayFragment();
                 //financeCashflow.setSharedElementReturnTransition(new DetailsTransition());
@@ -668,7 +670,14 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                 break;
 
             case 5:
-                walletMultiDaysFragment = new WalletMultiDaysFragment(menuTop, fragment_container_one, menu_container);
+                if(dayPicked){
+                    walletMultiDaysFragment = new WalletMultiDaysFragment(menuTop, fragment_container_one, menu_container, selectedDay);
+
+                }
+                else{
+                    walletMultiDaysFragment = new WalletMultiDaysFragment(menuTop, fragment_container_one, menu_container, null);
+
+                }
                 ft.replace(fragment_container_one.getId(), walletMultiDaysFragment);
                 break;
         }
@@ -677,6 +686,8 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         ft.commit();
     }
 
+    boolean dayPicked = false;
+    CalendarLayoutDay selectedDay;
     int scrollDist = 0;
     boolean scrollDirUp = true;
     int dynamicMenuHeight;
@@ -803,7 +814,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
     @Override
     public void onCashflowItemClicked(int position) {
-        Log.i("Clicked OOOOOO", ""+position);
+
         financialFragment.inputCashflowInPopup(position);
         financialFragment.cashflowID = position;
         financialFragment.toggleRemoveShow(true);
@@ -1215,17 +1226,23 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
 
     @Override
-    public void calendarDaySelected(boolean test) {
+    public void calendarDaySelected(CalendarLayoutDay selectedDay) {
+
+        //Log.i("SelectedDay", ""+selectedDay.getMONTH_NAME() + " " +selectedDay.getMONTH_DAY_NUMBER());
 
         //openFragment();
         if(selectedFragment != 5){
             selectedFragment = 5;
+
+            dayPicked = true;
+            this.selectedDay = selectedDay;
             openFragment();
 
         }
 
         autoSlide(true, 300);
     }
+
 
     public void autoSlide(final boolean open, int duration){
 

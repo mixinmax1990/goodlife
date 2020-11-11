@@ -98,7 +98,6 @@ public class TouchSlider extends FrameLayout {
 
         paddingTop = (int) (getHeight()/2 * paddingTopRatio);
 
-        Log.i("ANimSLider",""+paddingTop);
 
         canvas.drawRect(new RectF(0,(0 + paddingTop), getWidth(), (getHeight()) - paddingTop), backgroundPaint);
 
@@ -164,15 +163,15 @@ public class TouchSlider extends FrameLayout {
                 case MotionEvent.ACTION_DOWN:
 
                     TD = (int)event.getX();
-                    Log.i("Touched", "Down");
+                    //Log.i("Touched", "Down");
                     break;
                 case MotionEvent.ACTION_UP:
-                    Log.i("Touched", "Up");
+                    //Log.i("Touched", "Up");
                     //position = position + touchMoveDist;
                     break;
                 case MotionEvent.ACTION_MOVE:
                     touchMoveDist =  (int) (event.getX() - TD);
-                    Log.i("Touched", "Move"+touchMoveDist);
+                    //Log.i("Touched", "Move"+touchMoveDist);
                     invalidate();
                     break;
                 default:

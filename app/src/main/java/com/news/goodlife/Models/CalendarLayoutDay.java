@@ -3,17 +3,20 @@ package com.news.goodlife.Models;
 import android.util.Log;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
-public class CalendarLayout {
+public class CalendarLayoutDay {
 
         private String type;
         private Calendar calendar;
+        private boolean today = false;
+        private Date date;
        // public String dayofMonth;
 
         private String DAY_OF_WEEK_NUMBER, DAY_OF_WEEK_NAME, MONTH_DAY_NUMBER, YEAR, MONTH_NUMBER, MONTH_NAME;
 
-        public CalendarLayout(String type, Calendar calendar) {
+        public CalendarLayoutDay(String type, Calendar calendar) {
             this.type = type;
             setCalendar(calendar);
 
@@ -24,10 +27,27 @@ public class CalendarLayout {
             setYEAR(""+calendar.get(Calendar.YEAR));
             setMONTH_NAME(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
             setMONTH_NUMBER(""+calendar.get(Calendar.MONTH));
+            setDate(calendar.getTime());
 
         }
 
-        public String getType() {
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public boolean isToday() {
+        return today;
+    }
+
+    public void setToday(boolean today) {
+        this.today = today;
+    }
+
+    public String getType() {
             return type;
         }
 

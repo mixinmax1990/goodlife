@@ -48,7 +48,7 @@
        app:layout_constraintEnd_toEndOf="parent"
        android:textAlignment="center"
        android:padding="5dp"
-       android:alpha="1"
+       android:alpha=".7"
        android:textSize="12sp"
        android:textColor="?attr/textColorPrimary"
        android:text="Mon"/>

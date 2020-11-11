@@ -54,7 +54,6 @@ public class PopUpFrame extends ConstraintLayout {
         theme.resolveAttribute(R.attr.textColorPrimary, typedValue, true);
         expandDotColor = typedValue.data;
 
-        Log.i("WHite",""+expandDotColor);
 
 
         setAttributes(attrs);

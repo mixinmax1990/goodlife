@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.flexbox.AlignItems;
@@ -19,11 +20,13 @@ import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.news.goodlife.Adapters.Recycler.CashflowMonthAdapter;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.Interfaces.CalendarSelectDayListener;
 
-import com.news.goodlife.Models.CalendarLayout;
+import com.news.goodlife.Models.CalendarLayoutDay;
+import com.news.goodlife.Models.CalendarLayoutMonth;
 import com.news.goodlife.R;
 import com.news.goodlife.StartActivity;
 
@@ -34,10 +37,11 @@ import java.util.List;
 public class WalletCalendarFragment extends Fragment {
 
     RecyclerView monthRecycler;
-    FlexboxLayoutManager flexLM;
+    LinearLayoutManager LM;
     //List<toCalendarViewTransition> allTransitionNames;
     BorderRoundView slideIndicator;
     public StartActivity activity;
+    private View scroll_today;
 
     CalendarSelectDayListener callbackCalendarSelectDayListener;
 
@@ -58,30 +62,23 @@ public class WalletCalendarFragment extends Fragment {
         activity = (StartActivity) getActivity();
 
         monthRecycler = root.findViewById(R.id.month_recycler);
-        flexLM = new FlexboxLayoutManager(getContext());
-        flexLM.setFlexWrap(FlexWrap.WRAP);
-        flexLM.setFlexDirection(FlexDirection.ROW);
-        flexLM.setJustifyContent(JustifyContent.FLEX_START);
-        flexLM.setAlignItems(AlignItems.FLEX_START);
-
+        LM = new LinearLayoutManager(getContext());
         slideIndicator = root.findViewById(R.id.slide_indicator);
+        scroll_today = root.findViewById(R.id.scroll_today);
 
 
         //Todo Get Data From DataBase and get First Entry Date
 
         getCalendarRange(1);
 
-        for(CalendarLayout cl: allCalendarDates){
-            Log.i("DayCal", ""+cl.getCalendar().get(Calendar.DAY_OF_WEEK));
-        }
 
         //TODO ADD Dynamic Data to Adapter
-        CashflowMonthAdapter cashflowMonthAdapter = new CashflowMonthAdapter(getContext(), allCalendarDates);
+        CashflowMonthAdapter cashflowMonthAdapter = new CashflowMonthAdapter(getContext(), allMonths);
         monthRecycler.setAdapter(cashflowMonthAdapter);
-        monthRecycler.setLayoutManager(flexLM);
+        monthRecycler.setLayoutManager(LM);
 
         //monthRecycler.scrollToPosition(1000);
-        //monthRecycler.smoothScrollToPosition(todayItemPosition);
+        monthRecycler.scrollToPosition(todayItemPosition);
 
         monthRecycler.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -164,6 +161,13 @@ public class WalletCalendarFragment extends Fragment {
 
             }
         });
+
+        scroll_today.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                monthRecycler.smoothScrollToPosition(todayItemPosition);
+            }
+        });
     }
 
     @Override
@@ -203,8 +207,11 @@ public class WalletCalendarFragment extends Fragment {
         slideIndicator.setScaleX(1);
     }
 
-    int forecastYears = 2;
-    public List<CalendarLayout> allCalendarDates = new ArrayList<>();
+    int forecastYears = 10;
+    //List of all Days
+    public List<CalendarLayoutDay> allCalendarDays = new ArrayList<>();
+    //List of CaldarMoths
+    List<CalendarLayoutMonth> allMonths = new ArrayList<>();
 
     private int todayItemPosition;
     private void getCalendarRange(long Date){
@@ -237,14 +244,16 @@ public class WalletCalendarFragment extends Fragment {
             loopDay.add(Calendar.DATE, 1);
 
             //Set The Day Object
-            CalendarLayout calendarLayout = new CalendarLayout("day", loopDay);
+            CalendarLayoutDay calendarLayoutDay = new CalendarLayoutDay("day", loopDay);
 
             //Check if WEEK,MONTH,YEAR ends
-            allCalendarDates.add(calendarLayout);
+            allCalendarDays.add(calendarLayoutDay);
             analysisPoints(loopDay);
         }
 
-        todayItemPosition = allCalendarDates.size();
+        allCalendarDays.get(allCalendarDays.size() - 1).setToday(true);
+
+        todayItemPosition = allMonths.size();
         
         //add Future Days
 
@@ -252,13 +261,15 @@ public class WalletCalendarFragment extends Fragment {
 
             loopDay.add(Calendar.DATE, 1);
             //Set The Day Object
-            CalendarLayout calendarLayout = new CalendarLayout("day", loopDay);
+            CalendarLayoutDay calendarLayoutDay = new CalendarLayoutDay("day", loopDay);
 
 
             //Check if WEEK,MONTH,YEAR ends
-            allCalendarDates.add(calendarLayout);
+            allCalendarDays.add(calendarLayoutDay);
             analysisPoints(loopDay);
         }
+
+
 
         //allCalendarDates.get(0).getTime();
 
@@ -281,22 +292,29 @@ public class WalletCalendarFragment extends Fragment {
         day.add(Calendar.DATE, 1);
         if(weekday == 1){
             //ADD Weekend Analysis
-            CalendarLayout calendarLayout = new CalendarLayout("weekend", day);
-            allCalendarDates.add(calendarLayout);
+            CalendarLayoutDay calendarLayoutDay = new CalendarLayoutDay("weekend", day);
+            allCalendarDays.add(calendarLayoutDay);
 
         }
 
         if(year != day.get(Calendar.YEAR)){
             //Add YearEnd Analaysis
-            CalendarLayout calendarLayout = new CalendarLayout("yearend", day);
-            allCalendarDates.add(calendarLayout);
+            CalendarLayoutDay calendarLayoutDay = new CalendarLayoutDay("yearend", day);
+            allCalendarDays.add(calendarLayoutDay);
 
         }
 
         if(month != day.get(Calendar.MONTH)){
+
             //Add MonthEnd Analysis
-            CalendarLayout calendarLayout = new CalendarLayout("monthend", day);
-            allCalendarDates.add(calendarLayout);
+            CalendarLayoutDay calendarLayoutDay = new CalendarLayoutDay("monthend", day);
+            allCalendarDays.add(calendarLayoutDay);
+
+            CalendarLayoutMonth month = new CalendarLayoutMonth(allCalendarDays);
+
+            allMonths.add(month);
+
+            allCalendarDays = new ArrayList<>();
 
         }
         day.add(Calendar.DATE, -1);

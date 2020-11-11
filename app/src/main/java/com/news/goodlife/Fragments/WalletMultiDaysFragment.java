@@ -28,12 +28,16 @@ import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.CustomViews.ElasticEdgeView;
 import com.news.goodlife.CustomViews.LiquidView;
 import com.news.goodlife.CustomViews.SpectrumBar;
+import com.news.goodlife.Models.CalendarLayoutDay;
+import com.news.goodlife.Models.CalendarLayoutMonth;
 import com.news.goodlife.Models.toCalendarViewTransition;
 import com.news.goodlife.R;
 import com.news.goodlife.StartActivity;
 import com.news.goodlife.Transitions.DetailsTransition;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -62,25 +66,45 @@ public class WalletMultiDaysFragment extends Fragment {
     TextView overflowDay;
 
     BorderRoundView slideIndicator;
+    CalendarLayoutDay selectedDay;
 
 
 
     public int menuTop;
-    public WalletMultiDaysFragment(int menuTop, FrameLayout popContainer, FrameLayout menu_container) {
+    public WalletMultiDaysFragment(int menuTop, FrameLayout popContainer, FrameLayout menu_container,@Nullable CalendarLayoutDay selected) {
         this.menuTop = menuTop;
         this.popContainer = popContainer;
         this.menu_container = menu_container;
+        this.selectedDay = selected;
 
     }
     int firstElement = 10000;
     int lastElement = 10001;
     ViewHolder visibleViewHolder;
+    View root;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.wallet_multi_days, container, false);
+        root = inflater.inflate(R.layout.wallet_multi_days, container, false);
         activity = (StartActivity) getActivity();
+
+        //Get Dates
+
+        if(selectedDay != null){
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(selectedDay.getDate());
+            Log.i("Selected Day",""+cal.get(Calendar.DAY_OF_MONTH));
+
+            getCalendarRange(selectedDay.getDate());
+        }
+        else{
+            Log.i("Selected Day", "null");
+            getCalendarRange(null);
+        }
+
+
+
 
         //Tab Sections
         cashflow_input_frame = root.findViewById(R.id.cashflow_input_frame);
@@ -88,9 +112,13 @@ public class WalletMultiDaysFragment extends Fragment {
         lp.setMargins(0,0,0, menuTop);
         cashflow_input_frame.setLayoutParams(lp);
         cashflow_recycler = root.findViewById(R.id.cashflow_recycler);
-        cashflowMainAdapter = new CashflowMainAdapter(getContext(), popContainer, this);
+        cashflowMainAdapter = new CashflowMainAdapter(getContext(), popContainer, this, root, getActivity().getWindow().getDecorView(), allCalendarDays);
         llm = new LinearLayoutManager(getContext());
         llm.setStackFromEnd(false);
+
+
+
+
         cashflow_recycler.setLayoutManager(llm);
         cashflow_recycler.setNestedScrollingEnabled(true);
         cashflow_recycler.setAdapter(cashflowMainAdapter);
@@ -103,6 +131,8 @@ public class WalletMultiDaysFragment extends Fragment {
         monthviewIcon = root.findViewById(R.id.monthview_icon);
         overflowDay = root.findViewById(R.id.overflow_day);
         slideIndicator = root.findViewById(R.id.slide_indicator);
+
+        cashflow_recycler.scrollToPosition(todayItemPosition);
 
         final LiquidView[] countVisibleLiquid = new LiquidView[1];
         final TextView[] countVisibleDayNames = new TextView[1];
@@ -136,36 +166,8 @@ public class WalletMultiDaysFragment extends Fragment {
 
                         }
 
-                        /*
-                        try {
-                            ViewHolder vh = cashflow_recycler.findViewHolderForAdapterPosition(i);
-                            countVisibleLiquid[0] = vh.itemView.findViewById(R.id.budget_liquid);
-                            countVisibleDayNames[0] = vh.itemView.findViewById(R.id.item_day);
-                            countVisibleDayNames[0].setTransitionName(i+"_dayname");
-                            countVisibleLiquid[0].setTransitionName(i+"_trans");
-                            countVisibleLiquid[0].getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                                @Override
-                                public void onGlobalLayout() {
-                                    try {
-                                        countVisibleLiquid[0].animateWave();
-                                        Log.i("Visible Element Loop", "Animate"+x);
-                                    }catch(Exception e){
-                                        Log.i("Visible Element Loop", "Error"+x);
-                                    };
-                                }
-                            });
-                        }
-                        catch (Exception e){
-
-                        }*/
                     }
                 }
-                /*
-                if(lastElement != llm.findLastVisibleItemPosition()){
-                    lastElement = llm.findLastVisibleItemPosition();
-                    //resetWave(lastElement);
-                }*/
-
 
             }
         });
@@ -173,6 +175,113 @@ public class WalletMultiDaysFragment extends Fragment {
         listeners();
 
         return root;
+    }
+
+    private int todayItemPosition;
+    public List<CalendarLayoutDay> allCalendarDays = new ArrayList<>();
+    private void getCalendarRange(Date selectDate){
+
+        //getToday
+        Calendar today = Calendar.getInstance();
+
+        //SetTime To Zero
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
+        today.set(Calendar.MILLISECOND, 0);
+        //clear TimeZone
+        today.clear(Calendar.ZONE_OFFSET);
+
+        //Todo make first da a Date - for now go 60 days back
+
+        int forecastDays = 100;// * 365
+
+
+        //Go X years back
+        Calendar loopDay = Calendar.getInstance();
+        if(selectDate != null){
+            loopDay.setTime(selectDate);
+        }
+        loopDay.add(Calendar.DATE, - forecastDays);
+
+        //Calendar Obj of first day 10 Years back
+
+        // Add PastDays
+        for(int i = 0; i < forecastDays; i++){
+
+            loopDay.add(Calendar.DATE, 1);
+
+            //Set The Day Object
+            CalendarLayoutDay calendarLayoutDay = new CalendarLayoutDay("day", loopDay);
+
+            //Check if WEEK,MONTH,YEAR ends
+            allCalendarDays.add(calendarLayoutDay);
+            analysisPoints(loopDay);
+        }
+
+        allCalendarDays.get(allCalendarDays.size() - 1).setToday(true);
+
+        todayItemPosition = allCalendarDays.size();
+
+        //add Future Days
+
+        for(int i = 0; i < forecastDays; i++){
+
+            loopDay.add(Calendar.DATE, 1);
+            //Set The Day Object
+            CalendarLayoutDay calendarLayoutDay = new CalendarLayoutDay("day", loopDay);
+
+
+            //Check if WEEK,MONTH,YEAR ends
+            allCalendarDays.add(calendarLayoutDay);
+            analysisPoints(loopDay);
+        }
+
+
+
+        //allCalendarDates.get(0).getTime();
+
+        //c.add(Calendar.DATE, 40);  // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE
+        //SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
+        //String output = sdf1.format(c.getTime());
+    }
+
+    int year, weekday, month;
+    private void analysisPoints(Calendar day) {
+
+        weekday = day.get(Calendar.DAY_OF_WEEK);
+        year = day.get(Calendar.YEAR);
+        month = day.get(Calendar.MONTH);
+
+
+
+        // get NextDay
+
+        day.add(Calendar.DATE, 1);
+        if(weekday == 1){
+            //ADD Weekend Analysis
+            CalendarLayoutDay calendarLayoutDay = new CalendarLayoutDay("weekend", day);
+            allCalendarDays.add(calendarLayoutDay);
+
+        }
+
+        if(year != day.get(Calendar.YEAR)){
+            //Add YearEnd Analaysis
+            CalendarLayoutDay calendarLayoutDay = new CalendarLayoutDay("yearend", day);
+            allCalendarDays.add(calendarLayoutDay);
+
+        }
+
+        if(month != day.get(Calendar.MONTH)){
+
+            //Add MonthEnd Analysis
+            CalendarLayoutDay calendarLayoutDay = new CalendarLayoutDay("monthend", day);
+            allCalendarDays.add(calendarLayoutDay);
+
+            CalendarLayoutMonth month = new CalendarLayoutMonth(allCalendarDays);
+        }
+        day.add(Calendar.DATE, -1);
+
     }
 
     float visibleScreen;
@@ -323,12 +432,11 @@ public class WalletMultiDaysFragment extends Fragment {
                 allTransitionNames.add(transDataInstance);
             }
             catch (Exception e){
-                Log.i("AllTransitionNamesCount", "Crashes");
+
                 e.printStackTrace();
             }
         }
 
-        Log.i("AllTransitionNamesCount", ""+allTransitionNames.size());
 
         WalletCalendarFragment walletCalendarFragment = new WalletCalendarFragment();
         FragmentTransaction ft = ((StartActivity)getContext()).getSupportFragmentManager().beginTransaction();
@@ -518,12 +626,12 @@ public class WalletMultiDaysFragment extends Fragment {
 
         private void animateVisibleWaves(RecyclerView recyclerView, int first, int last){
 
-            Log.i("Runs", "animateVIsiFunction"+first);
+
             if(prevFirst != first){
                 prevFirst = first;
                 for(int i = first; i <= last; i++){
                     try {
-                        Log.i("Runs", "animateVisi");
+
                         ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(i);
                         SpectrumBar bar = vh.itemView.findViewById(R.id.spectrumBar);
                         LiquidView liquid = vh.itemView.findViewById(R.id.budget_liquid);

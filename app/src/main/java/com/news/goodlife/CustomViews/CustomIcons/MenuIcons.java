@@ -146,7 +146,6 @@ public class MenuIcons extends FrameLayout {
 
         textMargin = width * margin;
         iconMargin = (width * margin) * anim;
-        Log.i("AnimVal", ""+ iconMargin);
 
         menuIcon.setBounds(
                 (int)(0 + iconMargin),
@@ -165,7 +164,7 @@ public class MenuIcons extends FrameLayout {
 
     int distance;
     public void moveIndicator(float perc){
-        Log.i("PErcentage", ""+perc);
+
         distance = end - start;
         float revPerc = 1 - perc;
         move = (int)(distance * revPerc);

@@ -696,10 +696,10 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
         }
         if(model.getRepeat().equals("true")){
             monthlySwitch.setChecked(true);
-            Log.i("SwitchState", ""+model.getRepeat());
+
         }
         else{
-            Log.i("SwitchState", ""+model.getRepeat());
+
             monthlySwitch.setChecked(false);
         }
 
@@ -738,7 +738,7 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
         //Log.d("size", ""+list.size());
 
         for(FinancialEventModel cashflow: allCashflow){
-            Log.i("CashflowID", ""+cashflow.getId());
+
 
         }
 

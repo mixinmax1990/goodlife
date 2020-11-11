@@ -44,8 +44,6 @@ public class CashflowTimelineRecycler extends RecyclerView.Adapter<CashflowTimel
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        Log.i("less than 4","Desc:"+cashflow.getDescription()+" -- Days till Next"+tillNextDate);
-
         //Check if last item hast the same Date
         if(last_itemDate.equals(current_itemDate)){
             //Check if next item has the same Date

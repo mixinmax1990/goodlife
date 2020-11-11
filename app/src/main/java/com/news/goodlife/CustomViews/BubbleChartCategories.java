@@ -35,7 +35,7 @@ public class BubbleChartCategories extends FrameLayout {
     List<CostCatData> percData;
     Boolean darkMode;
     static int count = 0;
-    @ColorInt int bubbleBackground;
+    @ColorInt int bubbleBackground, iconColor;
 
     float sizeSquared;
     float marginPerc = .35f;
@@ -50,7 +50,6 @@ public class BubbleChartCategories extends FrameLayout {
         setPaints();
         setWillNotDraw(false);
         count++;
-        Log.i("Count", ""+count);
         darkMode = getResources().getBoolean(R.bool.dark);
 
 
@@ -79,6 +78,9 @@ public class BubbleChartCategories extends FrameLayout {
         //Pick Attribute Colors
         theme.resolveAttribute(R.attr.bubbleBackground, typedValue, true);
         bubbleBackground = typedValue.data;
+
+        theme.resolveAttribute(R.attr.textColorPrimary, typedValue, true);
+        iconColor = typedValue.data;
 
 
     }
@@ -329,7 +331,6 @@ public class BubbleChartCategories extends FrameLayout {
         float padding = 0.8f;
 
         count = allBubblesSurround.size();
-        Log.i("Size of Data", ""+count);
 
         if(drawn){
             try{
@@ -439,61 +440,55 @@ invalidate();
             case "Food":
                 bubbleColor = "#0899a1";
                 bubbleIcon = getResources().getDrawable(R.drawable.cat_ic_grocery, null);
-                DrawableCompat.setTint(bubbleIcon, Color.parseColor(bubbleColor));
+                DrawableCompat.setTint(bubbleIcon, iconColor);
                 break;
             case "Entertainment":
                 bubbleColor = "#fa425a";
                 bubbleIcon = getResources().getDrawable(R.drawable.cat_ic_grocery, null);
-                DrawableCompat.setTint(bubbleIcon, Color.parseColor(bubbleColor));
+                DrawableCompat.setTint(bubbleIcon, iconColor);
                 break;
             case "Car":
                 bubbleColor = "#f6e02e";
                 bubbleIcon = getResources().getDrawable(R.drawable.cat_ic_car, null);
-                DrawableCompat.setTint(bubbleIcon, Color.parseColor(bubbleColor));
+                DrawableCompat.setTint(bubbleIcon, iconColor);
                 break;
             case "Transport":
                 bubbleColor = "#d01c17";
                 bubbleIcon = getResources().getDrawable(R.drawable.cat_ic_transportation, null);
-                DrawableCompat.setTint(bubbleIcon, Color.parseColor(bubbleColor));
+                DrawableCompat.setTint(bubbleIcon, iconColor);
                 break;
             case "House":
                 bubbleColor = "#fa8825";
                 bubbleIcon = getResources().getDrawable(R.drawable.cat_ic_home, null);
-                DrawableCompat.setTint(bubbleIcon, Color.parseColor(bubbleColor));
+                DrawableCompat.setTint(bubbleIcon, iconColor);
                 break;
             case "Sports":
                 bubbleColor = "#b4f237";
-                bubbleIcon = getResources().getDrawable(R.drawable.cat_ic_sport, null);
+                DrawableCompat.setTint(bubbleIcon, iconColor);
                 break;
             case "Restaurant":
                 bubbleColor = "#1aadf8";
                 bubbleIcon = getResources().getDrawable(R.drawable.cat_ic_sport, null);
-                DrawableCompat.setTint(bubbleIcon, Color.parseColor(bubbleColor));
+                DrawableCompat.setTint(bubbleIcon, iconColor);
                 break;
             case "Health":
                 bubbleColor = "#9453bb";
                 bubbleIcon = getResources().getDrawable(R.drawable.cat_ic_sport, null);
-                DrawableCompat.setTint(bubbleIcon, Color.parseColor(bubbleColor));
+                DrawableCompat.setTint(bubbleIcon, iconColor);
                 break;
             case "Clothes":
-                if(darkMode){
-                    bubbleColor = "#FFFFFF";
-                }
-                else{
-                    bubbleColor = "#000000";
-                }
                 bubbleIcon = getResources().getDrawable(R.drawable.cat_ic_sport, null);
-                DrawableCompat.setTint(bubbleIcon, Color.parseColor(bubbleColor));
+                DrawableCompat.setTint(bubbleIcon, iconColor);
                 break;
             case "Communication":
                 bubbleColor = "#f6e02e";
                 bubbleIcon = getResources().getDrawable(R.drawable.cat_ic_sport, null);
-                DrawableCompat.setTint(bubbleIcon, Color.parseColor(bubbleColor));
+                DrawableCompat.setTint(bubbleIcon, iconColor);
                 break;
             default:
                 bubbleColor = "#000000";
                 bubbleIcon = getResources().getDrawable(R.drawable.cat_ic_sport, null);
-                DrawableCompat.setTint(bubbleIcon, Color.parseColor(bubbleColor));
+                DrawableCompat.setTint(bubbleIcon, iconColor);
                 break;
         }
     }

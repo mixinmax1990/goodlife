@@ -109,7 +109,6 @@ public class LabeledEntryView extends androidx.appcompat.widget.AppCompatEditTex
     protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
         super.onFocusChanged(focused, direction, previouslyFocusedRect);
 
-        Log.i("Focused",""+focused);
         if(focused){
             roundedStrokePaint.setColor(strokeColorSelected);
             roundedStrokePaint.setAlpha(255);

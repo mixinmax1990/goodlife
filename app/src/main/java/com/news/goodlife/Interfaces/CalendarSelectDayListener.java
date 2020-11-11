@@ -1,6 +1,9 @@
 package com.news.goodlife.Interfaces;
 
+import com.news.goodlife.Models.CalendarLayoutDay;
+
 public interface CalendarSelectDayListener {
-    public void calendarDaySelected(boolean selected) ;
+    void calendarDaySelected(CalendarLayoutDay selectedDay);
+
 
 }

@@ -1,5 +1,7 @@
 package com.news.goodlife.Fragments;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -141,18 +143,37 @@ public class WalletTodayFragment extends Fragment {
             }
         });
 
-        add_cashflow.setOnClickListener(new View.OnClickListener() {
+        add_cashflow.findViewById(R.id.add_cash_inday).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Add entry fields
                 new_cashflow_container.setVisibility(View.VISIBLE);
-                new_cashflow_container.animate().alpha(1f).scaleX(1).scaleY(1);
+                new_cashflow_container.animate().alpha(1f).scaleX(1).scaleY(1).setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        amount.requestFocus();
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(amount, InputMethodManager.SHOW_IMPLICIT);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
+                });
                 add_cashflow.setVisibility(View.GONE);
 
                 toggleMinusPlus(true);
-                amount.requestFocus();
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(amount, InputMethodManager.SHOW_IMPLICIT);
 
                 addcashflowBTN.setTextColor(selectedStroke);
                 addcashflowBTN.setAlpha(1f);
@@ -185,8 +206,7 @@ public class WalletTodayFragment extends Fragment {
                     fullDisplay = r.height();
                 }
 
-                Log.i("Display Size",""+fullDisplay);
-                Log.i("Height R",""+r.height());
+
                 int heightDiff = fullDisplay - r.height();
 
 
@@ -196,28 +216,120 @@ public class WalletTodayFragment extends Fragment {
                     int diff = fullDisplay - (cashflow_pop_container.getTop() + new_cashflow_container.getHeight());
                     //diff = diff - (root.getHeight() - fullDisplay);
 
-                    Log.i("Math", ""+ diff);
 
 
-                    root.setY(- (heightDiff - diff));
+
+
+                    animateSoftkeyOpend((int) root.getY(),- (heightDiff - diff), false);
+                    softKeyVisible = true;
                 }
                 else{
-                    root.setY(0);
+                    if(softKeyUp){
+                        animateSoftkeyOpend((int) root.getY(), 0, true);
+                    }
+
+                    softKeyVisible = false;
+                    //hideAddCashflowEntry();
                 }
-                Log.d("Keyboard Size Day", "Size: " + heightDiff);
+
 
             }
         });
         addcashflowBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("Save The Cashflow", "Set Cashflow");
+
             }
         });
 
     }
-
     int fullDisplay = 0;
+    public boolean softKeyVisible = false;
+
+    public void hideAddCashflowEntry(){
+
+        new_cashflow_container.animate().alpha(0f).scaleX(.7f).scaleY(.7f).setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                new_cashflow_container.setVisibility(View.GONE);
+                add_cashflow.setVisibility(View.VISIBLE);
+                add_cashflow.setAlpha(0);
+                add_cashflow.setScaleX(.7f);
+                add_cashflow.setScaleY(.7f);
+                add_cashflow.animate().alpha(1f).scaleY(1).scaleX(1);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+    }
+
+    private boolean softKeyUp = false;
+
+    private void animateSoftkeyOpend(int start, int end, final boolean close){
+        ValueAnimator vaLeave = ValueAnimator.ofInt(start, end);
+        vaLeave.setDuration(300);
+        vaLeave.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int animval = (int) valueAnimator.getAnimatedValue();
+                 root.setY(animval);
+            }
+        });
+        vaLeave.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+
+
+
+                if(close){
+
+                    hideAddCashflowEntry();
+                    softKeyUp = false;
+                }
+                else{
+                    softKeyUp = true;
+                }
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+
+         vaLeave.start();
+
+
+
+    }
+
+
 
     private void toggleMinusPlus(boolean add) {
 
@@ -232,6 +344,8 @@ public class WalletTodayFragment extends Fragment {
         }
 
     }
+
+
 
     float visibleScreen;
     float scaleIndicator;
