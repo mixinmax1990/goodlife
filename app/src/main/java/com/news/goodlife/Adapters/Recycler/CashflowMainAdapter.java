@@ -142,7 +142,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
         switch(calDay.getType()){
             case "weekend":
-                return new CashflowMainAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.cashflow_recycler_item_week_analysis, parent, false), pos, calDay);
+                return new CashflowMainAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.wallet_recycler_weekend_item, parent, false), pos, calDay);
             case "day":
                 if(calDay.isToday()){
                     return new CashflowMainAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.wallet_recycler_today_item, parent, false), pos, calDay);
@@ -150,6 +150,12 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                 else{
                     return new CashflowMainAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.wallet_recycler_day_item, parent, false), pos, calDay);
                 }
+            case "monthend":
+                return new CashflowMainAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.wallet_recycler_monthend_item, parent, false), pos, calDay);
+
+            case "yearend":
+                return new CashflowMainAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.wallet_recycler_yearend, parent, false), pos, calDay);
+
             default:
                 return null;
         }
@@ -334,12 +340,14 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                     });
                     break;
                 case "weekend":
-                    weekendcontainer = itemView.findViewById(R.id.cashflow_weekend_container);
-                    weekendcontainer.setBackgroundColor("#101315");
                     break;
                 case "monthend":
+                    TextView monthname = itemView.findViewById(R.id.wallet_balance_card_new_month);
+                    monthname.setText(dayData.getMONTH_NAME());
                     break;
                 case "yearend":
+                    TextView yearname = itemView.findViewById(R.id.wallet_balance_card_new_year);
+                    yearname.setText(dayData.getYEAR());
                     break;
             }
 

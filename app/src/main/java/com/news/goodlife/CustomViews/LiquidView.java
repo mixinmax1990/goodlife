@@ -1,4 +1,4 @@
-package com.news.goodlife.CustomViews;
+ package com.news.goodlife.CustomViews;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
