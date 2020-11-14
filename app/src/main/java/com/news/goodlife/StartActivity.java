@@ -34,6 +34,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,10 +48,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.CustomViews.CustomIcons.MenuIcons;
 import com.news.goodlife.CustomViews.ElasticEdgeView;
+import com.news.goodlife.Data.Local.Controller.DatabaseController;
+import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
 import com.news.goodlife.Fragments.WalletCalendarFragment;
 import com.news.goodlife.Fragments.WalletTodayFragment;
 import com.news.goodlife.Interfaces.OnClickedCashflowItemListener;
 import com.news.goodlife.Interfaces.CalendarSelectDayListener;
+import com.news.goodlife.Interfaces.WalletDatabaseEvents;
 import com.news.goodlife.Models.CalendarLayoutDay;
 import com.news.goodlife.Tools.CameraScan.CameraScanFragment;
 import com.news.goodlife.Fragments.WalletMultiDaysFragment;
@@ -71,12 +75,15 @@ import java.util.regex.Pattern;
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
 
-public class StartActivity extends AppCompatActivity implements OnClickedCashflowItemListener, CalendarSelectDayListener {
+public class StartActivity extends AppCompatActivity implements OnClickedCashflowItemListener, CalendarSelectDayListener, WalletDatabaseEvents {
 
 
 
     public FrameLayout fragment_container_one;
     public FrameLayout fragment_container_two;
+    public BorderRoundView frame_one_border, frame_two_border;
+    public TextView frame_one_title, frame_two_title;
+
 
     private Fragment fragment;
     int selectedFragment = 0;
@@ -110,11 +117,17 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
     //Metrics
     int displayWidth, displayHeight;
 
+    //Database
+    DatabaseController myDB;
+
+    //Callbacks
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.start_activiy);
         transparentStatus();
         setStatusbarspace();
 
@@ -128,6 +141,12 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
         fragment_container_one = findViewById(R.id.fragment_container_one);
         fragment_container_two = findViewById(R.id.fragment_container_two);
+        frame_one_border = findViewById(R.id.frame_one_border);
+        frame_two_border = findViewById(R.id.frame_two_border);
+        frame_one_title = findViewById(R.id.frame_one_title);
+        frame_two_title = findViewById(R.id.frame_two_title);
+
+
         statusbarspace = findViewById(R.id.statusspace);
 
 
@@ -142,6 +161,13 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
         previewImage = findViewById(R.id.previewImage);
 
+        //DataBase
+        myDB = new DatabaseController(this);
+
+
+
+        //callbacks
+       //walletDaysCallback = (WalletDaysCallback) this.context;
 
 
 
@@ -151,10 +177,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             // Do night stuff here
 
         }
-
-
         //Navigation Section
-
 
         //Overview
         overviewTodayTitle = findViewById(R.id.wallet_overview_today_title);
@@ -182,9 +205,9 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                 displayHeight = fragment_container_one.getHeight();
                 fragment_container_two.setX(displayWidth);
 
-                //overviewFragments();
+                overviewFragments();
 
-                slideMechanism(0, true);
+                //slideMechanism(0, true);
 
                 fragment_container_one.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
@@ -206,7 +229,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             slideProgess = (float)(displayWidth - move) / displayWidth;
             if(slideProgess > .7f){
                 if(!vibratedSlideIn){
-                    vibrator.vibrate(20);
+                    vibrator.vibrate(5);
                     vibratedSlideIn = true;
                 }
             }
@@ -215,7 +238,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             slideProgess = Math.abs((float)move / displayWidth);
             if(slideProgess > .3f){
                 if(!vibratedSlideIn){
-                    vibrator.vibrate(20);
+                    vibrator.vibrate(5);
                     vibratedSlideIn = true;
                 }
             }
@@ -256,7 +279,6 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         }
 
     }
-
     public void autoFinishSlide(int move,final boolean open, long velocity){
 
 
@@ -352,6 +374,113 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
     }
 
+    private void walletOverview(String from, final String to){
+
+
+        if(from.equals("Overview")){
+
+            //Get Positions of Views
+            final int frag1X = (int) fragment_container_one.getX();
+            final int frag2X = (int) fragment_container_two.getX();
+            final float scale1Diff =  (to.equals("Calendar")? .5f : 1f) - scale;
+            final float scale2Diff =  1f - scale;
+            final float frag1Diff = - frag2X;
+            final float frag2XDiff;
+            final int heightDiff = displayHeight - displayWidth;
+            final int marginBottomDiff = - marginBottom;
+            final ConstraintLayout.LayoutParams LPone = (ConstraintLayout.LayoutParams) fragment_container_one.getLayoutParams();
+            final ConstraintLayout.LayoutParams LPtwo = (ConstraintLayout.LayoutParams) fragment_container_two.getLayoutParams();
+
+
+            Log.i("fragment X", "One = "+frag1X+" ;; Two"+frag2X);
+
+            ValueAnimator va = ValueAnimator.ofFloat(0, 1f);
+            va.setDuration(500);
+            if(to.equals("Days")){
+                 frag2XDiff = displayWidth - frag2X;
+            }
+            else{
+                frag2XDiff  = - frag2X;
+            }
+
+
+            // Animate scale back to 1 and move Both frames to wanted position
+            va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    float animVal = (float)valueAnimator.getAnimatedValue();
+
+                    //Animate Scale
+                    fragment_container_one.setScaleX(scale + (scale1Diff * animVal));
+                    fragment_container_one.setScaleY(scale + (scale1Diff * animVal));
+                    frame_one_border.setScaleX(scale + (scale1Diff * animVal));
+                    frame_one_border.setScaleY(scale + (scale1Diff * animVal));
+
+                    fragment_container_two.setScaleX(scale + (scale2Diff * animVal));
+                    fragment_container_two.setScaleY(scale + (scale2Diff * animVal));
+                    frame_two_border.setScaleX(scale + (scale2Diff * animVal));
+                    frame_two_border.setScaleY(scale + (scale2Diff * animVal));
+
+                    //Animate Position
+
+                    fragment_container_one.setX(frag1X - (frag1Diff * animVal));
+                    frame_one_border.setX(frag1X - (frag1Diff * animVal));
+
+                    fragment_container_two.setX(frag2X + (frag2XDiff * animVal));
+                    frame_two_border.setX(frag2X + (frag2XDiff * animVal));
+
+                    // Animate LayoutParams
+
+
+                    LPone.height = (int) (displayWidth + (heightDiff * animVal));
+                    LPtwo.height = (int) (displayWidth + (heightDiff * animVal));
+
+                    LPone.bottomMargin = (int) ((1f - animVal) * marginBottom);
+                    LPtwo.bottomMargin = (int) ((1f - animVal) * marginBottom);
+
+                    fragment_container_one.setLayoutParams(LPone);
+                    fragment_container_two.setLayoutParams(LPtwo);
+
+
+                }
+            });
+
+            va.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animator) {
+                    if(to.equals("Calendar")){
+                        frame_one_border.setAlpha(0);
+                    }
+
+                }
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    overviewWallet = false;
+                    frame_one_border.animate().alpha(0);
+                    frame_two_border.animate().alpha(0);
+                }
+                @Override
+                public void onAnimationCancel(Animator animator) {
+
+                }
+                @Override
+                public void onAnimationRepeat(Animator animator) {
+
+                }
+            });
+
+            va.setInterpolator(new AccelerateDecelerateInterpolator());
+            va.start();
+
+
+
+
+        }
+
+
+
+    }
+    float scale;
 
     boolean overviewWallet = false;
     int overviewFragTwoX;
@@ -359,8 +488,8 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
     public void overviewFragments(){
         overviewWallet = true;
 
-        float scale = 0.45f;
-        int centerScaledWidth = (int)(displayWidth * .5)/2;
+        scale = 0.40f;
+        int centerScaledWidth = (int)((int)(displayWidth * .5)/2);
 
         setScaleNavigation(scale,scale);
 
@@ -368,35 +497,75 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         //setSlideWidth(overviewFragTwoX, true);
 
         fragment_container_one.setX(-centerScaledWidth);
-        fragment_container_two.setX(centerScaledWidth);
+        frame_one_border.setX(-centerScaledWidth);
+        frame_one_title.setX(-centerScaledWidth);
 
-        overviewCalendarTitle.setVisibility(View.VISIBLE);
-        overviewTodayTitle.setVisibility(View.VISIBLE);
+        fragment_container_two.setX(centerScaledWidth);
+        frame_two_border.setX(centerScaledWidth);
+        frame_two_title.setX(centerScaledWidth);
+
+        //fragment_container_one.setY(-160);
+        //frame_one_border.setY(-160);
+        frame_one_title.setY(((displayWidth/2)-((displayWidth/2)*scale))/2);
+        frame_two_title.setY(((displayWidth/2)-((displayWidth/2)*scale))/2);
+
+        //fragment_container_two.setY(-160);
+        //frame_two_border.setY(-160);
+
+        overviewCalendarTitle.setVisibility(View.GONE);
+        overviewTodayTitle.setVisibility(View.GONE);
 
         overviewTodayTitle.setX(-centerScaledWidth);
-        overviewTodayTitle.setY(displayHeight/4 - dpToPx(10));
+        overviewTodayTitle.setY(displayHeight/4 - dpToPx(20));
         overviewCalendarTitle.setX(centerScaledWidth);
-        overviewCalendarTitle.setY(displayHeight/4 - dpToPx(10));
+        overviewCalendarTitle.setY(displayHeight/4 - dpToPx(20));
 
 
     }
-
+    int marginBottom;
     public void setScaleNavigation(float fragOneScale, float fragTwoScale){
+
+        ConstraintLayout.LayoutParams LPone = (ConstraintLayout.LayoutParams) fragment_container_one.getLayoutParams();
+        ConstraintLayout.LayoutParams LPtwo = (ConstraintLayout.LayoutParams) fragment_container_two.getLayoutParams();
+
+        marginBottom = (int) ((displayWidth) * scale) + dpToPx(20);
+        LPone.height = displayWidth;
+        LPone.setMargins(0,0,0, marginBottom);
+        LPtwo.height = displayWidth;
+        LPtwo.setMargins(0,0,0, marginBottom);
+
+
+        fragment_container_one.setLayoutParams(LPone);
+        fragment_container_two.setLayoutParams(LPtwo);
 
         fragment_container_one.setScaleX(fragOneScale);
         fragment_container_one.setScaleY(fragOneScale);
+        frame_one_border.setScaleX(fragOneScale);
+        frame_one_border.setScaleY(fragOneScale);
+        frame_one_title.setScaleX(fragOneScale);
+        frame_one_title.setScaleY(fragOneScale);
+
+        frame_one_title.setY(((displayWidth/2)-((displayWidth/2)*fragOneScale))/2);
+        frame_two_title.setY(((displayWidth/2)-((displayWidth/2)*fragTwoScale))/2);
+
 
         fragment_container_two.setScaleX(fragTwoScale);
         fragment_container_two.setScaleY(fragTwoScale);
+        frame_two_border.setScaleX(fragTwoScale);
+        frame_two_border.setScaleY(fragTwoScale);
+        frame_two_title.setScaleX(fragTwoScale);
+        frame_two_title.setScaleY(fragTwoScale);
 
     }
 
     public void setSlideWidth(int move, boolean open){
         if(open){
             fragment_container_two.setX(displayWidth - move);
+            frame_two_border.setX(displayWidth - move);
         }
         else{
             fragment_container_two.setX(move);
+            frame_two_border.setX(move);
         }
 
     }
@@ -447,6 +616,65 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
     int menuTop = 0;
     private void listeners(){
+
+        frame_one_border.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch(motionEvent.getActionMasked()){
+                    case MotionEvent.ACTION_DOWN:
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        //walletBTN.animateLeave();
+
+                        //Log Animate Overview Leave To Today
+                        walletOverview("Overview", "Days");
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        break;
+                }
+
+                if(overviewWallet){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+
+            }
+
+
+        });
+
+        frame_two_border.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch(motionEvent.getActionMasked()){
+                    case MotionEvent.ACTION_DOWN:
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        //walletBTN.animateLeave();
+
+                        //Log Animate Overview Leave To Calendar
+                        walletOverview("Overview", "Calendar");
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        break;
+                }
+
+                if(overviewWallet){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+
+            }
+
+
+        });
+
 
 
         walletBTN.setOnTouchListener(new View.OnTouchListener() {
@@ -671,11 +899,11 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
             case 5:
                 if(dayPicked){
-                    walletMultiDaysFragment = new WalletMultiDaysFragment(menuTop, fragment_container_one, menu_container, selectedDay);
+                    walletMultiDaysFragment = new WalletMultiDaysFragment(menuTop, fragment_container_one, menu_container, selectedDay, myDB);
 
                 }
                 else{
-                    walletMultiDaysFragment = new WalletMultiDaysFragment(menuTop, fragment_container_one, menu_container, null);
+                    walletMultiDaysFragment = new WalletMultiDaysFragment(menuTop, fragment_container_one, menu_container, null, myDB);
 
                 }
                 ft.replace(fragment_container_one.getId(), walletMultiDaysFragment);
@@ -1296,6 +1524,26 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         });
 
         va.start();
+
+    }
+
+    @Override
+    public void saveNewWalletEvent(WalletEventModel data, int pos) {
+
+        //Log.i("Is Running", "YEEEEEES");
+
+        long id = myDB.WalletEvent.newCashflow(data);
+
+        if(id > 0){
+            WalletEventModel savedRow = myDB.WalletEvent.getCashflow((int)id);
+
+            walletMultiDaysFragment.enterNewDataEntry(savedRow, pos);
+
+        }
+        else{
+            Toast.makeText(this, "Couuldnt store the data", Toast.LENGTH_SHORT).show();
+        }
+
 
     }
 }

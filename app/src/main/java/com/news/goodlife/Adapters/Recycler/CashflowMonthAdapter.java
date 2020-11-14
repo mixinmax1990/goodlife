@@ -19,7 +19,9 @@ import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.CustomViews.LiquidView;
+import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
 import com.news.goodlife.Interfaces.CalendarSelectDayListener;
+import com.news.goodlife.Interfaces.WalletDaysCallback;
 import com.news.goodlife.Models.CalendarLayoutDay;
 import com.news.goodlife.Models.CalendarLayoutMonth;
 import com.news.goodlife.R;
@@ -27,7 +29,7 @@ import com.news.goodlife.R;
 import java.util.List;
 import java.util.Random;
 
-public class CashflowMonthAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class CashflowMonthAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context context;
     List<CalendarLayoutMonth> allMonths;

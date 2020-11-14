@@ -19,7 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
-import com.news.goodlife.Data.Local.Models.Financial.FinancialEventModel;
+import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
 import com.news.goodlife.R;
 
 import org.json.JSONException;
@@ -419,10 +419,10 @@ public class BezierView extends View {
     private JSONObject getData(){
 
         JSONObject dataDays = new JSONObject();
-        List<FinancialEventModel> data = db.FinancialEvent.getAllCashflow();
+        List<WalletEventModel> data = db.WalletEvent.getAllCashflow();
 
         boolean first = true;
-        for(FinancialEventModel cashflow: data){
+        for(WalletEventModel cashflow: data){
 
             if(first){
                 String dateStr = cashflow.getDate();

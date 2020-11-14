@@ -6,6 +6,7 @@ import android.content.Context;
 
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -15,7 +16,9 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
@@ -27,16 +30,27 @@ import com.news.goodlife.CustomViews.BulletPointTextView;
 import com.news.goodlife.CustomViews.CustomEntries.LabeledEntryView;
 import com.news.goodlife.CustomViews.CustomEntries.PopUpFrame;
 import com.news.goodlife.CustomViews.LiquidView;
+import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
+import com.news.goodlife.Data.Local.Models.WalletEventDayOrderModel;
 import com.news.goodlife.Fragments.WalletMultiDaysFragment;
 import com.news.goodlife.Fragments.PopFragments.CostCategoriesChart;
 import com.news.goodlife.Fragments.PopFragments.IncomingCashPopFragment;
 import com.news.goodlife.Fragments.PopFragments.OutgoingCashPopFragment;
+import com.news.goodlife.Interfaces.WalletDatabaseEvents;
+import com.news.goodlife.Interfaces.WalletDaysCallback;
 import com.news.goodlife.Models.CalendarLayoutDay;
 import com.news.goodlife.PopWindowData.CashCategoryData;
 import com.news.goodlife.R;
 import com.news.goodlife.Transitions.DetailsTransition;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -49,13 +63,24 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
     View root, rootView;
     int cat_count = 4;
     @ColorInt int selectedStroke, unselectedStroke;
+    JSONObject orderedData;
 
     List<CalendarLayoutDay> dateRange;
 
+    WalletDatabaseEvents databaseEventsCallback;
+    static int dayCount = 0;
+
+
+    //editorViews
+    static View delete, card;
+    View new_cashflow_container_global, add_cashflow_global;
+    static ProgressBar spinner;
+    boolean editTextOpened = false;
+    boolean editCardOpend = false;
     //PopFragment
     WalletMultiDaysFragment parentFragmentClass;
 
-    public CashflowMainAdapter(Context context, FrameLayout popWindow, WalletMultiDaysFragment parentFragmentClass, View root, View rootView, List<CalendarLayoutDay> dateRange) {
+    public CashflowMainAdapter(Context context, FrameLayout popWindow, WalletMultiDaysFragment parentFragmentClass, View root, View rootView, List<CalendarLayoutDay> dateRange, JSONObject orderedData) {
 
         this.context = context;
         this.popWindow = popWindow;
@@ -63,10 +88,13 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
         this.root = root;
         this.rootView = rootView;
         this.dateRange = dateRange;
+        this.orderedData = orderedData;
+
+        this.databaseEventsCallback = (WalletDatabaseEvents) context;
 
 
 
-        Log.i("DateRanges", ""+dateRange.size());
+        //Log.i("DateRanges", ""+dateRange.size());
 
         listeners();
         loadPopFragments();
@@ -177,19 +205,20 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
         return dateRange.size();
     }
 
+
     public class ViewHolder extends RecyclerView.ViewHolder{
         PopUpFrame costcat, cashout, cashin,budgetliquid, cashflow, weekendcontainer;
         FlexboxLayout cost_cat_flex;
         LiquidView liquidView;
         TextView itemday, itemDate;
         View graph, frame;
-        View add_cashflow;
-        ImageView add_plus, add_minus;
-        TextView addcashflowBTN;
-        View new_cashflow_container;
+
+        TextView minusplus_before;
+
         boolean isweekend = false;
         String[] colors = {"#ff6859","#59a7ff", "#b7ff59", "#FFFFFF", "#FFEB3B"};
-
+        ImageView add_plus, add_minus;
+        LabeledEntryView amount, description;
 
         //CostCat Variable
         List<CashCategoryData> allCashCategoryData = new ArrayList<>();
@@ -201,11 +230,49 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
 
 
-        public ViewHolder(@NonNull View itemView, int pos, CalendarLayoutDay dayData) {
+        public ViewHolder(@NonNull View itemView, final int pos, final CalendarLayoutDay dayData) {
             super(itemView);
+
+            itemView.setTag("pos_"+pos);
+
+
+
 
             switch(dayData.getType()){
                 case "day":
+
+                    dayCount++;
+
+                    WalletEventDayOrderModel dataList = null;
+
+
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date dateWithoutTime = null;
+                    try {
+                        dateWithoutTime = sdf.parse(sdf.format(dayData.getDate()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    String dayOnly = ""+dateWithoutTime.getTime();
+
+                    //Get The Data ordered for the Day
+                    if(orderedData.has(dayOnly)){
+                        Log.i("Is Inside", "Yes at Pos"+dayCount);
+                        try {
+                            dataList = (WalletEventDayOrderModel) orderedData.get(dayOnly);
+                            //Log.i("Found","entries ="+dataList.getDaysData().size());
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else{
+                        Log.i("Is Not Inside", "No at Pos"+dayCount);
+                    }
+
+                    final TextView add_save = itemView.findViewById(R.id.add_cashflow_button_save);
                     graph = itemView.findViewById(R.id.graph);
                     frame = itemView.findViewById(R.id.frame);
                     liquidView = itemView.findViewById(R.id.budget_liquid);
@@ -216,23 +283,35 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                     cashout = itemView.findViewById(R.id.events_outgoing);
                     cashin = itemView.findViewById(R.id.events_incoming);
                     cost_cat_flex = itemView.findViewById(R.id.cashcat_flex);
+                    minusplus_before = itemView.findViewById(R.id.day_newentry_minusplus_bf);
+
+                    amount = itemView.findViewById(R.id.day_newentry_amount);
+                    description = itemView.findViewById(R.id.day_newentry_description);
+                    spinner = itemView.findViewById(R.id.progress_loader);
+                    spinner.setVisibility(View.GONE);
+                    spinner.setAlpha(0);
+                    spinner.setScaleX(.7f);
+                    spinner.setScaleY(.7f);
 
 
                     itemday.setText(dayData.getDAY_OF_WEEK_NAME());
-                    itemDate.setText(dayData.getMONTH_DAY_NUMBER()+" "+dayData.getMONTH_NAME()+" "+dayData.getYEAR());
+                    String itemDateText = dayData.getMONTH_DAY_NUMBER()+" "+dayData.getMONTH_NAME()+" "+dayData.getYEAR();
+                    itemDate.setText(itemDateText);
 
 
 
                     // Entry Field Views
                     add_plus = itemView.findViewById(R.id.day_newentry_plus);
                     add_minus = itemView.findViewById(R.id.day_newentry_minus);
-                    new_cashflow_container = itemView.findViewById(R.id.add_cashflow_entry_container);
-                    add_cashflow = itemView.findViewById(R.id.day_item_add_cashflow);
-                    final LabeledEntryView amount, description;
-                    amount = itemView.findViewById(R.id.day_newentry_amount);
-                    description = itemView.findViewById(R.id.day_newentry_description);
-                    addcashflowBTN = itemView.findViewById(R.id.add_cashflow_button);
+                    final View new_cashflow_container = itemView.findViewById(R.id.add_cashflow_entry_container);
+                    final View add_cashflow = itemView.findViewById(R.id.day_item_add_cashflow);
+                    ViewGroup cashflowContainer = itemView.findViewById(R.id.flex_cont);
 
+
+                    //Inflate Data if exists
+                    if(dataList != null){
+                        inflateData(dataList, cashflowContainer);
+                    }
 
                     setCostCats(cat_count);
 
@@ -289,6 +368,12 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                     add_cashflow.findViewById(R.id.add_cash_inday).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+
+
+
+                            add_cashflow_global = add_cashflow;
+                            new_cashflow_container_global = new_cashflow_container;
+                            editTextOpened = true;
                             //Add entry fields
                             new_cashflow_container.setVisibility(View.VISIBLE);
                             new_cashflow_container.animate().alpha(1f).scaleX(1).scaleY(1).setListener(new Animator.AnimatorListener() {
@@ -318,8 +403,8 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
                             toggleMinusPlus(true);
 
-                            addcashflowBTN.setTextColor(selectedStroke);
-                            addcashflowBTN.setAlpha(1f);
+                            add_save.setTextColor(selectedStroke);
+                            add_save.setAlpha(1f);
                         }
 
 
@@ -338,6 +423,49 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                             toggleMinusPlus(false);
                         }
                     });
+
+                    add_save.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            // Check if both Fields have Entries
+                            String ts = ""+dayData.getDate().getTime();
+                            long tslong = Long.parseLong(ts);
+                            Date tsdate = new Date();
+                            tsdate.setTime(tslong);
+
+                            Calendar tsCal = Calendar.getInstance();
+                            tsCal.setTime(tsdate);
+
+
+                          //  Log.i("TimeSTamp", ""+""+tsCal.get(Calendar.YEAR));
+
+                            if(amount.getText().toString().equals("") || description.getText().toString().equals("")){
+
+                                Toast.makeText(context, "Add Description and Amount", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(context, "Data Will be saved", Toast.LENGTH_SHORT).show();
+                                hideAddCashflowEntry(true);
+
+
+                                WalletEventModel data = new WalletEventModel();
+                                data.setValue(amount.getText().toString());
+                                data.setDescription(description.getText().toString());
+                                data.setCreated( ""+ new Date().getTime());
+                                data.setDate(""+dayData.getDate().getTime());
+                                data.setPositive(isPositiveAmount ? "plus": "minus");
+                                data.setRepeat("No");
+
+                                databaseEventsCallback.saveNewWalletEvent(data, pos);
+
+                            }
+
+                        }
+                    });
+
+
+                
                     break;
                 case "weekend":
                     break;
@@ -353,35 +481,97 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
         }
 
-        public void hideAddCashflowEntry(){
+        private void inflateData(WalletEventDayOrderModel dataList, ViewGroup cashflowContainer) {
 
-            new_cashflow_container.animate().alpha(0f).scaleX(.7f).scaleY(.7f).setListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animator) {
+            for(final WalletEventModel event: dataList.getDaysData()){
 
+                LayoutInflater inflater = LayoutInflater.from(root.getContext());
+                boolean neg;
+                final View eventHolder;
+                if(event.getPositive().equals("plus")){
+                    neg = false;
+                    eventHolder = inflater.inflate(R.layout.wallet_recycler_day_cashflow_item_pos, null);
+                }
+                else{
+                    neg = true;
+                    eventHolder = inflater.inflate(R.layout.wallet_recycler_day_cashflow_item_neg, null);
                 }
 
-                @Override
-                public void onAnimationEnd(Animator animator) {
-                    new_cashflow_container.setVisibility(View.GONE);
-                    add_cashflow.setVisibility(View.VISIBLE);
-                    add_cashflow.setAlpha(0);
-                    add_cashflow.setScaleX(.7f);
-                    add_cashflow.setScaleY(.7f);
-                    add_cashflow.animate().alpha(1f).scaleY(1).scaleX(1);
-                }
+                String amount = (neg? "-": "+") + event.getValue();
+                String description = event.getDescription();
 
-                @Override
-                public void onAnimationCancel(Animator animator) {
+                ((TextView)eventHolder.findViewById(R.id.amount)).setText(amount);
+                ((TextView)eventHolder.findViewById(R.id.description)).setText(description);
 
-                }
+                cashflowContainer.addView(eventHolder, 3);
 
-                @Override
-                public void onAnimationRepeat(Animator animator) {
+                eventHolder.setLayoutParams(new FlexboxLayout.LayoutParams(FlexboxLayout.LayoutParams.MATCH_PARENT, FlexboxLayout.LayoutParams.MATCH_PARENT));
 
-                }
-            });
+                eventHolder.setOnLongClickListener(new View.OnLongClickListener() {
+
+                    @Override
+                    public boolean onLongClick(View view) {
+                        Log.i("Delete", "yes give me Options");
+
+
+                        hideEditCard();
+
+
+                        editCardOpend = true;
+
+                        delete = view.findViewById(R.id.delete);
+                        card = view.findViewById(R.id.background_card);
+
+                        //card.setVisibility(View.VISIBLE);
+                        //Change Background Instead card.animate().scaleY(1).scaleX(1).alpha(.2f).setDuration(200);
+                        delete.setVisibility(View.VISIBLE);
+                        delete.animate().scaleX(1).scaleY(1).alpha(1).setDuration(200);
+
+
+                        delete.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // runn message to delete the item
+
+                                if(parentFragmentClass.getMyDB().WalletEvent.deleteCashflow(event.getId())){
+                                    //Only True if Delete was Successfull
+
+                                    eventHolder.animate().alpha(0).scaleX(.1f).scaleY(.1f).setDuration(350).setListener(new Animator.AnimatorListener() {
+                                        @Override
+                                        public void onAnimationStart(Animator animator) {
+
+                                        }
+
+                                        @Override
+                                        public void onAnimationEnd(Animator animator) {
+
+                                            eventHolder.setVisibility(View.GONE);
+                                        }
+
+                                        @Override
+                                        public void onAnimationCancel(Animator animator) {
+
+                                        }
+
+                                        @Override
+                                        public void onAnimationRepeat(Animator animator) {
+
+                                        }
+                                    });
+
+                                };
+                            }
+                        });
+
+                        return true;
+                    }
+                });
+
+            }
+
         }
+
+
 
         private boolean softKeyUp = false;
 
@@ -409,7 +599,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
                     if(close){
 
-                        hideAddCashflowEntry();
+                        hideAddCashflowEntry(true);
                         softKeyUp = false;
                     }
                     else{
@@ -434,17 +624,22 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
         }
 
         int fullDisplay = 0;
+        boolean isPositiveAmount = false;
 
         private void toggleMinusPlus(boolean add) {
 
             if(!add){
+                isPositiveAmount = true;
                 add_plus.setColorFilter(selectedStroke);
                 add_minus.setColorFilter(unselectedStroke);
+                minusplus_before.setText("+");
                 //DrawableCompat.setTint(add_plus.getDrawable(), selectedStroke);
             }
             else{
+                isPositiveAmount = false;
                 add_minus.setColorFilter(selectedStroke);
                 add_plus.setColorFilter(unselectedStroke);
+                minusplus_before.setText("-");
             }
 
         }
@@ -553,6 +748,73 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
             }
 
         }
+
+    }
+
+    public void hideEditCard() {
+
+        if(editCardOpend){
+            //resetViews(card);
+            resetViews(delete);
+            editCardOpend = false;
+        }
+
+    }
+
+    private void resetViews(View v){
+        v.setVisibility(View.GONE);
+        v.setAlpha(0);
+        v.setScaleY(.7f);
+        v.setScaleX(.7f);
+
+    }
+
+
+    public void hideAddCashflowEntry(final boolean fade){
+
+        if(editTextOpened){
+
+            editTextOpened = false;
+            new_cashflow_container_global.animate().alpha(0f).scaleX(.7f).scaleY(.7f).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animator) {
+                    if(!fade){
+                        new_cashflow_container_global.setVisibility(View.GONE);
+                        add_cashflow_global.setVisibility(View.VISIBLE);
+                    }
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    if(fade){
+                        new_cashflow_container_global.setVisibility(View.GONE);
+                        add_cashflow_global.setVisibility(View.VISIBLE);
+                        add_cashflow_global.setAlpha(0);
+                        add_cashflow_global.setScaleX(.7f);
+                        add_cashflow_global.setScaleY(.7f);
+                        add_cashflow_global.animate().alpha(1f).scaleY(1).scaleX(1);
+
+                        spinner.setVisibility(View.VISIBLE);
+                        spinner.animate().scaleX(1f).scaleY(1f).alpha(1);
+
+                    }
+
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animator) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animator) {
+
+                }
+            });
+
+        }
+
 
     }
 

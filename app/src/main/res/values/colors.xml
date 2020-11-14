@@ -22,7 +22,7 @@
     <color name="strokeColorNight">#8FFFFFFF</color>
     <color name="strokeColorDay">#8F000000</color>
 
-    <color name="menuColorNight">#383C42</color>
+    <color name="menuColorNight">#4D525A</color>
     <color name="menuColorDay">#E6E6E6</color>
 
     <color name="menuIconSelectedNight">#FBFBFB</color>

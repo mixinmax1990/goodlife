@@ -1,6 +1,8 @@
 package com.news.goodlife.Data.Local.Models.Financial;
 
-public class FinancialEventModel {
+import java.util.Date;
+
+public class WalletEventModel {
 
     public String id;
     public String value;
@@ -9,8 +11,9 @@ public class FinancialEventModel {
     public String repeat;
     public String date;
     public String created;
+    public Date DateOBJ;
 
-    public FinancialEventModel() {
+    public WalletEventModel() {
     }
 
     public String getValue() {
@@ -67,5 +70,13 @@ public class FinancialEventModel {
 
     public void setRepeat(String repeat) {
         this.repeat = repeat;
+    }
+
+    public Date getDateOBJ() {
+        return DateOBJ;
+    }
+
+    public void setDateOBJ(Date dateOBJ) {
+        DateOBJ = dateOBJ;
     }
 }

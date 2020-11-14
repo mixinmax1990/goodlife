@@ -1,6 +1,8 @@
 package com.news.goodlife.Data.Local.Statements.Financial;
 
-public class FinancialEventTable {
+import java.sql.Time;
+
+public class WalletEventTable {
 
     //Create Structure of Data Table
 

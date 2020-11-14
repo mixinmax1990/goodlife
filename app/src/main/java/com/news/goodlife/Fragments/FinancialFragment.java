@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.TransitionManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +38,7 @@ import com.news.goodlife.Adapters.CashFlowPagerAdapter;
 import com.news.goodlife.CustomViews.BezierView;
 import com.news.goodlife.CustomViews.CustomIcons.SubSectionIcon;
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
-import com.news.goodlife.Data.Local.Models.Financial.FinancialEventModel;
+import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
 import com.news.goodlife.Interfaces.OnClickedCashflowItemListener;
 import com.news.goodlife.R;
 
@@ -638,7 +637,7 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
 
         // Model the DATA
 
-        FinancialEventModel model = new FinancialEventModel();
+        WalletEventModel model = new WalletEventModel();
 
         model.setValue(cashflow_value);
         model.setPositive(cashflow_positiv);
@@ -647,7 +646,7 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
         model.setDate(cashflow_date);
         model.setCreated(cashflow_created);
 
-        db.FinancialEvent.newCashflow(model);
+        db.WalletEvent.newCashflow(model);
 
         toogleAnimateBlur(false);
 
@@ -659,7 +658,7 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
     public int cashflowID = 0;
     public void deleteCashflow(){
         if(cashflowID != 0){
-            db.FinancialEvent.deleteCashflow(""+cashflowID);
+            db.WalletEvent.deleteCashflow(""+cashflowID);
             instantiateViewPager();
             toogleAnimateBlur(false);
             //popCardDelete.setScaleX(1f);
@@ -683,8 +682,8 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
     }
 
     public void inputCashflowInPopup(int CashflowID){
-        FinancialEventModel model = new FinancialEventModel();
-        model = db.FinancialEvent.getCashflow(CashflowID);
+        WalletEventModel model = new WalletEventModel();
+        model = db.WalletEvent.getCashflow(CashflowID);
 
         cashflowAmount.setText(model.getValue());
         cashflowDescription.setText(model.getDescription());
@@ -726,18 +725,18 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
 
     }
 
-    List<FinancialEventModel> allCashflow;
+    List<WalletEventModel> allCashflow;
 
     private void testDatabase(){
 
         //Log.i("Success", ""+db.Cashflow.newCashflow(model));
 
-        allCashflow = db.FinancialEvent.getAllCashflow();
+        allCashflow = db.WalletEvent.getAllCashflow();
 
         //Log.d("list", list.get(0).value.toString());
         //Log.d("size", ""+list.size());
 
-        for(FinancialEventModel cashflow: allCashflow){
+        for(WalletEventModel cashflow: allCashflow){
 
 
         }
@@ -791,7 +790,7 @@ public class FinancialFragment extends Fragment implements OnClickedCashflowItem
 
 
 
-    private void showsCharts(List<FinancialEventModel> allCashflow) {
+    private void showsCharts(List<WalletEventModel> allCashflow) {
 
 
 

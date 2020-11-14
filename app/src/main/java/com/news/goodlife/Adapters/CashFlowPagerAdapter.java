@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.news.goodlife.Data.Local.Models.Financial.FinancialEventModel;
+import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
 import com.news.goodlife.Fragments.CashflowOnceFragment;
 import com.news.goodlife.Fragments.CashflowRegularFragment;
 import com.news.goodlife.Fragments.CashflowTimelineFragment;
@@ -16,7 +16,7 @@ import java.util.List;
 public class CashFlowPagerAdapter extends FragmentStatePagerAdapter {
 
     private Fragment mCurrentFragment;
-    private List<FinancialEventModel> allCashFlowData;
+    private List<WalletEventModel> allCashFlowData;
     public Fragment getCurrentFragment() {
         return mCurrentFragment;
     }
@@ -24,7 +24,7 @@ public class CashFlowPagerAdapter extends FragmentStatePagerAdapter {
     // tab titles
     private String[] tabTitles = new String[]{"All", "Pay", "Income"};
 
-    public CashFlowPagerAdapter(@NonNull FragmentManager fm, int numbOfTabs, List<FinancialEventModel> allCashflowData) {
+    public CashFlowPagerAdapter(@NonNull FragmentManager fm, int numbOfTabs, List<WalletEventModel> allCashflowData) {
         super(fm);
         this.numbOfTabs = numbOfTabs;
         this.allCashFlowData = allCashflowData;
@@ -62,12 +62,12 @@ public class CashFlowPagerAdapter extends FragmentStatePagerAdapter {
         return numbOfTabs;
     }
 
-    List<FinancialEventModel> incomingCashflow;
-    List<FinancialEventModel> outgoingCashflow;
+    List<WalletEventModel> incomingCashflow;
+    List<WalletEventModel> outgoingCashflow;
 
     private void separateCashflows(){
 
-        for(FinancialEventModel cashflow : allCashFlowData){
+        for(WalletEventModel cashflow : allCashFlowData){
 
             if(cashflow.getPositive().equals("true")){
                 incomingCashflow.add(cashflow);
