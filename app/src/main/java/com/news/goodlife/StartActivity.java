@@ -452,12 +452,17 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                         frame_one_border.setAlpha(0);
                     }
 
+                    //TODO Work on the  Titles
+                    frame_one_title.setAlpha(0);
+                    frame_two_title.setAlpha(0);
+
                 }
                 @Override
                 public void onAnimationEnd(Animator animator) {
                     overviewWallet = false;
                     frame_one_border.animate().alpha(0);
                     frame_two_border.animate().alpha(0);
+
                 }
                 @Override
                 public void onAnimationCancel(Animator animator) {
@@ -488,8 +493,8 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
     public void overviewFragments(){
         overviewWallet = true;
 
-        scale = 0.40f;
-        int centerScaledWidth = (int)((int)(displayWidth * .5)/2);
+        scale = 0.38f;
+        int centerScaledWidth = (int)((int)(displayWidth * .5)/2.2);
 
         setScaleNavigation(scale,scale);
 
@@ -525,18 +530,23 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
     int marginBottom;
     public void setScaleNavigation(float fragOneScale, float fragTwoScale){
 
-        ConstraintLayout.LayoutParams LPone = (ConstraintLayout.LayoutParams) fragment_container_one.getLayoutParams();
-        ConstraintLayout.LayoutParams LPtwo = (ConstraintLayout.LayoutParams) fragment_container_two.getLayoutParams();
+        if(overviewWallet){
 
-        marginBottom = (int) ((displayWidth) * scale) + dpToPx(20);
-        LPone.height = displayWidth;
-        LPone.setMargins(0,0,0, marginBottom);
-        LPtwo.height = displayWidth;
-        LPtwo.setMargins(0,0,0, marginBottom);
+            ConstraintLayout.LayoutParams LPone = (ConstraintLayout.LayoutParams) fragment_container_one.getLayoutParams();
+            ConstraintLayout.LayoutParams LPtwo = (ConstraintLayout.LayoutParams) fragment_container_two.getLayoutParams();
+
+            marginBottom = (int) ((displayWidth) * scale) + dpToPx(40);
+            LPone.height = displayWidth;
+            LPone.setMargins(0,0,0, marginBottom);
+            LPtwo.height = displayWidth;
+            LPtwo.setMargins(0,0,0, marginBottom);
 
 
-        fragment_container_one.setLayoutParams(LPone);
-        fragment_container_two.setLayoutParams(LPtwo);
+            fragment_container_one.setLayoutParams(LPone);
+            fragment_container_two.setLayoutParams(LPtwo);
+
+        }
+
 
         fragment_container_one.setScaleX(fragOneScale);
         fragment_container_one.setScaleY(fragOneScale);
