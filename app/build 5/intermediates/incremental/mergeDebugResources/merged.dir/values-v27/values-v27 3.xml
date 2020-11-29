@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="dark">false</bool>
+    <string name="mode">Day</string>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="baseBackground">@color/baseBackgroundDay</item>
+
+        <item name="baseContrast">@color/baseContrastDay</item>
+
+        <item name="standoutButton">@color/standoutButtonDay</item>
+
+        <item name="moduleBackground">@color/moduleBackgroundDay</item>
+
+        <item name="liquidBackground">@color/liquidBackgroundDay</item>
+
+        <item name="strokeColor">@color/strokeColorDay</item>
+
+        <item name="menuBackground">@color/menuColorDay</item>
+        <item name="menuIconSelected">@color/menuIconSelectedDay</item>
+        <item name="menuIconsUnselected">@color/menuIconUnselectedDay</item>
+
+        <item name="touchsliderBackground">@color/touchsliderBackgroundDay</item>
+        <item name="touchsliderSelectedBackground">@color/touchsliderSelectBackgroundDay</item>
+
+        <item name="bubbleBackground">@color/bubbleBackgroundDay</item>
+
+        <item name="entryBorder">@color/entryBorderDay</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="backgroundSecondary">@color/backgroundColorSecondary</item>
+        <item name="backgroundPrimary">@color/backgroundColor</item>
+        <item name="backgroundThirdly">@color/backgroundThirdly</item>
+        <item name="rippleSecondary">@color/rippleSecodary</item>
+        <item name="floatingButtonBGPrimary">@color/floatingButtonPrimaryBG</item>
+        <item name="floatingButtonBGSecondary">@color/floatingButtonSecodaryBG</item>
+        <item name="textColorPrimary">@color/black</item>
+        <item name="textColorPrimaryDisabled">@color/disabledBlack</item>
+        <item name="android:navigationBarColor">@color/backgroundColorSecondaryNight</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="financialGraphTrendline">@color/financialTrendLineColor</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+
+        <!--<item name="android:windowContentTransitions">true</item>-->
+    </style>
+    <style name="CustomTextAppearanceTab" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+</resources>

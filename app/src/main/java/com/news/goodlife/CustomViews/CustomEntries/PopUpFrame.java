@@ -59,12 +59,11 @@ public class PopUpFrame extends ConstraintLayout {
         setAttributes(attrs);
         configurePaints();
         setWillNotDraw(false);
-        setBackgroundColor("#1C2125");
+        setBackgroundColor("#1DFFFFFF");
     }
 
 
     int expandMargin = 25;
-
     @Override
     protected void onDraw(Canvas canvas) {
         roundedRectangle = new RectF(0 + strokeSize, 0 + strokeSize, getWidth() - strokeSize, getHeight() - strokeSize);
@@ -73,9 +72,9 @@ public class PopUpFrame extends ConstraintLayout {
 //#1C2125
 
             paintFill.setColor(color);
-            canvas.drawRoundRect(roundedRectangle, radiusSize, radiusSize, paintFill);
+            //canvas.drawRoundRect(roundedRectangle, radiusSize, radiusSize, paintFill);
             paintFill.setColor(Color.parseColor("#FFFFFF"));
-            paintFill.setAlpha(13);
+            paintFill.setAlpha(10);
             canvas.drawRoundRect(roundedRectangle, radiusSize, radiusSize, paintFill);
 
         if(stroke){
@@ -84,7 +83,7 @@ public class PopUpFrame extends ConstraintLayout {
         }
 
         if(expandable){
-            canvas.drawCircle(getWidth() - 35, getHeight() -35, 5, expandableArcPaint);
+           // canvas.drawCircle(getWidth() - 35, getHeight() -35, 5, expandableArcPaint);
         }
         super.onDraw(canvas);
     }

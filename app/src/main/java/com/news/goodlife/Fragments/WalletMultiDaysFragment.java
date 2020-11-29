@@ -3,6 +3,7 @@ package com.news.goodlife.Fragments;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
@@ -21,7 +23,6 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Explode;
 
@@ -31,27 +32,42 @@ import com.news.goodlife.CustomViews.BubbleChartCategories;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.CustomViews.ElasticEdgeView;
 import com.news.goodlife.CustomViews.LiquidView;
+import com.news.goodlife.CustomViews.MonthCashflowBezier;
 import com.news.goodlife.CustomViews.SpectrumBar;
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
 import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
+import com.news.goodlife.Data.Local.Models.WalletEventDayOrderModel;
+import com.news.goodlife.Interfaces.MonthCashflowBezierCallback;
+import com.news.goodlife.LayoutManagers.MultiDaysLinearLayoutManager;
 import com.news.goodlife.Models.CalendarLayoutDay;
 import com.news.goodlife.Models.CalendarLayoutMonth;
+import com.news.goodlife.Models.DayCashflowModel;
+import com.news.goodlife.Models.MonthCashflowModel;
 import com.news.goodlife.Models.toCalendarViewTransition;
 import com.news.goodlife.R;
+import com.news.goodlife.Singletons.SingletonClass;
 import com.news.goodlife.StartActivity;
 import com.news.goodlife.Transitions.DetailsTransition;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
+
+import eightbitlab.com.blurview.BlurView;
+import eightbitlab.com.blurview.RenderScriptBlur;
 
 import static androidx.recyclerview.widget.RecyclerView.*;
 
-public class WalletMultiDaysFragment extends Fragment {
+public class WalletMultiDaysFragment extends Fragment{
 
     //Account Tabs
     //TODO For testing Purposes (these will have to be created dynamically)
@@ -61,7 +77,7 @@ public class WalletMultiDaysFragment extends Fragment {
 
     //RecylcerView
     RecyclerView cashflow_recycler;
-    LinearLayoutManager llm;
+    MultiDaysLinearLayoutManager llm;
     CashflowMainAdapter cashflowMainAdapter;
     ElasticEdgeView elasticEdgeView;
     ConstraintLayout cashflow_display_menu;
@@ -72,11 +88,16 @@ public class WalletMultiDaysFragment extends Fragment {
     View monthviewIcon;
     public StartActivity activity;
     TextView overflowDay;
+    BlurView blurTopGraph;
 
     BorderRoundView slideIndicator;
     CalendarLayoutDay selectedDay;
     Date firstDayInRange;
     DatabaseController myDB;
+    SingletonClass singletonClass;
+
+    //Bezier Graph
+    MonthCashflowBezier bezier_curve_cont;
 
     public DatabaseController getMyDB() {
         return myDB;
@@ -92,11 +113,12 @@ public class WalletMultiDaysFragment extends Fragment {
 
     public int menuTop;
     public WalletMultiDaysFragment(int menuTop, FrameLayout popContainer, FrameLayout menu_container,@Nullable CalendarLayoutDay selected, @Nullable DatabaseController DB) {
+        singletonClass = SingletonClass.getInstance();
         this.menuTop = menuTop;
         this.popContainer = popContainer;
         this.menu_container = menu_container;
         this.selectedDay = selected;
-        this.myDB = DB;
+        this.myDB = singletonClass.getDatabaseController();
 
     }
     int firstElement = 10000;
@@ -111,8 +133,8 @@ public class WalletMultiDaysFragment extends Fragment {
         root = inflater.inflate(R.layout.wallet_multi_days, container, false);
         activity = (StartActivity) getActivity();
 
+        orderedData = myDB.WalletEvent.getAllByRange(getFirstDayInRange());
         //Get Dates
-
         if(selectedDay != null){
             Calendar cal = Calendar.getInstance();
             cal.setTime(selectedDay.getDate());
@@ -125,14 +147,32 @@ public class WalletMultiDaysFragment extends Fragment {
             getCalendarRange(null);
         }
 
-        orderedData = myDB.WalletEvent.getAllByRange(getFirstDayInRange());
+
+
+        for(MonthCashflowModel month: bezierData){
+            Log.i("Month", ""+month.getMonthName());
+            for(DayCashflowModel day: month.getMonthCashflow()){
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(day.getDate());
+                Log.i("Day", ""+cal.get(Calendar.DAY_OF_MONTH)+ " Amount:"+day.getAmount());
+            }
+        }
 
 
 
         Log.i("JSONOBject", ""+orderedData.toString());
 
+        //bezier curve
+        bezier_curve_cont = root.findViewById(R.id.graph_container);
+        bezier_curve_cont.setBezierData(bezierData);
+        bezier_curve_cont.setSmallestAmmount(smallesAmount);
+        bezier_curve_cont.setLargestAmount(largestAmount);
+        bezier_curve_cont.setParent(this);
 
-
+        bezierMonth = root.findViewById(R.id.monthbezier_month);
+        bezierBalance = root.findViewById(R.id.monthbezier_balance);
+        blurTopGraph = root.findViewById(R.id.blurtopgraph);
+        blur(20, blurTopGraph);
 
         //Tab Sections
         cashflow_input_frame = root.findViewById(R.id.cashflow_input_frame);
@@ -141,7 +181,7 @@ public class WalletMultiDaysFragment extends Fragment {
         cashflow_input_frame.setLayoutParams(lp);
         cashflow_recycler = root.findViewById(R.id.cashflow_recycler);
         cashflowMainAdapter = new CashflowMainAdapter(getContext(), popContainer, this, root, getActivity().getWindow().getDecorView(), allCalendarDays, orderedData);
-        llm = new LinearLayoutManager(getContext());
+        llm = new MultiDaysLinearLayoutManager(getContext());
         llm.setStackFromEnd(false);
 
 
@@ -186,7 +226,7 @@ public class WalletMultiDaysFragment extends Fragment {
                             BubbleChartCategories bubbleChart = visibleViewHolder.itemView.findViewById(R.id.item_day_bubble_chart);
                             TextView date = visibleViewHolder.itemView.findViewById(R.id.item_day);
                             liquid.animateWave();
-                            bubbleChart.animateBubbles();
+                            //bubbleChart.animateBubbles();
                             liquid.setTransitionName(i + "_trans");
                             date.setTransitionName(i + "_dayname");
 
@@ -196,13 +236,35 @@ public class WalletMultiDaysFragment extends Fragment {
 
                     }
                 }
-
             }
         });
 
         listeners();
 
         return root;
+    }
+
+    private void blur(float radius, BlurView view) {
+        radius = Math.round(radius);
+
+        //Max 25f
+        View decorView = activity.getWindow().getDecorView();
+        //ViewGroup you want to start blur from. Choose root as close to BlurView in hierarchy as possible.
+        ViewGroup rootView = (ViewGroup) decorView.findViewById(android.R.id.content);
+        //Set drawable to draw in the beginning of each blurred frame (Optional).
+        //Can be used in case your layout has a lot of transparent space and your content
+        //gets kinda lost after after blur is applied.
+        Drawable windowBackground = decorView.getBackground();
+
+        view.setClipToOutline(true);
+        view.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
+
+        view.setupWith(rootView)
+                .setFrameClearDrawable(windowBackground)
+                .setBlurAlgorithm(new RenderScriptBlur(getContext()))
+                .setBlurRadius(radius)
+                .setHasFixedTransformationMatrix(true);
+
     }
 
     public void enterNewDataEntry(WalletEventModel data, int itemPos){
@@ -262,20 +324,20 @@ public class WalletMultiDaysFragment extends Fragment {
 
     }
 
+    static float balanceamount = 2011.11f;
     private int todayItemPosition;
     public List<CalendarLayoutDay> allCalendarDays = new ArrayList<>();
+    public List<MonthCashflowModel> bezierData = new ArrayList<>();
     private void getCalendarRange(Date selectDate){
 
-        //getToday
-        Calendar today = Calendar.getInstance();
+        //BezierData
 
-        //SetTime To Zero
-        today.set(Calendar.HOUR_OF_DAY, 0);
-        today.set(Calendar.MINUTE, 0);
-        today.set(Calendar.SECOND, 0);
-        today.set(Calendar.MILLISECOND, 0);
-        //clear TimeZone
-        today.clear(Calendar.ZONE_OFFSET);
+        MonthCashflowModel monthCashflowModel = new MonthCashflowModel();
+        bezierData.add(monthCashflowModel);
+
+        //getThelast
+        bezierData.get(bezierData.size()-1);
+
 
         //Todo make first da a Date - for now go 60 days back
 
@@ -287,8 +349,20 @@ public class WalletMultiDaysFragment extends Fragment {
         if(selectDate != null){
             loopDay.setTime(selectDate);
         }
+
+        //SetTime To Zero
+        loopDay.set(Calendar.HOUR_OF_DAY, 0);
+        loopDay.set(Calendar.MINUTE, 0);
+        loopDay.set(Calendar.SECOND, 0);
+        loopDay.set(Calendar.MILLISECOND, 0);
+        //clear TimeZone
+        loopDay.clear(Calendar.ZONE_OFFSET);
+
         loopDay.add(Calendar.DATE, - forecastDays);
         setFirstDayInRange(loopDay.getTime());
+
+        //Set Name of Month for Bezier
+        bezierData.get(bezierData.size()-1).setMonthName(loopDay.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
         //Log.i("FirstDayInrnge",""+ getFirstDayInRange().getTime());
 
         //Calendar Obj of first day 10 Years back
@@ -301,9 +375,15 @@ public class WalletMultiDaysFragment extends Fragment {
             //Set The Day Object
             CalendarLayoutDay calendarLayoutDay = new CalendarLayoutDay("day", loopDay);
 
+            //Check if there is data on the day and Change the Balance
+            dayHasEvents(loopDay.getTime());
+            DayCashflowModel dayCashflowModel = new DayCashflowModel(loopDay.getTime(), balanceamount);
+            bezierData.get(bezierData.size()-1).addDayCashflow(dayCashflowModel);
             //Check if WEEK,MONTH,YEAR ends
             allCalendarDays.add(calendarLayoutDay);
             analysisPoints(loopDay);
+
+
         }
 
         allCalendarDays.get(allCalendarDays.size() - 1).setToday(true);
@@ -318,10 +398,14 @@ public class WalletMultiDaysFragment extends Fragment {
             //Set The Day Object
             CalendarLayoutDay calendarLayoutDay = new CalendarLayoutDay("day", loopDay);
 
+            dayHasEvents(loopDay.getTime());
+            DayCashflowModel dayCashflowModel = new DayCashflowModel(loopDay.getTime(), balanceamount);
+            bezierData.get(bezierData.size()-1).addDayCashflow(dayCashflowModel);
 
             //Check if WEEK,MONTH,YEAR ends
             allCalendarDays.add(calendarLayoutDay);
             analysisPoints(loopDay);
+
         }
 
 
@@ -331,6 +415,57 @@ public class WalletMultiDaysFragment extends Fragment {
         //c.add(Calendar.DATE, 40);  // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE
         //SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
         //String output = sdf1.format(c.getTime());
+    }
+
+    private void dayHasEvents(Date time) {
+
+        WalletEventDayOrderModel dataList = null;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateWithoutTime = null;
+        try {
+            dateWithoutTime = sdf.parse(sdf.format(time));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        String dayOnly = ""+dateWithoutTime.getTime();
+
+        //Get The Data ordered for the Day
+        if(orderedData.has(dayOnly)){
+            try {
+                dataList = (WalletEventDayOrderModel) orderedData.get(dayOnly);
+                //Log.i("Found","entries ="+dataList.getDaysData().size());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(dataList != null){
+            for(WalletEventModel daydata: dataList.getDaysData())
+            {
+                if(daydata.getPositive().equals("plus")){
+                    //add to balance
+                    balanceamount += Float.parseFloat(daydata.value);
+                }
+                else{
+                    //remove from balance
+                    balanceamount -= Float.parseFloat(daydata.value);
+                }
+            }
+            setAmountSpectrum();
+        }
+    }
+    float smallesAmount, largestAmount;
+    private void setAmountSpectrum() {
+        if(smallesAmount > balanceamount){
+            smallesAmount = balanceamount;
+        }
+
+        if(largestAmount < balanceamount){
+            largestAmount = balanceamount;
+        }
     }
 
     int year, weekday, month;
@@ -366,6 +501,12 @@ public class WalletMultiDaysFragment extends Fragment {
             allCalendarDays.add(calendarLayoutDay);
 
             CalendarLayoutMonth month = new CalendarLayoutMonth(allCalendarDays);
+
+            //BezierData start new Month
+            MonthCashflowModel monthCashflowModel = new MonthCashflowModel();
+            monthCashflowModel.setMonthName(day.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
+            bezierData.add(monthCashflowModel);
+
         }
         day.add(Calendar.DATE, -1);
 
@@ -400,12 +541,16 @@ public class WalletMultiDaysFragment extends Fragment {
     }
 
     //Elastic Parameters
-    float elTD, elDist, menDist;
+    float elTDX, elTDY, elDist, menDist;
     int elasticContWidth;
     boolean menuVisible = false;
     boolean openingMenu = false;
     boolean slidingFragment;
     long slidevelocoty = 0;
+    float dir_barrier = 10f;
+    boolean scrolling_horizontally = false;
+    boolean direction_identified = false;
+    float distX, distY;
 
     private void listeners() {
 
@@ -416,7 +561,9 @@ public class WalletMultiDaysFragment extends Fragment {
 
                 switch(e.getActionMasked()){
                     case MotionEvent.ACTION_DOWN:
-                        elTD = e.getX();
+                        slidingFragment = false;
+                        elTDX = e.getX();
+                        elTDY = e.getY();
                         if(menuVisible) {
                             showDisplayMenu(false);
                         }
@@ -432,14 +579,46 @@ public class WalletMultiDaysFragment extends Fragment {
                             slidevelocoty = System.currentTimeMillis() - slidevelocoty;
                             activity.autoFinishSlide((int)menDist, true, slidevelocoty);
                         }
+                        llm.setScrollEnabled(true);
+                        distX = 0f;
+                        distY = 0f;
+                        direction_identified = false;
+                        scrolling_horizontally = false;
                         openingMenu = false;
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        menDist = (elTD - e.getRawX());
-                        if(menDist >= 0){
-                            slidingFragment = true;
+                        //CHeck if I have reached the directionbarrier
+                        if(!direction_identified){
+                            distX = Math.abs(elTDX - e.getX());
+                            distY = Math.abs(elTDY - e.getY());
 
-                            activity.slideMechanism((int)menDist, true);
+                            if(distX > dir_barrier){
+                                //Scrolling Horizontally disable recycler scroll
+                                direction_identified = true;
+                                scrolling_horizontally = true;
+                                elTDX = e.getX();
+                                llm.setScrollEnabled(false);
+                            }
+
+                            if(distY > dir_barrier){
+                                scrolling_horizontally = false;
+                                direction_identified = true;
+                            }
+                        }
+                        else{
+                            if(scrolling_horizontally){
+                                menDist = (elTDX - e.getRawX());
+                                if(menDist >= 0){
+                                    slidingFragment = true;
+                                    activity.slideMechanism((int)menDist, true);
+                                }
+                                else{
+                                    activity.slideSideMenu((int)Math.abs(menDist));
+                                }
+                            }
+                            else{
+                                llm.setScrollEnabled(true);
+                            }
 
                         }
 
@@ -473,7 +652,7 @@ public class WalletMultiDaysFragment extends Fragment {
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         public void run() {
-                                showDisplayMenu(true);
+                                //showDisplayMenu(true);
                             }
                     }, 200);   //5 seconds
                 }
@@ -633,6 +812,21 @@ public class WalletMultiDaysFragment extends Fragment {
     boolean pauseAnim = false;
 
     int scrollingDist = 0;
+
+    TextView bezierMonth, bezierBalance;
+    public void setNewDay(String monthName, String balance) {
+        //Change The Data On BezierView
+        try {
+            bezierMonth.setText(monthName);
+            String rounded = round(Float.parseFloat(balance), 2) + "€";
+            bezierBalance.setText(rounded);
+            Log.i("Data Returned", "" + monthName + "--" + balance);
+        }
+        catch (Exception e){
+
+        }
+    }
+
     public class CustomScrollListener extends RecyclerView.OnScrollListener {
         public CustomScrollListener() {
         }
@@ -662,7 +856,7 @@ public class WalletMultiDaysFragment extends Fragment {
 
                     }
                     //showDisplayMenu(false);
-                    //animateVisibleWaves(recyclerView, llm.findFirstVisibleItemPosition(), llm.findLastVisibleItemPosition());
+                    animateVisibleWaves(recyclerView, llm.findFirstVisibleItemPosition(), llm.findLastVisibleItemPosition());
 
                     //getTopDay();
                     //llm.findFirstVisibleItemPosition();
@@ -691,7 +885,11 @@ public class WalletMultiDaysFragment extends Fragment {
                // Log.i("Scrolling", "Downward");
 
                 try{
-                    getTopDay();
+                    //getTopDay();
+                    ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(llm.findFirstVisibleItemPosition());
+                    bezier_curve_cont.setScrolledDate(vh.itemView.findViewById(R.id.item_date).getTag().toString());
+
+                    Log.i("DaysString" ,""+vh.itemView.findViewById(R.id.item_date).getTag().toString());
                 }
                 catch(Exception e){
 
@@ -702,7 +900,12 @@ public class WalletMultiDaysFragment extends Fragment {
                 //System.out.println("Scrolled Upwards - " +dy);
                 //Log.i("Scrolling", "Upward");
                 try{
-                    getTopDay();
+                    //getTopDay();
+
+                    ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(llm.findFirstVisibleItemPosition());
+                    bezier_curve_cont.setScrolledDate(vh.itemView.findViewById(R.id.item_date).getTag().toString());
+
+                    Log.i("DaysString" ,""+vh.itemView.findViewById(R.id.item_date).getTag().toString());
                 }
                 catch(Exception e){
 
@@ -742,13 +945,31 @@ public class WalletMultiDaysFragment extends Fragment {
         }
     }
 
+    public static float round(float value, int scale) {
+        int pow = 10;
+        for (int i = 1; i < scale; i++) {
+            pow *= 10;
+        }
+        float tmp = value * pow;
+        float tmpSub = tmp - (int) tmp;
+
+        return ( (float) ( (int) (
+                value >= 0
+                        ? (tmpSub >= 0.5f ? tmp + 1 : tmp)
+                        : (tmpSub >= -0.5f ? tmp : tmp - 1)
+        ) ) ) / pow;
+
+        // Below will only handles +ve values
+        // return ( (float) ( (int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp) ) ) / pow;
+    }
+
     //SOme Test Stuff
     TextView topdate;
     ViewHolder scrollingTopViewHolder;
     TextView hiddenDay;
     private void getTopDay() {
         //Log.i("Function","is Running");
-        llm.findFirstVisibleItemPosition();
+        //llm.findFirstVisibleItemPosition();
         scrollingTopViewHolder = cashflow_recycler.findViewHolderForAdapterPosition(llm.findFirstVisibleItemPosition());
         topdate = scrollingTopViewHolder.itemView.findViewById(R.id.item_day);
         //Log.i("TopDay",""+topdate.getText());

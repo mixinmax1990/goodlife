@@ -8,6 +8,7 @@
     app:cardCornerRadius="30dp"
     android:orientation="vertical"
     >
+
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
         android:layout_width="6dp"
         android:layout_height="6dp"
@@ -21,12 +22,25 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <include
+            layout="@layout/wallet_main_month_graph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/multidaysmonthgraph"
+            />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="@id/multidaysmonthgraph"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/recycler_top"/>
     <com.news.goodlife.CustomViews.ElasticEdgeView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="100dp"
         android:outlineProvider="none"
+        android:visibility="gone"
         android:id="@+id/elasticEdge"/>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
         app:layout_constraintTop_toTopOf="parent"
@@ -36,6 +50,7 @@
         app:backgroundCustomColor="#17191C"
         android:layout_height="wrap_content"
         app:borderCustomRadius="20"
+        android:visibility="gone"
         android:elevation="30dp"
         android:outlineProvider="none"
         android:layout_marginTop="50dp">
@@ -71,7 +86,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recycler_top"
         app:layout_constraintBottom_toTopOf="@id/cashflow_input_frame"
         android:id="@+id/cashflow_recycler"/>
 

@@ -20,6 +20,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
 import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
+import com.news.goodlife.Models.BezierCurvePoint;
 import com.news.goodlife.R;
 
 import org.json.JSONException;
@@ -57,8 +58,8 @@ public class BezierView extends View {
 
 
     float x0,y0,x1,y1,x2,y2;
-    CashflowBezierPoint lastPoint;
-    private List<CashflowBezierPoint> scrollPosData = new ArrayList<>();
+    BezierCurvePoint lastPoint;
+    private List<BezierCurvePoint> scrollPosData = new ArrayList<>();
     int ScrollPoint = 0;
     int numOfPoints;
     int factorTime = 30;
@@ -190,7 +191,7 @@ public class BezierView extends View {
         //y is Amount
 
         JSONObject jsob = getData();
-        List<CashflowBezierPoint> cashflowPath = calculatedData(jsob, canvas);
+        List<BezierCurvePoint> cashflowPath = calculatedData(jsob, canvas);
         scrollPosData.clear();
 
 
@@ -201,12 +202,12 @@ public class BezierView extends View {
 
 
         float spread;
-        lastPoint = new CashflowBezierPoint(zeroMark,0f);
+        lastPoint = new BezierCurvePoint(zeroMark,0f);
         path.moveTo(lastPoint.getTime()*factorTime, zeroMark - lastPoint.getAmount() * factorAmount);
         scrollPosData.add(addScrollData(lastPoint.getTime()*factorTime, 0));
         numOfPoints++;
 
-        for(CashflowBezierPoint point: cashflowPath){
+        for(BezierCurvePoint point: cashflowPath){
             //get each individual point
             x2 = point.getTime() * factorTime;
             y2 = zeroMark - (point.getAmount() * factorAmount);
@@ -248,7 +249,7 @@ public class BezierView extends View {
 
 
         if(!isOverview){
-            for(CashflowBezierPoint point: cashflowPath){
+            for(BezierCurvePoint point: cashflowPath){
                 //get each individual point
                 x2 = point.getTime() * factorTime;
                 y2 = zeroMark - (point.getAmount() * factorAmount);
@@ -410,9 +411,9 @@ public class BezierView extends View {
 
     // Data return Functions
 
-    private CashflowBezierPoint addScrollData(float position, float amount){
+    private BezierCurvePoint addScrollData(float position, float amount){
 
-        CashflowBezierPoint point = new CashflowBezierPoint(amount, position);
+        BezierCurvePoint point = new BezierCurvePoint(amount, position);
 
         return point;
     }
@@ -551,15 +552,15 @@ public class BezierView extends View {
         return dataDays;
 
     }
-    private List<CashflowBezierPoint> calculatedData(JSONObject cashflowData, Canvas canvas) {
+    private List<BezierCurvePoint> calculatedData(JSONObject cashflowData, Canvas canvas) {
 
 
-        List<CashflowBezierPoint> cashflowBezierPath = new ArrayList<>();
-        List<CashflowBezierPoint> cashflowLinePath = new ArrayList<>();
+        List<BezierCurvePoint> cashflowBezierPath = new ArrayList<>();
+        List<BezierCurvePoint> cashflowLinePath = new ArrayList<>();
 
         int graphSize = sizeInDays + daysSinceFirstEntry;
-        CashflowBezierPoint cashflowBezierPoint;
-        CashflowBezierPoint cashflowLinePoint;
+        BezierCurvePoint bezierCurvePoint;
+        BezierCurvePoint cashflowLinePoint;
         int cash = 0;
         for(int i = 0; i < graphSize; i++){
             if(isOverview){
@@ -591,10 +592,10 @@ public class BezierView extends View {
                     cash = cash + Integer.parseInt(cashflowData.get(""+i).toString());
                     //Log.i("CashData Look for -", ""+cashflowData.get(""+i).toString());
                     //Log.i("CashData A Look for -", ""+Integer.parseInt(cashflowData.get(""+i).toString()));
-                    cashflowBezierPoint = new CashflowBezierPoint((float)cash,(float)i);
-                    cashflowBezierPath.add(cashflowBezierPoint);
+                    bezierCurvePoint = new BezierCurvePoint((float)cash,(float)i);
+                    cashflowBezierPath.add(bezierCurvePoint);
 
-                    cashflowLinePoint = new CashflowBezierPoint((float)cash,(float)i);
+                    cashflowLinePoint = new BezierCurvePoint((float)cash,(float)i);
                     cashflowLinePath.add(cashflowLinePoint);
 
                 } catch (JSONException e) {
@@ -766,29 +767,7 @@ public class BezierView extends View {
     }
 
 //Inner Classes
-    public class CashflowBezierPoint {
-        Float amount, time;
-        public CashflowBezierPoint(Float amount, Float time){
-            setAmount(amount);
-            setTime(time);
-        }
 
-        public Float getAmount() {
-            return amount;
-        }
-
-        public void setAmount(Float amount) {
-            this.amount = amount;
-        }
-
-        public Float getTime() {
-            return time;
-        }
-
-        public void setTime(Float time) {
-            this.time = time;
-        }
-    }
 
 }
 

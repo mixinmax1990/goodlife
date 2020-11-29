@@ -6,7 +6,6 @@ import android.content.Context;
 
 import android.content.res.Resources;
 import android.graphics.Rect;
-import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -32,13 +31,14 @@ import com.news.goodlife.CustomViews.CustomEntries.PopUpFrame;
 import com.news.goodlife.CustomViews.LiquidView;
 import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
 import com.news.goodlife.Data.Local.Models.WalletEventDayOrderModel;
+import com.news.goodlife.Data.Remote.LookupCompanyLogo;
 import com.news.goodlife.Fragments.WalletMultiDaysFragment;
 import com.news.goodlife.Fragments.PopFragments.CostCategoriesChart;
 import com.news.goodlife.Fragments.PopFragments.IncomingCashPopFragment;
 import com.news.goodlife.Fragments.PopFragments.OutgoingCashPopFragment;
 import com.news.goodlife.Interfaces.WalletDatabaseEvents;
-import com.news.goodlife.Interfaces.WalletDaysCallback;
 import com.news.goodlife.Models.CalendarLayoutDay;
+import com.news.goodlife.Models.MonthCashflowModel;
 import com.news.goodlife.PopWindowData.CashCategoryData;
 import com.news.goodlife.R;
 import com.news.goodlife.Transitions.DetailsTransition;
@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapter.ViewHolder>{
@@ -77,6 +78,9 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
     static ProgressBar spinner;
     boolean editTextOpened = false;
     boolean editCardOpend = false;
+
+
+    private static int balanceamount = 0;
     //PopFragment
     WalletMultiDaysFragment parentFragmentClass;
 
@@ -294,9 +298,13 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                     spinner.setScaleY(.7f);
 
 
-                    itemday.setText(dayData.getDAY_OF_WEEK_NAME());
+                    Calendar dayCal = Calendar.getInstance();
+                    dayCal.setTime(dayData.getDate());
+                    String dayName = dayCal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+                    itemday.setText(dayName);
                     String itemDateText = dayData.getMONTH_DAY_NUMBER()+" "+dayData.getMONTH_NAME()+" "+dayData.getYEAR();
                     itemDate.setText(itemDateText);
+                    itemDate.setTag(dayOnly);
 
 
 
@@ -312,6 +320,10 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                     if(dataList != null){
                         inflateData(dataList, cashflowContainer);
                     }
+
+                    //Set the amount on
+
+                    //setBezierDayAmount(pos);
 
                     setCostCats(cat_count);
 
@@ -488,14 +500,21 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                 LayoutInflater inflater = LayoutInflater.from(root.getContext());
                 boolean neg;
                 final View eventHolder;
+
                 if(event.getPositive().equals("plus")){
                     neg = false;
                     eventHolder = inflater.inflate(R.layout.wallet_recycler_day_cashflow_item_pos, null);
+                    //balanceamount = balanceamount + Integer.parseInt(event.getValue());
                 }
                 else{
                     neg = true;
                     eventHolder = inflater.inflate(R.layout.wallet_recycler_day_cashflow_item_neg, null);
+                    //balanceamount = balanceamount - Integer.parseInt(event.getValue());
                 }
+
+                final ImageView logo = eventHolder.findViewById(R.id.company_logo);
+
+                new LookupCompanyLogo(event.getDescription(),logo);
 
                 String amount = (neg? "-": "+") + event.getValue();
                 String description = event.getDescription();
@@ -677,7 +696,9 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
                     break;
                 case "CashIn":
-                    IncomingCashPopFragment incomingCashPopFragment;
+
+                    parentFragmentClass.activity.slideInContainerThree(parentFragmentClass.activity.fragment_container_one);
+                    /*IncomingCashPopFragment incomingCashPopFragment;
 
                     incomingCashPopFragment = new IncomingCashPopFragment(cashin.getTransitionName(), incomeTitle.getTransitionName(), incomeValue.getTransitionName());
 
@@ -690,7 +711,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
                     ft.replace(popWindow.getId(), incomingCashPopFragment);
 
-                    ft.addToBackStack(incomingCashPopFragment.getClass().getSimpleName());
+                    ft.addToBackStack(incomingCashPopFragment.getClass().getSimpleName());*/
                     break;
                 case "CashOut":
                     OutgoingCashPopFragment outgoingCashPopFragment;
@@ -817,6 +838,8 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
 
     }
+
+
 
     private int randomValue(int rangeStart, int rangeEnd){
 

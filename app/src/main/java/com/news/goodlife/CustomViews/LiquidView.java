@@ -34,7 +34,7 @@ public class LiquidView extends CardView {
     RectF frame;
 
     int wave = 0;
-    int animatedValue = 0;
+    int animatedValue = 0; //FFB7ED81  #59a7ff
     String liquidColor = "#59a7ff";
     String liquidTextPaint = "#009cff";
     String daysBudget;
@@ -197,7 +197,7 @@ public class LiquidView extends CardView {
 
         textPaint.setColor(textColor);
         if(!noNumber){
-            canvas.drawText(remainingBudget, getWidth()/2, height / 2 - (int)(randomWaveHeight(0) * waveMovementUp) , textPaint);
+           // canvas.drawText(remainingBudget, getWidth()/2, height / 2 - (int)(randomWaveHeight(0) * waveMovementUp) , textPaint);
         }
         textPaint.setTextSize(11 * getResources().getDisplayMetrics().scaledDensity);
         //canvas.drawText("Budget", getWidth()/2,height - 30 - (int)(randomWaveHeight(0) * waveMovementUp) , textPaint );

@@ -6,13 +6,19 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.RadialGradient;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.ViewOutlineProvider;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import androidx.annotation.ColorInt;
@@ -27,9 +33,11 @@ public class MenuIcons extends FrameLayout {
 
     boolean Night = true;
     Paint menuText, menuBackground, shadowLayerPaint, pageIndicatorPaint;
+    Path buttonPath;
     Drawable menuIcon;
     String menuName;
     Boolean darkMode;
+    RectF rectFrame = new RectF(0,0,0,0);
 
     @ColorInt int selectedIcon, unselectedIcon, menuBackgroundColor;
 
@@ -72,37 +80,62 @@ public class MenuIcons extends FrameLayout {
 
         setWillNotDraw(false);
 
+        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                invalidate();
+                getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
 
+
+    }
+
+    @Override
+    public ViewTreeObserver getViewTreeObserver() {
+        return super.getViewTreeObserver();
     }
 
     private void setPaints() {
 
         setMenu(getTag().toString());
-
         menuText = new Paint();
         menuText.setStyle(Paint.Style.FILL);
-        menuText.setColor(colors.unselected);
+        menuText.setColor(Color.WHITE);
         menuText.setAntiAlias(true);
-
 
         menuBackground = new Paint(Paint.ANTI_ALIAS_FLAG);
         menuBackground.setStyle(Paint.Style.FILL);
-        menuBackground.setColor(menuBackgroundColor);
-        //menuBackground.setShadowLayer(2, 0, 0, Color.parseColor("#9F000000"));
-        setLayerType(LAYER_TYPE_SOFTWARE, menuBackground);
+
+        //menuBackground.setColor(menuBackgroundColor);
+        //menuBackground.setShadowLayer(2, 0, 0, Color.parseColor("#FFFFFF"));
+       // setLayerType(LAYER_TYPE_SOFTWARE, menuBackground);
 
         pageIndicatorPaint = new Paint();
         pageIndicatorPaint.setStyle(Paint.Style.FILL);
         pageIndicatorPaint.setAntiAlias(true);
         pageIndicatorPaint.setColor(Color.WHITE);
 
+        buttonPath = new Path();
 
-        unSelectMenu();
+
+
+        //unSelectMenu();
+    }
+
+    @Override
+    public void setOutlineProvider(ViewOutlineProvider provider) {
+        super.setOutlineProvider(provider);
     }
 
     private int subMenus = 0;
     public void setSubMenu(int n){
         this.subMenus = n;
+    }
+
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
     }
 
     int height, width;
@@ -116,10 +149,27 @@ public class MenuIcons extends FrameLayout {
 
         // Draw Rounded Rect First
         width = getWidth();
-        canvas.drawRoundRect(new RectF(0 + padding,0 + padding,getWidth() - padding, getHeight() - padding), 40,40, menuBackground);
+
+        float[] radius = {40f,40f};
+        float cornerRadius = 40;
+        rectFrame.left = padding;
+        rectFrame.top = padding;
+        rectFrame.right = getWidth() - padding;
+        rectFrame.bottom = getHeight() - padding;
+
+        buttonPath.reset();
+        buttonPath.addRoundRect(rectFrame, cornerRadius, cornerRadius,Path.Direction.CW);
+        buttonPath.close();
+
+        menuBackground.setShader(new RadialGradient((float)getWidth(), (float)getHeight(),
+                (float)getHeight()*1.5f, Color.parseColor("#17181A"), Color.parseColor("#373C41"),  Shader.TileMode.REPEAT));
+
+        canvas.drawRoundRect(rectFrame, radius[0],radius[1], menuBackground);
+        canvas.clipPath(buttonPath);
+
 
         if(subMenus == 1){
-            start = 34;
+            start = (width/2 - 10)-14;
             end = width/2 + 10;
             if(darkMode){
                 pageIndicatorPaint.setColor(Color.parseColor("#9FBABABA"));
@@ -129,16 +179,16 @@ public class MenuIcons extends FrameLayout {
             }
 
             canvas.drawRoundRect(new RectF(start,padding + 20,width/2 - 10, padding + 34), 50,50, pageIndicatorPaint);
-            canvas.drawRoundRect(new RectF(end,padding + 20,width -34, padding + 34), 50,50, pageIndicatorPaint);
+            canvas.drawRoundRect(new RectF(end,padding + 20,end + 14, padding + 34), 50,50, pageIndicatorPaint);
 
             if(darkMode){
-                pageIndicatorPaint.setColor(Color.parseColor("#000000"));
+                pageIndicatorPaint.setColor(Color.parseColor("#FFFFFF"));
             }
             else{
                 pageIndicatorPaint.setColor(Color.parseColor("#FFFFFF"));
             }
 
-            canvas.drawRoundRect(new RectF(34 + move,padding + 20,(width/2 - 10) + move, padding + 34), 50,50, pageIndicatorPaint);
+            canvas.drawRoundRect(new RectF(start + move,padding + 20,start + 14 + move, padding + 34), 50,50, pageIndicatorPaint);
 
         }
 
@@ -158,7 +208,49 @@ public class MenuIcons extends FrameLayout {
 
         menuText.setTextSize(11 * getResources().getDisplayMetrics().scaledDensity);
         menuText.setTextAlign(Paint.Align.CENTER);
+        //menuText.setColor(Color.WHITE);
+        menuText.setAlpha(255);
         canvas.drawText(menuName, (int)(width/2), (int)(width) - (textMargin / 2), menuText);
+
+
+        if(menuName.equals("Wallet")) {
+            drawWalletIcon(canvas);
+        }
+        switch(menuName){
+            case "Wallet":
+                break;
+            case "Other":
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    private void drawWalletIcon(Canvas canvas){
+
+        int start = getHeight() - (getHeight() / 3);
+        float tillCurve = (float)(getWidth() / 100) * 0.375f;
+        int cutoutheight = 20;
+        float cutoutwidth = (float)(getWidth() / 100) * 25;
+
+        Path walletCutout = new Path();
+        walletCutout.reset();
+
+        walletCutout.moveTo(0, start);
+        walletCutout.lineTo(tillCurve, start);
+        walletCutout.lineTo(tillCurve, start + cutoutheight);
+        walletCutout.lineTo(tillCurve + cutoutwidth, start + cutoutheight);
+        walletCutout.lineTo(tillCurve + cutoutwidth, start);
+        walletCutout.lineTo(getWidth(), start);
+        walletCutout.lineTo(getWidth(), getHeight());
+        walletCutout.lineTo(0 , getHeight());
+        walletCutout.close();
+
+        pageIndicatorPaint.setColor(Color.parseColor("#FFFFFF"));
+        //"#2D3033
+        //canvas.drawPath(walletCutout, pageIndicatorPaint);
+        //canvas.drawRect(new RectF(0, getHeight()/2, getWidth(), getHeight()), pageIndicatorPaint);
 
     }
 
@@ -203,12 +295,12 @@ public class MenuIcons extends FrameLayout {
         }
 
     }
-    float alpha = 0.5f;
+    float alpha = 1f;
     float revAnim;
     ValueAnimator vaEnter = ValueAnimator.ofFloat(1, 0);
     public void animateEnter(){
 
-        selectMenu();
+        //selectMenu();
 
         vaEnter.setDuration(100);
         vaEnter.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -249,7 +341,7 @@ public class MenuIcons extends FrameLayout {
         handler.postDelayed(new Runnable() {
             public void run() {
                 // Actions to do after 10 seconds
-                vaEnter.start();
+                //vaEnter.start();
             }
         }, 150);
 
@@ -300,20 +392,19 @@ public class MenuIcons extends FrameLayout {
         });
 
 
-        vaLeave.start();
+        //vaLeave.start();
     }
     public void unSelectMenu(){
-
+        menuBackground.setColor(menuBackgroundColor);
         if(darkMode){
             DrawableCompat.setTint(menuIcon, Color.WHITE);
             menuText.setColor(Color.WHITE);
-            menuBackground.setColor(menuBackgroundColor);
         }
         else{
             DrawableCompat.setTint(menuIcon, Color.BLACK);
             menuText.setColor(Color.BLACK);
-            menuBackground.setColor(menuBackgroundColor);
         }
+
         invalidate();
     }
 
@@ -327,13 +418,14 @@ public class MenuIcons extends FrameLayout {
         if(darkMode){
             DrawableCompat.setTint(menuIcon, Color.BLACK);
             menuText.setColor(Color.BLACK);
-            menuBackground.setColor(colors.selected);
+            //menuBackground.setColor(colors.selected);
         }
         else{
             DrawableCompat.setTint(menuIcon, Color.WHITE);
             menuText.setColor(Color.WHITE);
-            menuBackground.setColor(colors.selected);
+            //menuBackground.setColor(colors.selected);
         }
+        invalidate();
     }
 
 
@@ -343,7 +435,7 @@ public class MenuIcons extends FrameLayout {
         public MenuIconColors(@ColorInt int selected, @ColorInt int unselected) {
             this.selected = selected;
             this.unselected = unselected;
-            alpha = 0.5f;
+            alpha = 1f;
             invalidate();
         }
     }

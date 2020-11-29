@@ -3,14 +3,17 @@ package com.news.goodlife;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 
 import android.Manifest;
 import android.animation.Animator;
+import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -33,6 +36,7 @@ import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -50,12 +54,18 @@ import com.news.goodlife.CustomViews.CustomIcons.MenuIcons;
 import com.news.goodlife.CustomViews.ElasticEdgeView;
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
 import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
+import com.news.goodlife.Fragments.SlideInFragments.BankTransactionsFragment;
+import com.news.goodlife.Fragments.SlideInFragments.BudgetManagementFragment;
+import com.news.goodlife.Fragments.SlideInFragments.FixedCostsFragment;
+import com.news.goodlife.Fragments.SlideInFragments.FixedIncomeFragment;
+import com.news.goodlife.Fragments.SlideInFragments.SubcriptionsFragment;
 import com.news.goodlife.Fragments.WalletCalendarFragment;
 import com.news.goodlife.Fragments.WalletTodayFragment;
 import com.news.goodlife.Interfaces.OnClickedCashflowItemListener;
 import com.news.goodlife.Interfaces.CalendarSelectDayListener;
 import com.news.goodlife.Interfaces.WalletDatabaseEvents;
 import com.news.goodlife.Models.CalendarLayoutDay;
+import com.news.goodlife.Singletons.SingletonClass;
 import com.news.goodlife.Tools.CameraScan.CameraScanFragment;
 import com.news.goodlife.Fragments.WalletMultiDaysFragment;
 import com.news.goodlife.Fragments.FinancialFragment;
@@ -65,9 +75,16 @@ import com.news.goodlife.Fragments.PhysicalFragment;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -81,6 +98,8 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
     public FrameLayout fragment_container_one;
     public FrameLayout fragment_container_two;
+    public CardView fragment_container_three;
+    public ImageView fragment_container_three_backarrow;
     public BorderRoundView frame_one_border, frame_two_border;
     public TextView frame_one_title, frame_two_title;
 
@@ -113,6 +132,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
     //Menu Navigation
     View menuFloatingBtn;
+    View menu_drawer;
 
     //Metrics
     int displayWidth, displayHeight;
@@ -122,12 +142,99 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
     //Callbacks
 
+    //Loading Data TODO make Api Call Klarna
+    public String loadJSONFromAsset(){
+        String json = null;
+
+        try{
+            InputStream is = this.getAssets().open("my_account.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+
+        }
+        catch(IOException ex){
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+    private void loadInitData(){
+
+        //RequestCompanyWebsite requestCompanyWebsite = new RequestCompanyWebsite();
+        //Log.i("Company Site", "");
+        //Make sure we check new entries first and leave all existing entries
+        myDB.WalletEvent.deleteAllEvents();
+        //set
+        try{
+            JSONArray account_data = new JSONArray(loadJSONFromAsset());
+            int size = account_data.length();
+            for(int i = 0; i < size; i++){
+
+                JSONObject jsondata = account_data.getJSONObject(i);
+                WalletEventModel dataModel = new WalletEventModel();
+
+                dataModel.setCreated("null");
+                float amount = Float.parseFloat(jsondata.getJSONObject("amount").getString("amount")) / 100;
+
+                dataModel.setValue(""+amount);
+
+                try{
+                    dataModel.setDescription(""+ jsondata.getJSONObject("counter_party").getString("holder_name"));
+                }
+                catch(JSONException e){
+                    dataModel.setDescription(""+ jsondata.getString("reference"));
+                }
 
 
+                //create Date from string
+                try{
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date date = sdf.parse(""+jsondata.getString("date"));
+
+                    dataModel.setDate(""+date.getTime());
+                    dataModel.setDateOBJ(date);
+                }
+                catch(ParseException e){
+
+                    dataModel.setDate("null");
+
+                }
+
+                if(jsondata.getString("type").contains("DEBIT")){
+                    dataModel.setPositive("minus");
+                }
+                else{
+                    dataModel.setPositive("plus");
+                }
+
+                dataModel.setRepeat("null");
+
+                myDB.WalletEvent.newCashflow(dataModel);
+
+
+                //Log.i("JSON Data", "" + account_data.getJSONObject(i).getString("reference"));
+                //Log.i("JSON Data", "" + account_data.getJSONObject(i).getJSONObject("amount").getString("amount"));
+
+            }
+
+        }
+        catch(JSONException e){
+            e.printStackTrace();
+        }
+
+    }
+    //Loading Icons
+
+
+    SingletonClass singletonClass;
+    CardView blurcard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.start_activiy);
+        setContentView(R.layout.start_activity);
         transparentStatus();
         setStatusbarspace();
 
@@ -137,10 +244,14 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         analysisBTN = findViewById(R.id.buttonAnalysis);
         hubBTN = findViewById(R.id.buttonHub);
 
+        menu_drawer = findViewById(R.id.menu_drawer);
+
 
 
         fragment_container_one = findViewById(R.id.fragment_container_one);
         fragment_container_two = findViewById(R.id.fragment_container_two);
+        fragment_container_three = findViewById(R.id.fragment_container_three);
+        fragment_container_three_backarrow = findViewById(R.id.fragment_container_tree_backarrow);
         frame_one_border = findViewById(R.id.frame_one_border);
         frame_two_border = findViewById(R.id.frame_two_border);
         frame_one_title = findViewById(R.id.frame_one_title);
@@ -164,11 +275,15 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         //DataBase
         myDB = new DatabaseController(this);
 
+        loadInitData();
 
+        //Test Singleton
+        singletonClass = SingletonClass.getInstance();
 
         //callbacks
        //walletDaysCallback = (WalletDaysCallback) this.context;
-
+        blurViewMenu = findViewById(R.id.blurviewmenu);
+        blur(20);
 
 
         if (getResources().getBoolean(R.bool.dark)) {
@@ -180,8 +295,6 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         //Navigation Section
 
         //Overview
-        overviewTodayTitle = findViewById(R.id.wallet_overview_today_title);
-        overviewCalendarTitle = findViewById(R.id.wallet_overview_calendar_title);
 
         vibrator  = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -196,6 +309,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         //blur(15f);
         
         loadTools();
+        menuDrawer();
 
         fragment_container_one.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -204,16 +318,85 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                 displayWidth = fragment_container_one.getWidth();
                 displayHeight = fragment_container_one.getHeight();
                 fragment_container_two.setX(displayWidth);
+                fragment_container_three.setX(displayWidth);
+                fragment_container_three_backarrow.setX(displayWidth);
 
+                centerScaledWidth = (int)((int)(displayWidth * .5)/2.2);
                 overviewFragments();
 
+                singletonClass.setDisplayHeight(displayHeight);
+                singletonClass.setDisplayWidth(displayWidth);
+                singletonClass.setDatabaseController(myDB);
                 //slideMechanism(0, true);
 
                 fragment_container_one.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
+
+        menu_drawer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                drawerwidth = menu_drawer.getWidth();
+                menu_drawer.setX(-drawerwidth);
+                menu_drawer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
     }
 
+    View menuone, menutwo, menuthree, menufour, menufive, connectBankMenu;
+    private void menuDrawer(){
+        menuone = findViewById(R.id.menu_one);
+        menuone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Clicked", "MneuOne");
+                slideInContainerThree(null);
+                openSideFragment("BudgetManagement");
+            }
+        });
+        menutwo = findViewById(R.id.menu_two);
+        menutwo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slideInContainerThree(null);
+                openSideFragment("FixedCosts");
+            }
+        });
+        menuthree = findViewById(R.id.menu_three);
+        menuthree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slideInContainerThree(null);
+                openSideFragment("FixedIncome");
+            }
+        });
+        menufour = findViewById(R.id.menu_four);
+        menufour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slideInContainerThree(null);
+                openSideFragment("Subscriptions");
+            }
+        });
+        menufive = findViewById(R.id.menu_five);
+        menufive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slideInContainerThree(null);
+                openSideFragment("BankTransactions");
+            }
+        });
+
+        fragment_container_three_backarrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slideOutContainerThree(true);
+            }
+        });
+
+    }
+    int drawerwidth;
+    int centerScaledWidth;
     //Slideing Fragments Mechanism
 
     public boolean slideToday = false;
@@ -268,6 +451,40 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         setScaleNavigation(moveScale, 1f);
 
         //scrollHeightMenu((move / 20)*-1, true);
+
+    }
+
+    public void slideSideMenu(int dist){
+        float slideprogress = (float)(displayWidth - (dist*2)) / displayWidth;
+        float revSlideprogress = (1f - slideprogress)*2;
+
+        Log.i("SlideProg", ""+slideprogress);
+
+        float scale;
+        if(slideprogress >= 0.5f){
+            scale = slideprogress;
+            overviewWallet = true;
+        }
+        else{
+            scale = 0.5f;
+        }
+        setScaleNavigation(scale, scale);
+
+        //SLide Fragment One
+        if(revSlideprogress >= 1f){
+            revSlideprogress = 1f;
+        }
+        fragment_container_one.setX(+(centerScaledWidth * revSlideprogress));
+        frame_one_border.setX(+(centerScaledWidth * revSlideprogress));
+        //frame_one_border.setAlpha(revSlideprogress);
+        //Slide Fragment Two
+        int destination = displayWidth - (+centerScaledWidth + (int)(centerScaledWidth));
+        fragment_container_two.setX(displayWidth - (destination * revSlideprogress));
+        frame_two_border.setX(displayWidth - (destination * revSlideprogress));
+        frame_two_border.setAlpha(revSlideprogress);
+        //Slide Navigation Bar
+        menu_drawer.setX(-drawerwidth * (1f - revSlideprogress));
+        menu_drawer.setAlpha(revSlideprogress);
 
     }
 
@@ -374,6 +591,89 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
     }
 
+    View movedView = null;
+    public void slideInContainerThree(@Nullable View frame){
+
+        movedView = frame;
+
+        fragment_container_three.setVisibility(View.VISIBLE);
+        ValueAnimator va;
+        va = ValueAnimator.ofInt(displayWidth, 0);
+        va.setDuration(300);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+
+                int animval = (int)valueAnimator.getAnimatedValue();
+
+                float perc = 1f -(animval / (float)displayWidth);
+                fragment_container_three.setX(animval);
+                fragment_container_three_backarrow.setX(animval);
+                menu_drawer.setX(-drawerwidth * perc);
+
+                //Move Frame if it is not Null
+                if(frame != null){
+                        frame.setX(-(int)((displayWidth - animval)*0.25));
+                }
+            }
+
+        });
+        // long time = SystemClock.uptimeMillis();
+        //float timeInterpolated = (float) time / (float)(300);
+        TimeInterpolator time = new TimeInterpolator() {
+            @Override
+            public float getInterpolation(float input) {
+                return 0;
+            }
+        };
+        final TimeInterpolator testInterpolator = new LinearOutSlowInInterpolator();
+        va.setInterpolator(testInterpolator);
+        va.start();
+    }
+
+    public void slideOutContainerThree(final boolean showdrawer){
+        float x = 0;
+        if(movedView != null){
+            x = movedView.getX();
+        }
+        ValueAnimator va;
+        va = ValueAnimator.ofInt(0, displayWidth);
+        va.setDuration(300);
+        float finalX = x;
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+
+                int animval = (int)valueAnimator.getAnimatedValue();
+
+                float perc = 1f -(animval / (float)displayWidth);
+
+                fragment_container_three.setX(animval);
+                fragment_container_three_backarrow.setX(animval);
+                if(showdrawer){
+                    menu_drawer.setX(-drawerwidth * perc);
+                }
+
+                if(movedView != null){
+                    movedView.setX(finalX * perc);
+                }
+
+            }
+
+        });
+        va.start();
+    }
+
+    public void xSlideOutContainerThree(float x){
+        float move = Math.abs(x);
+        float perc = 1f - (move/ (float)displayWidth);
+        fragment_container_three.setX(move);
+        fragment_container_three_backarrow.setX(move);
+
+    }
+
     private void walletOverview(String from, final String to){
 
 
@@ -384,7 +684,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             final int frag2X = (int) fragment_container_two.getX();
             final float scale1Diff =  (to.equals("Calendar")? .5f : 1f) - scale;
             final float scale2Diff =  1f - scale;
-            final float frag1Diff = - frag2X;
+            final float frag1Diff = - frag1X;
             final float frag2XDiff;
             final int heightDiff = displayHeight - displayWidth;
             final int marginBottomDiff = - marginBottom;
@@ -395,7 +695,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             Log.i("fragment X", "One = "+frag1X+" ;; Two"+frag2X);
 
             ValueAnimator va = ValueAnimator.ofFloat(0, 1f);
-            va.setDuration(500);
+            va.setDuration(300);
             if(to.equals("Days")){
                  frag2XDiff = displayWidth - frag2X;
             }
@@ -416,31 +716,20 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                     frame_one_border.setScaleX(scale + (scale1Diff * animVal));
                     frame_one_border.setScaleY(scale + (scale1Diff * animVal));
 
-                    fragment_container_two.setScaleX(scale + (scale2Diff * animVal));
-                    fragment_container_two.setScaleY(scale + (scale2Diff * animVal));
-                    frame_two_border.setScaleX(scale + (scale2Diff * animVal));
-                    frame_two_border.setScaleY(scale + (scale2Diff * animVal));
+                    fragment_container_two.setScaleX((scale) + (scale2Diff * animVal));
+                    fragment_container_two.setScaleY((scale) + (scale2Diff * animVal));
+                    frame_two_border.setScaleX((scale) + (scale2Diff * animVal));
+                    frame_two_border.setScaleY((scale) + (scale2Diff * animVal));
 
                     //Animate Position
 
-                    fragment_container_one.setX(frag1X - (frag1Diff * animVal));
-                    frame_one_border.setX(frag1X - (frag1Diff * animVal));
+                    fragment_container_one.setX(frag1X + (frag1Diff * animVal));
+                    frame_one_border.setX(frag1X + (frag1Diff * animVal));
 
                     fragment_container_two.setX(frag2X + (frag2XDiff * animVal));
                     frame_two_border.setX(frag2X + (frag2XDiff * animVal));
 
                     // Animate LayoutParams
-
-
-                    LPone.height = (int) (displayWidth + (heightDiff * animVal));
-                    LPtwo.height = (int) (displayWidth + (heightDiff * animVal));
-
-                    LPone.bottomMargin = (int) ((1f - animVal) * marginBottom);
-                    LPtwo.bottomMargin = (int) ((1f - animVal) * marginBottom);
-
-                    fragment_container_one.setLayoutParams(LPone);
-                    fragment_container_two.setLayoutParams(LPtwo);
-
 
                 }
             });
@@ -451,10 +740,6 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                     if(to.equals("Calendar")){
                         frame_one_border.setAlpha(0);
                     }
-
-                    //TODO Work on the  Titles
-                    frame_one_title.setAlpha(0);
-                    frame_two_title.setAlpha(0);
 
                 }
                 @Override
@@ -477,9 +762,6 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             va.setInterpolator(new AccelerateDecelerateInterpolator());
             va.start();
 
-
-
-
         }
 
 
@@ -493,78 +775,33 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
     public void overviewFragments(){
         overviewWallet = true;
 
-        scale = 0.38f;
-        int centerScaledWidth = (int)((int)(displayWidth * .5)/2.2);
+        scale = 0.5f;
 
         setScaleNavigation(scale,scale);
 
         //overviewFragTwoX = (int)(displayWidth /2.5);
         //setSlideWidth(overviewFragTwoX, true);
 
-        fragment_container_one.setX(-centerScaledWidth);
-        frame_one_border.setX(-centerScaledWidth);
-        frame_one_title.setX(-centerScaledWidth);
+        fragment_container_one.setX(+centerScaledWidth);
+        frame_one_border.setX(+centerScaledWidth);
 
-        fragment_container_two.setX(centerScaledWidth);
-        frame_two_border.setX(centerScaledWidth);
-        frame_two_title.setX(centerScaledWidth);
-
-        //fragment_container_one.setY(-160);
-        //frame_one_border.setY(-160);
-        frame_one_title.setY(((displayWidth/2)-((displayWidth/2)*scale))/2);
-        frame_two_title.setY(((displayWidth/2)-((displayWidth/2)*scale))/2);
-
-        //fragment_container_two.setY(-160);
-        //frame_two_border.setY(-160);
-
-        overviewCalendarTitle.setVisibility(View.GONE);
-        overviewTodayTitle.setVisibility(View.GONE);
-
-        overviewTodayTitle.setX(-centerScaledWidth);
-        overviewTodayTitle.setY(displayHeight/4 - dpToPx(20));
-        overviewCalendarTitle.setX(centerScaledWidth);
-        overviewCalendarTitle.setY(displayHeight/4 - dpToPx(20));
-
+        fragment_container_two.setX(+centerScaledWidth + (int)(centerScaledWidth));
+        frame_two_border.setX(+centerScaledWidth  + (int)(centerScaledWidth));
 
     }
     int marginBottom;
     public void setScaleNavigation(float fragOneScale, float fragTwoScale){
 
-        if(overviewWallet){
-
-            ConstraintLayout.LayoutParams LPone = (ConstraintLayout.LayoutParams) fragment_container_one.getLayoutParams();
-            ConstraintLayout.LayoutParams LPtwo = (ConstraintLayout.LayoutParams) fragment_container_two.getLayoutParams();
-
-            marginBottom = (int) ((displayWidth) * scale) + dpToPx(40);
-            LPone.height = displayWidth;
-            LPone.setMargins(0,0,0, marginBottom);
-            LPtwo.height = displayWidth;
-            LPtwo.setMargins(0,0,0, marginBottom);
-
-
-            fragment_container_one.setLayoutParams(LPone);
-            fragment_container_two.setLayoutParams(LPtwo);
-
-        }
-
-
         fragment_container_one.setScaleX(fragOneScale);
         fragment_container_one.setScaleY(fragOneScale);
         frame_one_border.setScaleX(fragOneScale);
         frame_one_border.setScaleY(fragOneScale);
-        frame_one_title.setScaleX(fragOneScale);
-        frame_one_title.setScaleY(fragOneScale);
-
-        frame_one_title.setY(((displayWidth/2)-((displayWidth/2)*fragOneScale))/2);
-        frame_two_title.setY(((displayWidth/2)-((displayWidth/2)*fragTwoScale))/2);
 
 
         fragment_container_two.setScaleX(fragTwoScale);
         fragment_container_two.setScaleY(fragTwoScale);
         frame_two_border.setScaleX(fragTwoScale);
         frame_two_border.setScaleY(fragTwoScale);
-        frame_two_title.setScaleX(fragTwoScale);
-        frame_two_title.setScaleY(fragTwoScale);
 
     }
 
@@ -617,11 +854,15 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         //gets kinda lost after after blur is applied.
         Drawable windowBackground = decorView.getBackground();
 
+        blurViewMenu.setClipToOutline(true);
+        blurViewMenu.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
+
         blurViewMenu.setupWith(rootView)
                 .setFrameClearDrawable(windowBackground)
                 .setBlurAlgorithm(new RenderScriptBlur(this))
                 .setBlurRadius(radius)
                 .setHasFixedTransformationMatrix(true);
+
     }
 
     int menuTop = 0;
@@ -692,10 +933,13 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch(motionEvent.getActionMasked()){
                     case MotionEvent.ACTION_DOWN:
-                        resetButtonTint();
-                        walletBTN.animateEnter();
-                        selectedFragment = 3;
-                        changeSelectedColor();
+                        if(selectedFragment != 3){
+                            resetButtonTint();
+                            walletBTN.animateEnter();
+                            selectedFragment = 3;
+                            changeSelectedColor();
+                        }
+
                         break;
                     case MotionEvent.ACTION_UP:
                         //walletBTN.animateLeave();
@@ -714,10 +958,12 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch(motionEvent.getActionMasked()){
                     case MotionEvent.ACTION_DOWN:
-                        resetButtonTint();
-                        goalsBTN.animateEnter();
-                        selectedFragment = 2;
-                        changeSelectedColor();
+                        if(selectedFragment != 2){
+                            resetButtonTint();
+                            goalsBTN.animateEnter();
+                            selectedFragment = 2;
+                            changeSelectedColor();
+                        }
                         break;
                     case MotionEvent.ACTION_UP:
                         //goalsBTN.animateLeave();
@@ -736,10 +982,12 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch(motionEvent.getActionMasked()){
                     case MotionEvent.ACTION_DOWN:
-                        resetButtonTint();
-                        analysisBTN.animateEnter();
-                        selectedFragment = 3;
-                        changeSelectedColor();
+                        if(selectedFragment != 3){
+                            resetButtonTint();
+                            analysisBTN.animateEnter();
+                            selectedFragment = 3;
+                            changeSelectedColor();
+                        }
                         break;
                     case MotionEvent.ACTION_UP:
                         //analysisBTN.animateLeave();
@@ -758,10 +1006,12 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch(motionEvent.getActionMasked()){
                     case MotionEvent.ACTION_DOWN:
-                        resetButtonTint();
-                        hubBTN.animateEnter();
-                        selectedFragment = 1;
-                        changeSelectedColor();
+                        if(selectedFragment != 1){
+                            resetButtonTint();
+                            hubBTN.animateEnter();
+                            selectedFragment = 1;
+                            changeSelectedColor();
+                        }
                         break;
                     case MotionEvent.ACTION_UP:
                         //hubBTN.animateLeave();
@@ -835,11 +1085,11 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
     }
 
     private void resetButtonTint(){
-        walletBTN.unSelectMenu();
+       /* walletBTN.unSelectMenu();
         goalsBTN.unSelectMenu();
         analysisBTN.unSelectMenu();
         hubBTN.unSelectMenu();
-
+*/
     }
 
     public void transparentStatus() {
@@ -858,6 +1108,40 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             //ContextCompat.getColor(this,R.color.white)
 
         }
+    }
+
+    public Fragment opendSideFragment = null;
+
+    public void openSideFragment(String actionName){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        switch(actionName){
+            case "BudgetManagement":
+                opendSideFragment = new BudgetManagementFragment();
+                ft.replace(fragment_container_three.getId(), opendSideFragment);
+                break;
+            case "FixedCosts":
+                opendSideFragment = new FixedCostsFragment();
+                ft.replace(fragment_container_three.getId(), opendSideFragment);
+                break;
+            case "FixedIncome":
+                opendSideFragment = new FixedIncomeFragment();
+                ft.replace(fragment_container_three.getId(), opendSideFragment);
+                break;
+            case "Subscriptions":
+                opendSideFragment = new SubcriptionsFragment();
+                ft.replace(fragment_container_three.getId(), opendSideFragment);
+                break;
+            case "BankTransactions":
+                opendSideFragment = new BankTransactionsFragment();
+                ft.replace(fragment_container_three.getId(), opendSideFragment);
+                break;
+            default:
+                break;
+
+        }
+
+        ft.commit();
+
     }
 
     private HealthFragment healthFragment;

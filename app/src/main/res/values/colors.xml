@@ -19,16 +19,16 @@
     <color name="standoutButtonNight">#FFFFFF</color>
     <color name="standoutButtonDay">#282B2E</color>
 
-    <color name="strokeColorNight">#8FFFFFFF</color>
+    <color name="strokeColorNight">#FFFFFF</color>
     <color name="strokeColorDay">#8F000000</color>
 
-    <color name="menuColorNight">#4D525A</color>
+    <color name="menuColorNight">#17181A</color>
     <color name="menuColorDay">#E6E6E6</color>
 
-    <color name="menuIconSelectedNight">#FBFBFB</color>
-    <color name="menuIconSelectedDay">#383838</color>
+    <color name="menuIconSelectedNight">#FFFFFF</color>
+    <color name="menuIconSelectedDay">#FFFFFF</color>
 
-    <color name="menuIconUnselectedNight">#FFFFFF</color>
+    <color name="menuIconUnselectedNight">#A9FF0000</color>
     <color name="menuIconUnselectedDay">#000000</color>
 
     <color name="touchsliderBackgroundNight">#1EFFFFFF</color>
@@ -73,6 +73,6 @@
     <color name="financialTrendLineColor">#8C248A</color>
     <color name="financialTrendLineColoGradEnd">#00DBAF</color>
     <color name="financialTrendLineColorNeg">#ff6859</color>
-    <color name="testCOlors">#57D679</color>
-    <color name="testCOlors2">#3677DD</color>
+    <color name="testCOlors">#151619</color>
+    <color name="testCOlors2">#9FFFFFFF</color>
 </resources>

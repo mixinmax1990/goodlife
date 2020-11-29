@@ -219,5 +219,21 @@ public class WalletEventController extends DatabaseHelper {
         return success;
     }
 
+    public boolean deleteAllEvents() {
+
+        boolean success;
+        SQLiteDatabase db = this.getWritableDatabase();
+
+
+        try {
+            db.execSQL("delete from "+ walletEventTable.TABLE_NAME);
+            success = true;
+        }
+        catch (SQLException e) {
+            success = false;
+        }
+        return success;
+    }
+
 
 }

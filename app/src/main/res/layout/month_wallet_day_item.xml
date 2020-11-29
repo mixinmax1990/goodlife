@@ -29,10 +29,16 @@
        app:layout_constraintBottom_toBottomOf="@id/wallet_day_button"
        android:id="@+id/day_item_liquidcard"
       >
+      <com.news.goodlife.CustomViews.CustomEntries.RoundEventIndicator
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:elevation="100dp"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"/>
       <com.news.goodlife.CustomViews.LiquidView
           android:id="@+id/day_liquid"
           app:cardCornerRadius="200dp"
-          android:layout_margin="4px"
+          android:layout_margin="5px"
           android:alpha="1"
           app:cardBackgroundColor="?attr/liquidBackground"
           android:layout_width="match_parent"
