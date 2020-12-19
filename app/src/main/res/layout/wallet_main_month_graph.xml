@@ -1,63 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:elevation="100dp"
+    android:outlineProvider="none"
+    android:paddingTop="30dp"
+    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    app:cardBackgroundColor="#4020262B"
-    app:cardCornerRadius="20dp"
+    android:paddingBottom="200dp"
+    android:background="@drawable/graph_bg_gradient"
+    android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.news.goodlife.CustomViews.CustomBackground.BehindMenuView
         android:layout_width="match_parent"
-        android:background="#17FFFFFF"
-        android:layout_height="wrap_content">
-        <!--#17FFFFFF-->
-        <com.news.goodlife.CustomViews.CustomBackground.BehindMenuView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/blurtopgraph"
-            app:layout_constraintStart_toStartOf="parent"/>
-        <eightbitlab.com.blurview.BlurView
-            android:paddingTop="40dp"
-            android:id="@+id/blurtopgraph"
-            android:layout_width="match_parent"
-            android:background="#5C232323"
-            android:layout_height="match_parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        <com.news.goodlife.CustomViews.MonthCashflowBezier
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:id="@+id/graph_container"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/blurtopgraph"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <eightbitlab.com.blurview.BlurView
+        android:paddingTop="40dp"
+        android:id="@+id/blurtopgraph"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <com.news.goodlife.CustomViews.MonthCashflowBezier
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:id="@+id/graph_container"
+        app:layout_constraintTop_toBottomOf="@id/monthbezier_balance"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/graph_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="2,345€"
+        android:paddingEnd="20dp"
+        android:paddingTop="10dp"
+        android:textSize="20sp"
+        android:id="@+id/monthbezier_balance"
+        android:paddingBottom="10dp"/>
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="50dp"
+        android:layout_margin="15dp"
+        app:cardBackgroundColor="#25FFFFFF"
+        app:layout_constraintTop_toTopOf="@id/monthbezier_balance"
+        app:layout_constraintBottom_toBottomOf="@id/monthbezier_balance"
+        app:layout_constraintStart_toStartOf="parent">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/graph_container"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="2,345€"
-            android:visibility="gone"
-            android:paddingEnd="20dp"
-            android:paddingTop="10dp"
-            android:textSize="20sp"
-            android:id="@+id/monthbezier_balance"
-            android:paddingBottom="10dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/graph_container"
-            app:layout_constraintStart_toStartOf="parent"
             android:text="January"
-            android:visibility="gone"
             android:id="@+id/monthbezier_month"
-            android:paddingEnd="20dp"
-            android:paddingStart="20dp"
-            android:paddingTop="10dp"
             android:textSize="16sp"
-            android:paddingBottom="10dp"/>
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            />
+    </androidx.cardview.widget.CardView>
 
-        </eightbitlab.com.blurview.BlurView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

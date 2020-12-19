@@ -98,6 +98,7 @@ public class WalletMultiDaysFragment extends Fragment{
 
     //Bezier Graph
     MonthCashflowBezier bezier_curve_cont;
+    View monthGraph;
 
     public DatabaseController getMyDB() {
         return myDB;
@@ -171,8 +172,9 @@ public class WalletMultiDaysFragment extends Fragment{
 
         bezierMonth = root.findViewById(R.id.monthbezier_month);
         bezierBalance = root.findViewById(R.id.monthbezier_balance);
-        blurTopGraph = root.findViewById(R.id.blurtopgraph);
-        blur(20, blurTopGraph);
+        monthGraph = root.findViewById(R.id.multidaysmonthgraph);
+        //blurTopGraph = root.findViewById(R.id.blurtopgraph);
+        //blur(20, blurTopGraph);
 
         //Tab Sections
         cashflow_input_frame = root.findViewById(R.id.cashflow_input_frame);
@@ -618,6 +620,7 @@ public class WalletMultiDaysFragment extends Fragment{
                             }
                             else{
                                 llm.setScrollEnabled(true);
+                                monthGraph.setVisibility(View.VISIBLE);
                             }
 
                         }
@@ -836,6 +839,7 @@ public class WalletMultiDaysFragment extends Fragment{
                 case RecyclerView.SCROLL_STATE_IDLE:
                     //System.out.println("The RecyclerView is not scrolling");
                     //Log.i("FirstVisible =", "View "+llm.findFirstVisibleItemPosition());
+                    monthGraph.setVisibility(GONE);
 
                     ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(llm.findFirstCompletelyVisibleItemPosition());
                     if(!activity.mainMenuVisible) {

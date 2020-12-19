@@ -53,6 +53,7 @@ import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.CustomViews.CustomIcons.MenuIcons;
 import com.news.goodlife.CustomViews.ElasticEdgeView;
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
+import com.news.goodlife.Data.Local.Models.Financial.BudgetCategoryModel;
 import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
 import com.news.goodlife.Fragments.SlideInFragments.BankTransactionsFragment;
 import com.news.goodlife.Fragments.SlideInFragments.BudgetManagementFragment;
@@ -167,7 +168,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         //Log.i("Company Site", "");
         //Make sure we check new entries first and leave all existing entries
         myDB.WalletEvent.deleteAllEvents();
-        //set
+        // set
         try{
             JSONArray account_data = new JSONArray(loadJSONFromAsset());
             int size = account_data.length();
@@ -227,8 +228,6 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
     }
     //Loading Icons
-
-
     SingletonClass singletonClass;
     CardView blurcard;
     @Override
@@ -237,6 +236,16 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         setContentView(R.layout.start_activity);
         transparentStatus();
         setStatusbarspace();
+
+        //SIngleton Classes
+        singletonClass = SingletonClass.getInstance();
+
+        //DataBase
+        myDB = new DatabaseController(this);
+        //setup app
+        singletonClass.setDatabaseController(myDB);
+        SetupApp setup = new SetupApp();
+
 
 
         walletBTN = findViewById(R.id.buttonWallet);
@@ -272,13 +281,11 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
         previewImage = findViewById(R.id.previewImage);
 
-        //DataBase
-        myDB = new DatabaseController(this);
 
         loadInitData();
 
         //Test Singleton
-        singletonClass = SingletonClass.getInstance();
+
 
         //callbacks
        //walletDaysCallback = (WalletDaysCallback) this.context;
@@ -326,7 +333,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
                 singletonClass.setDisplayHeight(displayHeight);
                 singletonClass.setDisplayWidth(displayWidth);
-                singletonClass.setDatabaseController(myDB);
+                singletonClass.setUniversalBackarrow(fragment_container_three_backarrow);
                 //slideMechanism(0, true);
 
                 fragment_container_one.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -1113,7 +1120,8 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
     public Fragment opendSideFragment = null;
 
     public void openSideFragment(String actionName){
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ft;
+        ft = getSupportFragmentManager().beginTransaction();
         switch(actionName){
             case "BudgetManagement":
                 opendSideFragment = new BudgetManagementFragment();

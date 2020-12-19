@@ -4,8 +4,10 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Shader;
 import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -31,8 +33,8 @@ import static android.content.Context.VIBRATOR_SERVICE;
 
 public class MonthCashflowBezier extends View {
 
-    Paint line, curve, curveselected, point, pointselected, textPaint;
-    Path curvePath, selectedCurvePath;
+    Paint line, curve, curveselected, areaSelected, point, pointselected, textPaint;
+    Path curvePath, selectedCurvePath, areaSelectedPath;
 
     public List<MonthCashflowModel> bezierData;
     private float smallestAmmount;
@@ -87,6 +89,11 @@ public class MonthCashflowBezier extends View {
         curveselected.setAntiAlias(true);
         curveselected.setStrokeWidth(12);
         curveselected.setAlpha(250);
+        
+        areaSelected = new Paint();
+        areaSelected.setStyle(Paint.Style.FILL);
+        //areaSelected.setColor(Color.parseColor("#6AA8EC0A"));
+        areaSelected.setAntiAlias(true);
 
         pointselected = new Paint();
         pointselected.setStyle(Paint.Style.FILL);
@@ -186,6 +193,7 @@ public class MonthCashflowBezier extends View {
         invalidate();
     }
 
+    LinearGradient arealg;
     //List<int>
     //Curve Parameters
     float x0,y0,x1,y1,x2,y2;
@@ -193,9 +201,10 @@ public class MonthCashflowBezier extends View {
     int currentX = 0;
     int circlePosition = 0;
     private void drawGraph(Canvas canvas) {
-        Log.i("DrawGraph", "Runs");
+        //Log.i("DrawGraph", "Runs");
         curvePath = new Path();
         selectedCurvePath = new Path();
+        areaSelectedPath = new Path();
         float selectedPX = -100;
         float selectedPY = -100;
         Date selectedDay = new Date();
@@ -206,6 +215,7 @@ public class MonthCashflowBezier extends View {
         lastPoint = new BezierCurvePoint((float)getAmountPos(0),(float)currentX);
         curvePath.moveTo(lastPoint.getTime(), lastPoint.getAmount());
         selectedCurvePath.moveTo(lastPoint.getTime(), lastPoint.getAmount());
+        areaSelectedPath.moveTo(lastPoint.getTime(), lastPoint.getAmount());
 
         for(int i = 0; i < emptyFirstDays; i++){
             float amountPos = getAmountPos(0);
@@ -253,9 +263,14 @@ public class MonthCashflowBezier extends View {
             currentX += dayWidth;
         }
 
+        arealg = new LinearGradient(0,0,0,getHeight(), Color.parseColor("#82D7E1"),Color.parseColor("#82D7E1"), Shader.TileMode.CLAMP);
+        areaSelected.setShader(arealg);
+        areaSelected.setAlpha(80);
+
         //Draw Bezier Curve
         canvas.drawPath(curvePath, curve);
         canvas.drawPath(selectedCurvePath, curveselected);
+        //canvas.drawPath(areaSelectedPath, areaSelected);
         canvas.drawCircle(selectedPX, selectedPY, 30, pointselected);
         Calendar selCal = Calendar.getInstance();
         selCal.setTime(selectedDay);
@@ -284,11 +299,16 @@ public class MonthCashflowBezier extends View {
             if(!lastSelected){
                 if(isPastCurve){
                     selectedCurvePath.cubicTo(x0, y0, x1, y1, x2, y2);
+                    areaSelectedPath.cubicTo(x0, y0, x1, y1, x2, y2);
                 }
             }
             else{
                 if(isPastCurve){
                     selectedCurvePath.cubicTo(x0, y0, x1, y1, x2, y2);
+                    areaSelectedPath.cubicTo(x0, y0, x1, y1, x2, y2);
+                    areaSelectedPath.lineTo(x2, getHeight());
+                    areaSelectedPath.lineTo(0, getHeight());
+                    areaSelectedPath.close();
                     isPastCurve = false;
                 }
 

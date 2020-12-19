@@ -1,5 +1,6 @@
 package com.news.goodlife.Fragments.SlideInFragments;
 
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,20 +10,30 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.news.goodlife.R;
 import com.news.goodlife.Singletons.SingletonClass;
 
 public class BudgetManagementFragment extends Fragment {
 
+    CardView slideinFragmentView;
+    View openBreakdownTV, rootContent, newcat;
+    SingletonClass singletonMain;
     View root;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.slidein_budget_manage_layout, container, false);
 
-        SingletonClass test = SingletonClass.getInstance();
+        singletonMain = SingletonClass.getInstance();
+        slideinFragmentView = root.findViewById(R.id.slidein_fragment);
+        openBreakdownTV = root.findViewById(R.id.openbudgetbreakdown);
+        slideinFragmentView.setX(singletonMain.getDisplayWidth());
+        rootContent = root.findViewById(R.id.budget_manage_content);
+        newcat = root.findViewById(R.id.new_cat);
 
         listeners();
         return root;
@@ -87,5 +98,61 @@ public class BudgetManagementFragment extends Fragment {
 
             }
         });
+        openBreakdownTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slideIn("Breakdown");
+            }
+        });
+        newcat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slideIn("NewCategory");
+            }
+        });
+
+    }
+
+    private Fragment deepFragment;
+    private void slideIn(String fragment) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        switch(fragment){
+            case "Breakdown":
+                deepFragment = new BudgetBreakdown();
+                ft.replace(slideinFragmentView.getId(), deepFragment);
+                break;
+            case "NewCategory":
+                deepFragment = new BudgetNew();
+                ft.replace(slideinFragmentView.getId(), deepFragment);
+            default:
+                break;
+        }
+        ft.commit();
+
+        ValueAnimator va;
+
+        va = ValueAnimator.ofInt(singletonMain.getDisplayWidth(), 0);
+
+
+        va.setDuration(250);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+
+                int animval = (int)valueAnimator.getAnimatedValue();
+                slideinFragmentView.setX(animval);
+                int move = singletonMain.getDisplayWidth() - animval;
+                rootContent.setX(-(int)(move/3));
+                //Set The both offset to be reset
+                singletonMain.setOffsetViewChild(slideinFragmentView);
+                singletonMain.setOffsetViewParent(rootContent);
+                singletonMain.getUniversalBackarrow().setX(-(int)(move/3));
+            }
+
+        });
+
+        va.start();
     }
 }

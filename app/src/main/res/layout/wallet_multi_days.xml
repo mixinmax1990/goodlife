@@ -21,8 +21,10 @@
         android:outlineProvider="none"/>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
         <include
+            android:visibility="gone"
             layout="@layout/wallet_main_month_graph"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

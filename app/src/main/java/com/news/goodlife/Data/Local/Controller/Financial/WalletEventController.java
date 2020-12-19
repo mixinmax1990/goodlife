@@ -54,6 +54,7 @@ public class WalletEventController extends DatabaseHelper {
         return insert;
 
     }
+
     public WalletEventModel getCashflow(int CashflowID){
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -206,7 +207,6 @@ public class WalletEventController extends DatabaseHelper {
 
         boolean success;
         SQLiteDatabase db = this.getWritableDatabase();
-
 
         try {
             db.delete(walletEventTable.TABLE_NAME, walletEventTable.getFinancialEventId() + " = ?",

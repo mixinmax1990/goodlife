@@ -1,0 +1,45 @@
+{
+    "logs": [
+        {
+            "outputFile": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-night-v27/values-night-v27.xml",
+            "map": [
+                {
+                    "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/values-night-v27/strings.xml",
+                    "from": {
+                        "startLines": "3,2",
+                        "startColumns": "4,4",
+                        "startOffsets": "94,55",
+                        "endColumns": "33,38",
+                        "endOffsets": "123,89"
+                    },
+                    "to": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,89",
+                        "endColumns": "33,38",
+                        "endOffsets": "84,123"
+                    }
+                },
+                {
+                    "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/values-night-v27/styles.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "48",
+                        "endColumns": "12",
+                        "endOffsets": "2537"
+                    },
+                    "to": {
+                        "startLines": "4",
+                        "startColumns": "4",
+                        "startOffsets": "128",
+                        "endLines": "50",
+                        "endColumns": "12",
+                        "endOffsets": "2610"
+                    }
+                }
+            ]
+        }
+    ]
+}

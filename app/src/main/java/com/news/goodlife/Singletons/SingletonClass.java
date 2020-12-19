@@ -1,5 +1,10 @@
 package com.news.goodlife.Singletons;
 
+import android.view.View;
+
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
 
 public class SingletonClass {
@@ -54,5 +59,43 @@ public class SingletonClass {
 
     public void setDatabaseController(DatabaseController databaseController) {
         this.databaseController = databaseController;
+    }
+
+    View UniversalBackarrow;
+
+    public View getUniversalBackarrow() {
+        return UniversalBackarrow;
+    }
+
+    public void setUniversalBackarrow(View universalBackarrow) {
+        UniversalBackarrow = universalBackarrow;
+    }
+
+    View offsetViewParent, offsetViewChild;
+
+    public View getOffsetViewParent() {
+        return offsetViewParent;
+    }
+
+    public void setOffsetViewParent(View offsetViewParent) {
+        this.offsetViewParent = offsetViewParent;
+    }
+
+    public View getOffsetViewChild() {
+        return offsetViewChild;
+    }
+
+    public void setOffsetViewChild(View offsetViewChild) {
+        this.offsetViewChild = offsetViewChild;
+    }
+
+    FragmentManager fragmentManager;
+
+    public FragmentManager getFragmentManager() {
+        return fragmentManager;
+    }
+
+    public void setFragmentManager(FragmentManager fragmentManager) {
+        this.fragmentManager = fragmentManager;
     }
 }
