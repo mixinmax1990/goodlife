@@ -49,6 +49,7 @@ public class BehindMenuView extends View {
         paint.setColor(Color.parseColor("#151619"));
         paint.setAlpha(170);
         canvas.drawRoundRect(rectF, dpToPx(25),dpToPx(25), paint);
+        setClipToOutline(false);
 
         //Drawfirstcircle
         paint.setColor(Color.parseColor("#000000"));

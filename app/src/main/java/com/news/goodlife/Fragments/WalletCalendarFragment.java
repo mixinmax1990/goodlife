@@ -25,6 +25,7 @@ import com.news.goodlife.Adapters.Recycler.CashflowMonthAdapter;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.Interfaces.CalendarSelectDayListener;
 
+import com.news.goodlife.LayoutManagers.WalletCalendarLinearLayoutManager;
 import com.news.goodlife.Models.CalendarLayoutDay;
 import com.news.goodlife.Models.CalendarLayoutMonth;
 import com.news.goodlife.R;
@@ -37,7 +38,7 @@ import java.util.List;
 public class WalletCalendarFragment extends Fragment {
 
     RecyclerView monthRecycler;
-    LinearLayoutManager LM;
+    WalletCalendarLinearLayoutManager LM;
     //List<toCalendarViewTransition> allTransitionNames;
     BorderRoundView slideIndicator;
     public StartActivity activity;
@@ -62,7 +63,7 @@ public class WalletCalendarFragment extends Fragment {
         activity = (StartActivity) getActivity();
 
         monthRecycler = root.findViewById(R.id.month_recycler);
-        LM = new LinearLayoutManager(getContext());
+        LM = new WalletCalendarLinearLayoutManager(getContext());
         slideIndicator = root.findViewById(R.id.slide_indicator);
         scroll_today = root.findViewById(R.id.scroll_today);
 
@@ -96,12 +97,17 @@ public class WalletCalendarFragment extends Fragment {
 
         return root;
     }
-    float elTD, elDist, menDist;
+    float elTDX, elTDY, elDist, menDist;
     int elasticContWidth;
     boolean menuVisible = false;
     boolean openingMenu = false;
 
     long slideVelocity = 0;
+    float dir_barrier = 10f;
+    boolean scrolling_horizontally = false;
+    boolean direction_identified = false;
+    float distX, distY;
+
     private void listeners() {
         monthRecycler.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
@@ -109,7 +115,8 @@ public class WalletCalendarFragment extends Fragment {
 
                 switch(e.getActionMasked()){
                     case MotionEvent.ACTION_DOWN:
-                        elTD = e.getX();
+                        elTDX = e.getX();
+                        elTDY = e.getY();
                         if(menuVisible) {
                             //showDisplayMenu(false);
                         }
@@ -124,25 +131,45 @@ public class WalletCalendarFragment extends Fragment {
                             slideVelocity = System.currentTimeMillis() - slideVelocity;
                             activity.autoFinishSlide((int)menDist, false, slideVelocity);
                         }
+                        LM.setScrollEnabled(true);
+                        direction_identified = false;
+                        scrolling_horizontally = false;
                         openingMenu = false;
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        menDist = (elTD - e.getRawX());
-                        if(menDist < 0){
-                            activity.slideCalendar = true;
-                            //Opening Menu
-                            openingMenu = true;
-                            //Log.i("Calendar", "Calendar");
-                            activity.slideMechanism((int)Math.abs(menDist), false);
-                            /*
+                        if(!direction_identified){
+                            distX = Math.abs(elTDX - e.getX());
+                            distY = Math.abs(elTDY - e.getY());
 
-                            if(!menuVisible){
-                                if(menDist > 100){
-                                    menDist = 100;
-                                    showDisplayMenu(true);
+                            if(distX > dir_barrier){
+                                //Scrolling HOrizontally Disable recycler Scroll
+                                direction_identified = true;
+                                scrolling_horizontally = true;
+                                elTDX = e.getX();
+                                LM.setScrollEnabled(false);
+                            }
+
+                            if(distY > dir_barrier){
+                                scrolling_horizontally = false;
+                                direction_identified = true;
+                            }
+
+                        }
+                        else{
+                            if(scrolling_horizontally){
+                                menDist = (elTDX - e.getRawX());
+
+                                if(menDist < 0){
+                                    activity.slideCalendar = true;
+                                    //Opening Menu
+                                    openingMenu = true;
+                                    //Log.i("Calendar", "Calendar");
+                                    activity.slideMechanism((int)Math.abs(menDist), false);
                                 }
-                                elasticEdgeView.setPull((int)menDist);
-                            }*/
+                            }
+                            else{
+                                LM.setScrollEnabled(true);
+                            }
                         }
 
                         break;

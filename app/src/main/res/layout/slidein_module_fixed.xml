@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fixed Costs"
+        android:id="@+id/fixed_module_cost_title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="100dp"
+        android:padding="0dp"
+        android:textSize="22sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="22 November 2020"
+        android:textSize="12sp"
+        android:alpha=".5"
+        android:id="@+id/fixed_module_date"
+        app:layout_constraintTop_toBottomOf="@id/fixed_module_cost_title"
+        app:layout_constraintStart_toStartOf="@id/fixed_module_cost_title"
+        app:layout_constraintEnd_toEndOf="@id/fixed_module_cost_title"
+        app:layout_constraintBottom_toTopOf="@id/fixed_module_content"
+        android:padding="6dp"
+        android:layout_marginBottom="20dp"
+        />
+
+
+    <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/fixed_module_date"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:borderCustomRadius="50"
+        app:backgroundCustomColor="#0DFFFFFF"
+        android:layout_margin="10dp"
+        android:id="@+id/fixed_module_content"
+        >
+
+        <com.news.goodlife.CustomViews.ProgressBarLabeld
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:tag="70%"
+            android:layout_margin="20dp"
+            android:id="@+id/universal_fixed_progress"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/universal_fixed_progress"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/universal_fixed_amount"
+            android:text="500,00€ of 700,25€"
+            android:layout_marginTop="5dp"
+            android:textSize="18sp"
+            />
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/universal_fixed_amount"
+            android:layout_marginTop="30dp"
+            android:padding="20dp"
+            app:flexDirection="column"
+            app:flexWrap="wrap">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.news.goodlife.CustomViews.ProgressBarLabeld
+                    android:layout_width="120dp"
+                    android:layout_height="6dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/status_fixed_item"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:tag=""
+                    android:id="@+id/progress_fixed_item"
+                    android:layout_marginTop="0dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Paid Nov 1"
+                    app:layout_constraintStart_toStartOf="@id/progress_fixed_item"
+                    app:layout_constraintEnd_toEndOf="@id/progress_fixed_item"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/progress_fixed_item"
+                    android:textSize="11sp"
+                    android:padding="0dp"
+                    android:id="@+id/status_fixed_item"
+                    android:alpha=".7"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:text="375,00€"
+                    app:layout_constraintStart_toEndOf="@id/progress_fixed_item"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/amount_fixed_item"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Miete"
+                    app:layout_constraintStart_toEndOf="@id/amount_fixed_item"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/label_fixed_item"
+                    android:padding="0dp"
+                    android:alpha=".7"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.news.goodlife.CustomViews.ProgressBarLabeld
+                    android:layout_width="120dp"
+                    android:layout_height="6dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/status_fixed_item2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:tag=""
+                    android:id="@+id/progress_fixed_item2"
+                    android:layout_marginTop="0dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Expected Nov 27"
+                    app:layout_constraintStart_toStartOf="@id/progress_fixed_item2"
+                    app:layout_constraintEnd_toEndOf="@id/progress_fixed_item2"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/progress_fixed_item2"
+                    android:textSize="11sp"
+                    android:padding="0dp"
+                    android:id="@+id/status_fixed_item2"
+                    android:alpha=".7"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:text="9,99€"
+                    app:layout_constraintStart_toEndOf="@id/progress_fixed_item2"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/amount_fixed_item2"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Netflix"
+                    app:layout_constraintStart_toEndOf="@id/amount_fixed_item2"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/label_fixed_item2"
+                    android:padding="0dp"
+                    android:alpha=".7"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.flexbox.FlexboxLayout>
+
+
+
+    </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

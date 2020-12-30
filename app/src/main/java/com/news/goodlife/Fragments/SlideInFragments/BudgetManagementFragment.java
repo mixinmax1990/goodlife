@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,14 +15,21 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.flexbox.FlexboxLayout;
+import com.news.goodlife.CustomViews.IconDoughnutView;
+import com.news.goodlife.Data.Local.Models.Financial.BudgetCategoryModel;
+import com.news.goodlife.Data.Local.Models.Financial.BudgetModel;
 import com.news.goodlife.R;
 import com.news.goodlife.Singletons.SingletonClass;
+
+import java.util.List;
 
 public class BudgetManagementFragment extends Fragment {
 
     CardView slideinFragmentView;
     View openBreakdownTV, rootContent, newcat;
     SingletonClass singletonMain;
+    FlexboxLayout budgetFlexCont;
     View root;
     @Nullable
     @Override
@@ -29,14 +37,45 @@ public class BudgetManagementFragment extends Fragment {
         root = inflater.inflate(R.layout.slidein_budget_manage_layout, container, false);
 
         singletonMain = SingletonClass.getInstance();
+
+        Log.i("HasCode Singleton", ""+ singletonMain.hashCode());
         slideinFragmentView = root.findViewById(R.id.slidein_fragment);
         openBreakdownTV = root.findViewById(R.id.openbudgetbreakdown);
         slideinFragmentView.setX(singletonMain.getDisplayWidth());
         rootContent = root.findViewById(R.id.budget_manage_content);
         newcat = root.findViewById(R.id.new_cat);
+        budgetFlexCont = root.findViewById(R.id.budget_flex_cont);
 
         listeners();
+
+        listSetBudgets();
         return root;
+    }
+
+    private void listSetBudgets() {
+
+        List<BudgetModel> allBudgets = singletonMain.getDatabaseController().BudgetController.getAllBudgets();
+
+        for(BudgetModel budget: allBudgets){
+
+            Log.i("BudgetCat ID", ""+budget.getCategoryid());
+            //TODO ASYNC Inflate Following
+            BudgetCategoryModel category = singletonMain.getDatabaseController().BudgetCategoryController.getBudgetCategory(Integer.parseInt(budget.getCategoryid()));
+
+            LayoutInflater inflater = LayoutInflater.from(root.getContext());
+            View catitem = inflater.inflate(R.layout.budget_category_item, null);
+
+            catitem.setTag(budget.id);
+            TextView name = catitem.findViewById(R.id.category_item_name);
+            name.setText(category.catname);
+
+            //TODO Set Clicklistner to edit and detail view Budget
+
+            IconDoughnutView dv = catitem.findViewById(R.id.icondoughnut);
+            dv.setCategory(category.getCatcolor(), category.getCaticon());
+
+            budgetFlexCont.addView(catitem);
+        }
     }
 
     boolean clicked = false;

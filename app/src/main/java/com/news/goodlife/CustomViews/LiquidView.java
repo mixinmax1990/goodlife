@@ -29,8 +29,8 @@ import java.util.Random;
 
 public class LiquidView extends CardView {
 
-    Paint liquidPaint, bgPaint, textPaint;
-    Path liquidPath;
+    Paint liquidPaint, liquidPaintMonth, bgPaint, textPaint;
+    Path liquidPath, liquidPathMonth;
     RectF frame;
 
     int wave = 0;
@@ -88,6 +88,16 @@ public class LiquidView extends CardView {
         invalidate();
     }
 
+    boolean hideOil = false;
+
+    public boolean isHideOil() {
+        return hideOil;
+    }
+
+    public void setHideOil(boolean hideOil) {
+        this.hideOil = hideOil;
+    }
+
     int  waveHeight, minWaveHeight, maxWaveHeight;
     public LiquidView(@NonNull Context context) {
         super(context);
@@ -124,6 +134,7 @@ public class LiquidView extends CardView {
 
     private void setPaints() {
         liquidPaint = new Paint();
+        liquidPaintMonth = new Paint();
         bgPaint = new Paint();
         textPaint = new Paint();
 
@@ -131,6 +142,11 @@ public class LiquidView extends CardView {
         liquidPaint.setColor(Color.parseColor(getLiquidColor()));
         //1a9658   961a34  009cff
         liquidPaint.setAntiAlias(true);
+
+        liquidPaintMonth.setStyle(Paint.Style.FILL);
+        liquidPaintMonth.setColor(Color.BLUE);
+        liquidPaintMonth.setAntiAlias(true);
+        liquidPaintMonth.setAlpha(35);
 
         bgPaint.setStyle(Paint.Style.FILL);
         bgPaint.setColor(Color.parseColor(getLiquidColor()));
@@ -148,6 +164,13 @@ public class LiquidView extends CardView {
         textPaint.setColor(Color.parseColor(getLiquidTextPaint()));
         textPaint.setAntiAlias(true);
     }
+
+    public void setSavingsBG(){
+        bgPaint.setColor(Color.parseColor("#335072"));
+        bgPaint.setAlpha(255);
+        invalidate();
+    }
+
 
     public boolean isTextEnabled() {
         return textEnabled;
@@ -182,6 +205,9 @@ public class LiquidView extends CardView {
         //canvas.drawRect(frame, bgPaint);
 
         liquidPath = new Path();
+        liquidPathMonth = new Path();
+
+        liquidPathMonth.moveTo(0,0);
 
         createWaves(waveNo);
 
@@ -189,9 +215,14 @@ public class LiquidView extends CardView {
         liquidPath.lineTo(0, getHeight());
         liquidPath.close();
 
+        liquidPathMonth.lineTo(getWidth(), 0);
+        liquidPathMonth.close();
+
         canvas.drawRoundRect(new RectF(0,0,getWidth(),getHeight()),50,50,bgPaint);
 
         canvas.drawPath(liquidPath, liquidPaint);
+        //canvas.drawPath(liquidPathMonth, liquidPaintMonth)
+
         textPaint.setColor(Color.parseColor(getLiquidTextPaint()));
         textPaint.setTextSize(textSize * getResources().getDisplayMetrics().scaledDensity);
 
@@ -212,6 +243,7 @@ public class LiquidView extends CardView {
 
     }
     int waveNo;
+    int mb = 100;
     private void createWaves(int waveCount){
         boolean top = true;
         int x1,y1,x2,y2,x3,y3;
@@ -223,6 +255,7 @@ public class LiquidView extends CardView {
         prev_y3 = baseline - (int)(randomWaveHeight(0) * waveMovementUp);
 
         liquidPath.moveTo(prev_x3, prev_y3);
+        liquidPathMonth.lineTo(prev_x3, prev_y3 + mb);
 
         for(int i = 1; i <= waveCount; i++){
             newWavePeakX = (waveLength * i);
@@ -245,6 +278,7 @@ public class LiquidView extends CardView {
                 y3 = prev_y3 = newWavePeakY;
 
             liquidPath.cubicTo(x1,y1,x2,y2,x3,y3);
+            liquidPathMonth.cubicTo(x1,y1 + mb,x2,y2 + mb,x3,y3 + mb);
             }
 
     }

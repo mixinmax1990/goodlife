@@ -188,22 +188,10 @@ public class CashflowMonthAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             root.addView(day);
 
-            final LiquidView dayLiquid = day.findViewById(R.id.day_liquid);
+
             TextView dayNameTV = day.findViewById(R.id.day_name);
             TextView dayNumberTV = day.findViewById(R.id.monthview_day_number);
             BorderRoundView liquidContainer = day.findViewById(R.id.day_item_liquidcard);
-            dayLiquid.setTextSize(12);
-            dayLiquid.noText(true);
-            dayLiquid.setBaseline(randomValue(0, 200));
-
-            dayLiquid.getViewTreeObserver().addOnDrawListener(new ViewTreeObserver.OnDrawListener() {
-                @Override
-                public void onDraw() {
-
-                    dayLiquid.animateWave();
-                }
-
-            });
 
             liquidContainer.setOnClickListener(new View.OnClickListener() {
                 @Override

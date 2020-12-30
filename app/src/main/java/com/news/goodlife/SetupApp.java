@@ -14,7 +14,7 @@ public class SetupApp {
 
     public SetupApp() {
 
-        checkBudgetCategories();
+        //checkBudgetCategories();
     }
 
     List<BudgetCategoryModel> budgetCatData;

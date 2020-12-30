@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.news.goodlife.CustomViews.LiquidView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/budgetTopLiquid"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="3:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/budgetTopLiquid"
+        android:src="@drawable/ic_baseline_notifications_active_24"
+        android:elevation="40dp"
+        android:id="@+id/budget_iconview"
+        android:layout_marginTop="50dp"
+        android:padding="30dp"
+        android:outlineProvider="none"
+        android:alpha=".5"
+        app:tint="@android:color/black" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Budget Name"
+        app:layout_constraintBottom_toBottomOf="@id/budget_iconview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="100dp"
+        android:textSize="22sp"
+        android:alpha=".8"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@android:color/black"
+        android:outlineProvider="none"
+        android:id="@+id/budgetname"/>
+
+    <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        app:borderCustomRadius="50"
+        app:backgroundCustomColor="#2C000000"
+        android:elevation="200dp"
+        android:id="@+id/budget_modfrag_container"
+        app:layout_constraintTop_toBottomOf="@id/budget_iconview"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

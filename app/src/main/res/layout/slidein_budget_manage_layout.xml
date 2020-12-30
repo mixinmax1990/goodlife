@@ -91,6 +91,7 @@
             app:flexWrap="wrap"
             app:flexDirection="row"
             android:padding="10dp"
+            android:id="@+id/budget_flex_cont"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/budget_breakdown_cont">
             <androidx.constraintlayout.widget.ConstraintLayout

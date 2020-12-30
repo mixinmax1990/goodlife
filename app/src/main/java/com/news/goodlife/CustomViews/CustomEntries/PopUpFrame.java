@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -31,6 +32,7 @@ public class PopUpFrame extends ConstraintLayout {
 
     Paint paintFill, paintStroke, expandableArcPaint;
     RectF roundedRectangle, expandEdgeRectangle;
+    Path roundPath;
 
     AttributeSet attrs;
     Context context;
@@ -42,6 +44,8 @@ public class PopUpFrame extends ConstraintLayout {
     public PopUpFrame(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
+
+
 
         //Get Color Attributes
         TypedValue typedValue = new TypedValue();
@@ -64,18 +68,40 @@ public class PopUpFrame extends ConstraintLayout {
 
 
     int expandMargin = 25;
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+    }
+
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         roundedRectangle = new RectF(0 + strokeSize, 0 + strokeSize, getWidth() - strokeSize, getHeight() - strokeSize);
         expandEdgeRectangle = new RectF((int)(getWidth() - radiusSize * 1) - expandMargin, (int)(getHeight() - radiusSize * 1) - expandMargin, getWidth() - expandMargin, getHeight() - expandMargin);
 
 //#1C2125
+            roundPath = new Path();
 
             paintFill.setColor(color);
             //canvas.drawRoundRect(roundedRectangle, radiusSize, radiusSize, paintFill);
             paintFill.setColor(Color.parseColor("#FFFFFF"));
             paintFill.setAlpha(10);
-            canvas.drawRoundRect(roundedRectangle, radiusSize, radiusSize, paintFill);
+
+            roundPath.reset();
+            roundPath.addRoundRect(roundedRectangle, radiusSize, radiusSize, Path.Direction.CW);
+            roundPath.close();
+
+            canvas.clipPath(roundPath);
+
+            canvas.drawPath(roundPath, paintFill);
+            //canvas.drawRoundRect(roundedRectangle, radiusSize, radiusSize, paintFill);
+            //canvas
+
 
         if(stroke){
 

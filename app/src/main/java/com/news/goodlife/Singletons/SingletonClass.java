@@ -1,11 +1,15 @@
 package com.news.goodlife.Singletons;
 
+import android.content.res.Resources;
 import android.view.View;
 
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
+import com.news.goodlife.Data.Remote.Klarna.Controller.KlarnaRequestController;
+import com.news.goodlife.Models.ObservableFragmentChange;
+
+import java.util.Observable;
 
 public class SingletonClass {
 
@@ -13,6 +17,8 @@ public class SingletonClass {
 
     //private constructor.
     private SingletonClass(){
+
+
 
         //Prevent form the reflection api.
         if (sSoleInstance != null){
@@ -32,6 +38,13 @@ public class SingletonClass {
 
         return sSoleInstance;
     }
+
+    //Klarna Controller
+    KlarnaRequestController klarna = new KlarnaRequestController();
+
+    public ObservableFragmentChange changeFragment = new ObservableFragmentChange("None");
+
+
 
     int DisplayWidth;
     int DisplayHeight;
@@ -97,5 +110,9 @@ public class SingletonClass {
 
     public void setFragmentManager(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
+    }
+
+    public int dpToPx(int dp) {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 }

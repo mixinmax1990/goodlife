@@ -14,9 +14,9 @@ public class BudgetTable {
     private static final String CREATE_BUDGET_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
             + BUDGET_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + BUDGETCAT_ID + " TEXT,"
-            + AMOUNT + "TEXT,"
-            + FREQUENCY + "TEXT,"
-            + STARTDATE + "TEXT,"
+            + AMOUNT + " TEXT,"
+            + FREQUENCY + " TEXT,"
+            + STARTDATE + " TEXT,"
             + ENDDATE + " TEXT"+
             ")";
 

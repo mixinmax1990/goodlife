@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.animation.Animator;
@@ -50,21 +51,28 @@ import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
+import com.news.goodlife.CustomViews.CustomEntries.PageIndicatorBar;
 import com.news.goodlife.CustomViews.CustomIcons.MenuIcons;
+import com.news.goodlife.CustomViews.CustomIcons.WalletIcon;
+import com.news.goodlife.CustomViews.CustomIcons.WalletIconCard;
 import com.news.goodlife.CustomViews.ElasticEdgeView;
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
-import com.news.goodlife.Data.Local.Models.Financial.BudgetCategoryModel;
 import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
 import com.news.goodlife.Fragments.SlideInFragments.BankTransactionsFragment;
 import com.news.goodlife.Fragments.SlideInFragments.BudgetManagementFragment;
+import com.news.goodlife.Fragments.SlideInFragments.BudgetModuleFragment;
 import com.news.goodlife.Fragments.SlideInFragments.FixedCostsFragment;
 import com.news.goodlife.Fragments.SlideInFragments.FixedIncomeFragment;
+import com.news.goodlife.Fragments.SlideInFragments.FixedModuleFragment;
+import com.news.goodlife.Fragments.SlideInFragments.KlarnaAccountOne;
 import com.news.goodlife.Fragments.SlideInFragments.SubcriptionsFragment;
 import com.news.goodlife.Fragments.WalletCalendarFragment;
 import com.news.goodlife.Fragments.WalletTodayFragment;
+import com.news.goodlife.Functions.RelationshipMapping;
 import com.news.goodlife.Interfaces.OnClickedCashflowItemListener;
 import com.news.goodlife.Interfaces.CalendarSelectDayListener;
 import com.news.goodlife.Interfaces.WalletDatabaseEvents;
+import com.news.goodlife.LayoutManagers.MultiDaysLinearLayoutManager;
 import com.news.goodlife.Models.CalendarLayoutDay;
 import com.news.goodlife.Singletons.SingletonClass;
 import com.news.goodlife.Tools.CameraScan.CameraScanFragment;
@@ -87,6 +95,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -129,7 +139,11 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
 
     //MenuIcons
-    MenuIcons walletBTN, goalsBTN, analysisBTN, hubBTN;
+    MenuIcons goalsBTN, analysisBTN, hubBTN, magicButton;
+    WalletIcon walletBTN;
+    PageIndicatorBar walletPageIndicator;
+
+    WalletIconCard walletCardOne;
 
     //Menu Navigation
     View menuFloatingBtn;
@@ -142,6 +156,11 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
     DatabaseController myDB;
 
     //Callbacks
+
+
+    //Connect Accounts
+
+    View connectAccountOne;
 
     //Loading Data TODO make Api Call Klarna
     public String loadJSONFromAsset(){
@@ -246,16 +265,20 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         singletonClass.setDatabaseController(myDB);
         SetupApp setup = new SetupApp();
 
+        singletonClass.changeFragment.addObserver(changeFragment);
+
 
 
         walletBTN = findViewById(R.id.buttonWallet);
         goalsBTN = findViewById(R.id.buttonGoals);
         analysisBTN = findViewById(R.id.buttonAnalysis);
         hubBTN = findViewById(R.id.buttonHub);
+        magicButton = findViewById(R.id.magic_button);
+        walletPageIndicator = findViewById(R.id.wallet_page_indicator);
+
+        walletCardOne = findViewById(R.id.walletCardOne);
 
         menu_drawer = findViewById(R.id.menu_drawer);
-
-
 
         fragment_container_one = findViewById(R.id.fragment_container_one);
         fragment_container_two = findViewById(R.id.fragment_container_two);
@@ -282,6 +305,9 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         previewImage = findViewById(R.id.previewImage);
 
 
+        //Connect Account
+        connectAccountOne = findViewById(R.id.connect_account_one);
+
         loadInitData();
 
         //Test Singleton
@@ -290,8 +316,10 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         //callbacks
        //walletDaysCallback = (WalletDaysCallback) this.context;
         blurViewMenu = findViewById(R.id.blurviewmenu);
+
         blur(20);
 
+        //setWalletCards();
 
         if (getResources().getBoolean(R.bool.dark)) {
 
@@ -349,6 +377,63 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             }
         });
     }
+
+    private void setWalletCards() {
+        int walletWidth;
+        final int padding = singletonClass.dpToPx(12);
+
+        walletBTN.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                int cardWidth = walletBTN.getWidth() - (padding * 2);
+                int cardHeight = (cardWidth / 6) * 4;
+
+                ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) walletCardOne.getLayoutParams();
+
+                lp.setMargins(padding, padding, padding, padding);
+                lp.width = cardWidth;
+                lp.height = cardHeight;
+
+                walletCardOne.setLayoutParams(lp);
+
+                walletBTN.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+    }
+
+    private Observer changeFragment = new Observer() {
+        @Override
+        public void update(Observable o, Object newValue) {
+
+            //Slidein Fragment Container and Load
+            Log.d("Observer Main Activity", "a1 has changed, new value:"+ newValue);
+
+            switch(newValue.toString()){
+                case "IncomeModule":
+                    slideInContainerThree(fragment_container_one);
+                    openSideFragment("IncomingModule");
+                    break;
+                case "OutgoingModule":
+                    slideInContainerThree(fragment_container_one);
+                    openSideFragment("OutgoingModule");
+                    break;
+                case "BudgetModule":
+                    slideInContainerThree(fragment_container_one);
+                    openSideFragment("BudgetModule");
+                    //Contains ID as Data
+                    break;
+                case "FixedModule":
+                    slideInContainerThree(fragment_container_one);
+                    openSideFragment("FixedModule");
+                    break;
+                default:
+                    break;
+
+            }
+
+        }
+    };
 
     View menuone, menutwo, menuthree, menufour, menufive, connectBankMenu;
     private void menuDrawer(){
@@ -434,7 +519,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             }
         }
 
-        moveMenuButtonIndicator(slideProgess);
+        movePageIndicator(slideProgess);
 
         setSlideWidth(move, open);
         float visibleScreen;
@@ -460,7 +545,6 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         //scrollHeightMenu((move / 20)*-1, true);
 
     }
-
     public void slideSideMenu(int dist){
         float slideprogress = (float)(displayWidth - (dist*2)) / displayWidth;
         float revSlideprogress = (1f - slideprogress)*2;
@@ -495,11 +579,15 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
     }
 
-    private void moveMenuButtonIndicator(float perc){
+    private void movePageIndicator(float perc){
 
         if(selectedFragment == 3 || selectedFragment == 5){
            // Wallet is selected
-            walletBTN.moveIndicator(perc);
+            //walletBTN.moveIndicator(perc);
+            //TODO change move Indicator to the Right Position
+
+            walletPageIndicator.movePoint(perc);
+            //hh
         }
 
     }
@@ -599,7 +687,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
     }
 
     View movedView = null;
-    public void slideInContainerThree(@Nullable View frame){
+    public void slideInContainerThree(@Nullable final View frame){
 
         movedView = frame;
 
@@ -638,7 +726,6 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         va.setInterpolator(testInterpolator);
         va.start();
     }
-
     public void slideOutContainerThree(final boolean showdrawer){
         float x = 0;
         if(movedView != null){
@@ -647,7 +734,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         ValueAnimator va;
         va = ValueAnimator.ofInt(0, displayWidth);
         va.setDuration(300);
-        float finalX = x;
+        final float finalX = x;
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
@@ -862,6 +949,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         Drawable windowBackground = decorView.getBackground();
 
         blurViewMenu.setClipToOutline(true);
+
         blurViewMenu.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
 
         blurViewMenu.setupWith(rootView)
@@ -942,7 +1030,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                     case MotionEvent.ACTION_DOWN:
                         if(selectedFragment != 3){
                             resetButtonTint();
-                            walletBTN.animateEnter();
+                            //walletBTN.animateEnter();
                             selectedFragment = 3;
                             changeSelectedColor();
                         }
@@ -1060,6 +1148,82 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         });
 
 
+        magicButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch(motionEvent.getActionMasked()){
+                    case MotionEvent.ACTION_DOWN:
+                        //Run Code
+                        doMagic(true);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        //Stop Code
+                        doMagic(false);
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+
+                        break;
+                }
+                return true;
+            }
+        });
+
+        connectAccountOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                slideInContainerThree(fragment_container_one);
+                openSideFragment("AccountOne");
+            }
+        });
+
+
+    }
+
+    private void doMagic(boolean action){
+        if(action){
+            if(selectedFragment == 5){
+                //Multidays is opened get All Visible Day Views
+
+                RelationshipMapping relationshipMapping = new RelationshipMapping();
+                List<RecyclerView.ViewHolder> visibleViewHolders = new ArrayList<>();
+
+                MultiDaysLinearLayoutManager llm = walletMultiDaysFragment.getLlm();
+
+
+                for(int i = llm.findFirstVisibleItemPosition(); i <= llm.findLastVisibleItemPosition(); i++){
+                    //Log.i("Visible Element Loop", "Runs"+i);
+
+                        RecyclerView.ViewHolder visibleViewHolder = walletMultiDaysFragment.getCashflow_recycler().findViewHolderForAdapterPosition(i);
+                        visibleViewHolders.add(visibleViewHolder);
+                }
+
+                relationshipMapping.setVisibleDays(visibleViewHolders);
+                relationshipMapping.mapRelationships();
+            }
+        }
+        else{
+
+            if(selectedFragment == 5){
+                //Multidays is opened get All Visible Day Views
+
+                RelationshipMapping relationshipMapping = new RelationshipMapping();
+                List<RecyclerView.ViewHolder> visibleViewHolders = new ArrayList<>();
+
+                MultiDaysLinearLayoutManager llm = walletMultiDaysFragment.getLlm();
+
+
+                for(int i = llm.findFirstVisibleItemPosition(); i <= llm.findLastVisibleItemPosition(); i++){
+                    //Log.i("Visible Element Loop", "Runs"+i);
+
+                    RecyclerView.ViewHolder visibleViewHolder = walletMultiDaysFragment.getCashflow_recycler().findViewHolderForAdapterPosition(i);
+                    visibleViewHolders.add(visibleViewHolder);
+                }
+
+                relationshipMapping.setVisibleDays(visibleViewHolders);
+                relationshipMapping.clearMap();
+            }
+
+        }
     }
 
 
@@ -1141,6 +1305,24 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                 break;
             case "BankTransactions":
                 opendSideFragment = new BankTransactionsFragment();
+                ft.replace(fragment_container_three.getId(), opendSideFragment);
+                break;
+            case "IncomeModule":
+                // Open Income Fragment
+                // opendSideFragment = new
+                break;
+            case "OutgoingModule":
+                break;
+            case "FixedModule":
+                opendSideFragment = new FixedModuleFragment();
+                ft.replace(fragment_container_three.getId(), opendSideFragment);
+                break;
+            case "BudgetModule":
+                opendSideFragment = new BudgetModuleFragment(singletonClass.changeFragment.getData().get(0).toString());
+                ft.replace(fragment_container_three.getId(), opendSideFragment);
+                break;
+            case "AccountOne":
+                opendSideFragment = new KlarnaAccountOne();
                 ft.replace(fragment_container_three.getId(), opendSideFragment);
                 break;
             default:

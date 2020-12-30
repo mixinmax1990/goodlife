@@ -67,21 +67,22 @@ public class IconDoughnutView extends FrameLayout {
         ring = new Paint();
         ring.setStyle(Paint.Style.STROKE);
         ring.setAntiAlias(true);
-        ring.setStrokeWidth(8);
+        ring.setStrokeWidth(10);
         ring.setStrokeJoin(Paint.Join.ROUND);
         ring.setStrokeCap(Paint.Cap.ROUND);
         ring.setPathEffect(new CornerPathEffect(20));
+        ring.setAlpha(200);
 
         ringbg = new Paint();
         ringbg.setStyle(Paint.Style.STROKE);
         ringbg.setAntiAlias(true);
-        ringbg.setStrokeWidth(8);
+        ringbg.setStrokeWidth(10);
         ringbg.setColor(Color.WHITE);
         ringbg.setAlpha(50);
 
     }
 
-    int marginPerc = 30;
+    int marginPerc = 20;
     int margin, iconmargin;
     float sweepAngle;
     @Override
@@ -89,7 +90,7 @@ public class IconDoughnutView extends FrameLayout {
         super.onDraw(canvas);
         sweepAngle = ((float)360 / 100) * 80;
         margin = (int)(getWidth() / 100) * marginPerc;
-        iconmargin = (int)(getWidth()/3.5f);
+        iconmargin = (int)(getWidth()/3f);
 
         if(add){
 
@@ -115,8 +116,9 @@ public class IconDoughnutView extends FrameLayout {
             ringRectF.bottom = getHeight() - margin;
 
             catPaint.setAlpha(40);
-            canvas.drawRoundRect(rectF, 50,50, catPaint);
+            //canvas.drawRoundRect(rectF, 50,50, catPaint);
             canvas.drawArc(ringRectF, -90, 360, false, ringbg);
+            ring.setAlpha(255);
             canvas.drawArc(ringRectF, -90, sweepAngle, false, ring);
 
             //Draw Icon
@@ -126,6 +128,7 @@ public class IconDoughnutView extends FrameLayout {
                     getWidth() - iconmargin,
                     getHeight() - iconmargin
             );
+            icon.setAlpha(180);
 
             icon.draw(canvas);
         }

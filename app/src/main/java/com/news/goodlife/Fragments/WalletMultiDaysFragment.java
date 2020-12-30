@@ -87,7 +87,7 @@ public class WalletMultiDaysFragment extends Fragment{
     FrameLayout menu_container;
     View monthviewIcon;
     public StartActivity activity;
-    TextView overflowDay;
+    TextView overflowDate;
     BlurView blurTopGraph;
 
     BorderRoundView slideIndicator;
@@ -199,7 +199,7 @@ public class WalletMultiDaysFragment extends Fragment{
         //skeletonLP.width = 0;
         //elasticContentSkeleton.setLayoutParams(skeletonLP);
         monthviewIcon = root.findViewById(R.id.monthview_icon);
-        overflowDay = root.findViewById(R.id.overflow_day);
+        overflowDate = root.findViewById(R.id.overflow_date);
         slideIndicator = root.findViewById(R.id.slide_indicator);
 
         cashflow_recycler.scrollToPosition(todayItemPosition);
@@ -244,6 +244,14 @@ public class WalletMultiDaysFragment extends Fragment{
         listeners();
 
         return root;
+    }
+
+    public MultiDaysLinearLayoutManager getLlm() {
+        return llm;
+    }
+
+    public RecyclerView getCashflow_recycler() {
+        return cashflow_recycler;
     }
 
     private void blur(float radius, BlurView view) {
@@ -620,7 +628,9 @@ public class WalletMultiDaysFragment extends Fragment{
                             }
                             else{
                                 llm.setScrollEnabled(true);
-                                monthGraph.setVisibility(View.VISIBLE);
+
+                                //Todo Completely remove Month Graph from Here
+                                //monthGraph.setVisibility(View.VISIBLE);
                             }
 
                         }
@@ -889,7 +899,7 @@ public class WalletMultiDaysFragment extends Fragment{
                // Log.i("Scrolling", "Downward");
 
                 try{
-                    //getTopDay();
+                    getTopDay();
                     ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(llm.findFirstVisibleItemPosition());
                     bezier_curve_cont.setScrolledDate(vh.itemView.findViewById(R.id.item_date).getTag().toString());
 
@@ -904,7 +914,7 @@ public class WalletMultiDaysFragment extends Fragment{
                 //System.out.println("Scrolled Upwards - " +dy);
                 //Log.i("Scrolling", "Upward");
                 try{
-                    //getTopDay();
+                    getTopDay();
 
                     ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(llm.findFirstVisibleItemPosition());
                     bezier_curve_cont.setScrolledDate(vh.itemView.findViewById(R.id.item_date).getTag().toString());
@@ -969,22 +979,22 @@ public class WalletMultiDaysFragment extends Fragment{
 
     //SOme Test Stuff
     TextView topdate;
+    TextView topday;
     ViewHolder scrollingTopViewHolder;
-    TextView hiddenDay;
+    TextView hiddenDay, hiddenDate;
     private void getTopDay() {
         //Log.i("Function","is Running");
         //llm.findFirstVisibleItemPosition();
         scrollingTopViewHolder = cashflow_recycler.findViewHolderForAdapterPosition(llm.findFirstVisibleItemPosition());
-        topdate = scrollingTopViewHolder.itemView.findViewById(R.id.item_day);
+        topdate = scrollingTopViewHolder.itemView.findViewById(R.id.item_date);
+        topday = scrollingTopViewHolder.itemView.findViewById(R.id.item_day);
         //Log.i("TopDay",""+topdate.getText());
-        if(overflowDay.getText() != topdate.getText()){
+        if(overflowDate.getText() != topdate.getText()){
 
-            if(hiddenDay != null){
-                hiddenDay.setVisibility(VISIBLE);
-            }
-            overflowDay.setText(topdate.getText());
-            hiddenDay = topdate;
-            hiddenDay.setVisibility(INVISIBLE);
+
+            overflowDate.setText(topdate.getText());
+            hiddenDate = topdate;
+
         }
 
 

@@ -2,13 +2,27 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
     android:elevation="105dp"
     android:outlineProvider="none"
     android:layout_width="match_parent"
-    android:paddingTop="0dp">
-<com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
-    android:id="@+id/budget_liquid_container"
+    android:paddingTop="0dp"
+    android:paddingBottom="50dp"
+    android:layout_marginTop="0dp"
+    android:layout_marginBottom="0dp">
+    <com.news.goodlife.CustomViews.RelationshipMapView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:elevation="200dp"
+        android:outlineProvider="none"
+        android:id="@+id/overlay_relation_map"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+<com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
+    android:id="@+id/module_status_overview"
     android:layout_width="0dp"
     android:layout_height="0dp"
     app:cardBackgroundColor="#00000000"
@@ -19,62 +33,59 @@
     app:layout_constraintBottom_toBottomOf="@id/right_up_frame"
     app:strokeCustomColor="#00FFFFFF"
     app:strokeCustomSize="1"
+    android:padding="16dp"
     android:layout_marginTop="10dp"
     android:layout_marginStart="10dp"
     android:layout_marginEnd="5dp"
     app:cardElevation="0dp"
     >
-    <com.news.goodlife.CustomViews.LiquidView
-        android:id="@+id/budget_liquid"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:cardBackgroundColor="?attr/liquidBackground"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:cardCornerRadius="15dp"
-        app:cardElevation="0dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Day Budget"
-        android:textSize="18sp"
-        android:padding="15dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/left"
-        android:text="Remaining"
-        app:layout_constraintStart_toStartOf="@id/left"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="37,20€"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="24sp"
-        android:id="@+id/left"
-        android:layout_margin="15dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="/50,00€"
-        app:layout_constraintStart_toEndOf="@id/left"
-        app:layout_constraintBottom_toBottomOf="@id/left"
-        android:textSize="14sp"
-        android:layout_marginBottom="3dp"
-        android:id="@+id/had"
-        />
 
-</com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/available_title"
+        android:text="Available Cash"
+        android:alpha=".7"
+        android:textSize="12sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/available_amount"
+        android:text="450,44€"
+        app:layout_constraintTop_toBottomOf="@id/available_title"
+       app:layout_constraintStart_toStartOf="parent"
+        android:textSize="30sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/remaining_budget_title"
+        android:text="Remaining Budgets"
+        android:alpha=".7"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/remaining_budget_amount"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/remaining_budget_amount"
+        android:text="72%"
+        app:layout_constraintTop_toBottomOf="@id/available_amount"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="26sp"/>
+
+
+
+</com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>>
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="1:1"
         android:id="@+id/right_up_frame"
-        app:layout_constraintStart_toEndOf="@id/budget_liquid_container"
+        app:layout_constraintStart_toEndOf="@id/module_status_overview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/item_date"
 
@@ -107,12 +118,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ausgaben"
-                android:alpha=".5"
+                android:alpha=".7"
                 app:layout_constraintBottom_toTopOf="@id/outgoing_value"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_margin="5dp"
-                android:textSize="11sp"
+                android:layout_margin="4dp"
+                android:textSize="12sp"
                 android:textColor="?attr/textColorPrimary"
                 android:id="@+id/outgoint_title"/>
             <TextView
@@ -146,12 +157,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Einnahmen"
-                android:textSize="11sp"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toTopOf="@id/incoming_value"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_margin="5dp"
-                android:alpha=".5"
+                android:layout_margin="4dp"
+                android:alpha=".7"
                 android:id="@+id/incoming_title"/>
             <TextView
                 android:id="@+id/incoming_value"
@@ -178,59 +189,140 @@
         app:layout_constraintStart_toStartOf="@id/events_outgoing"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="0dp"
+        android:padding="4dp"
         app:backgroundCustomColor="#000000"
         app:borderCustomRadius="50"
         android:id="@+id/cashcat_frame"
         >
-        <com.news.goodlife.CustomViews.DayBudgetShiftChart
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/item_day_bubble_chart"
-            android:layout_margin="0dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
-        <com.news.goodlife.CustomViews.DoughnutChartCategories
+        <com.news.goodlife.CustomViews.CustomEntries.LabeledSmallTextView
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_margin="15dp"
-            android:id="@+id/graph"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            android:visibility="gone"
-            />
-            <com.google.android.flexbox.FlexboxLayout
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/cashcat_flex"
-                app:flexDirection="column"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/graph"
-                app:layout_constraintEnd_toEndOf="parent"/>
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="3dp"
+            android:tag="Sparkasse"
+            android:paddingTop="15dp"
+            android:paddingStart="8dp"
+            android:paddingBottom="8dp"
+            android:paddingEnd="8dp"
+            android:text="2.175,50€"
+            android:textSize="12sp"
+            android:background="#212226"
+            android:textAlignment="center"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="8dp"
+            android:id="@+id/account_one_balance_cont"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/revenue_module_amount"
+            app:layout_constraintEnd_toStartOf="@id/account_two_balance_cont"/>
 
 
+        <com.news.goodlife.CustomViews.CustomEntries.LabeledSmallTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="6dp"
+            android:tag="Volksbank"
+            android:paddingTop="15dp"
+            android:paddingStart="8dp"
+            android:paddingBottom="8dp"
+            android:paddingEnd="8dp"
+            android:text="1.505,50€"
+            android:textSize="12sp"
+            android:background="#212226"
+            android:textAlignment="center"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="8dp"
+            android:id="@+id/account_two_balance_cont"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/revenue_module_amount"
+            app:layout_constraintStart_toEndOf="@id/account_one_balance_cont"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3.775,20€"
+            android:id="@+id/revenue_module_amount"
+            app:layout_constraintTop_toBottomOf="@id/account_one_balance_cont"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:elevation="10dp"
+            android:textSize="20sp"/>
     </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
-
 
     <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         app:borderCustomRadius="50"
-        app:backgroundCustomColor="#1a1b1c"
+        app:backgroundCustomColor="#00595959"
+        android:id="@+id/budget_main_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/module_status_overview"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Budgets"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:textSize="12sp"
+            android:paddingBottom="8dp"
+            android:alpha=".7"
+            android:id="@+id/budget_module_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <com.google.android.flexbox.FlexboxLayout
+            android:orientation="horizontal"
+            app:flexDirection="row"
+            app:flexWrap="wrap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/budget_container"
+            android:paddingBottom="16dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/budget_module_title"/>
+
+    </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
+
+    <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="150dp"
+        app:borderCustomRadius="50"
+        app:backgroundCustomColor="#00595959"
         android:id="@+id/casflow_activities_container"
-        app:layout_constraintTop_toBottomOf="@id/budget_liquid_container"
-        android:layout_margin="10dp">
+        app:layout_constraintTop_toBottomOf="@id/budget_main_container"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cash"
-            android:textSize="18sp"
-            android:padding= "10dp"
+            android:text="Bank Activities"
+            android:textSize="12sp"
+            android:padding= "16dp"
+            android:alpha=".7"
             android:id="@+id/cash_pop_title"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"/>
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/no_transactions"
+            android:text="No Transactions"
+            android:alpha=".7"
+            android:textSize="12sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="#FFFFFF"
+            />
         <com.google.android.flexbox.FlexboxLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -246,7 +338,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-
+                android:visibility="gone"
                 android:id="@+id/day_item_add_cashflow"
                 android:padding="40dp"
                 >
@@ -388,36 +480,390 @@
     </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
 
     <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_margin="10dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         app:borderCustomRadius="50"
         app:layout_constraintTop_toBottomOf="@id/casflow_activities_container"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/savings_module"
+        android:visibility="visible"
+        android:id="@+id/goals_module">
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:flexDirection="row"
+            app:flexWrap="wrap"
+            android:paddingTop="15dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="Car"
+                    android:textSize="12sp"
+                    android:id="@+id/module_goal_name"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <TextView
+                    android:id="@+id/goal_progress_days"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha=".5"
+                    android:text="32 Days"
+                    android:textSize="11sp"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintStart_toEndOf="@id/module_goal_name"
+                    app:layout_constraintBottom_toBottomOf="@id/module_goal_name" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="(+1)"
+                    android:textSize="11sp"
+                    android:alpha=".5"
+                    app:layout_constraintStart_toEndOf="@id/goal_progress_days"
+                    app:layout_constraintBottom_toBottomOf="@id/module_goal_name"  />
+
+
+
+                <com.news.goodlife.CustomViews.ProgressBarLabeld
+                    android:id="@+id/goal_progress_1"
+                    android:layout_width="0dp"
+                    android:layout_height="6dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginTop="5dp"
+                    android:tag=""
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/goal_progress_days" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="Playstation"
+                    android:textSize="12sp"
+                    android:id="@+id/module_goal_name"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <TextView
+                    android:id="@+id/goal_progress_days"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha=".5"
+                    android:text="12 Days"
+                    android:textSize="11sp"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintStart_toEndOf="@id/module_goal_name"
+                    app:layout_constraintBottom_toBottomOf="@id/module_goal_name" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="(+12)"
+                    android:textSize="11sp"
+                    android:alpha=".5"
+                    app:layout_constraintStart_toEndOf="@id/goal_progress_days"
+                    app:layout_constraintBottom_toBottomOf="@id/module_goal_name"  />
+
+
+
+                <com.news.goodlife.CustomViews.ProgressBarLabeld
+                    android:id="@+id/goal_progress_1"
+                    android:layout_width="0dp"
+                    android:layout_height="6dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginTop="5dp"
+                    android:tag=""
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/goal_progress_days" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="Vacation"
+                    android:textSize="12sp"
+                    android:id="@+id/module_goal_name"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <TextView
+                    android:id="@+id/goal_progress_days"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha=".5"
+                    android:text="224 Days"
+                    android:textSize="11sp"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintStart_toEndOf="@id/module_goal_name"
+                    app:layout_constraintBottom_toBottomOf="@id/module_goal_name" />
+
+
+                <com.news.goodlife.CustomViews.ProgressBarLabeld
+                    android:id="@+id/goal_progress_1"
+                    android:layout_width="0dp"
+                    android:layout_height="6dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginTop="5dp"
+                    android:tag=""
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/goal_progress_days" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="TV"
+                    android:textSize="12sp"
+                    android:id="@+id/module_goal_name"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <TextView
+                    android:id="@+id/goal_progress_days"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha=".5"
+                    android:text="2 Days"
+                    android:textSize="11sp"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintStart_toEndOf="@id/module_goal_name"
+                    app:layout_constraintBottom_toBottomOf="@id/module_goal_name" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="(+1)"
+                    android:textSize="11sp"
+                    android:alpha=".5"
+                    app:layout_constraintStart_toEndOf="@id/goal_progress_days"
+                    app:layout_constraintBottom_toBottomOf="@id/module_goal_name"  />
+
+
+
+                <com.news.goodlife.CustomViews.ProgressBarLabeld
+                    android:id="@+id/goal_progress_1"
+                    android:layout_width="0dp"
+                    android:layout_height="6dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginTop="5dp"
+                    android:tag=""
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/goal_progress_days" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="Macbook Pro"
+                    android:textSize="12sp"
+                    android:id="@+id/module_goal_name"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <TextView
+                    android:id="@+id/goal_progress_days"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha=".5"
+                    android:text="36 Days"
+                    android:textSize="11sp"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintStart_toEndOf="@id/module_goal_name"
+                    app:layout_constraintBottom_toBottomOf="@id/module_goal_name" />
+
+
+                <com.news.goodlife.CustomViews.ProgressBarLabeld
+                    android:id="@+id/goal_progress_1"
+                    android:layout_width="0dp"
+                    android:layout_height="6dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginTop="5dp"
+                    android:tag=""
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/goal_progress_days" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.google.android.flexbox.FlexboxLayout>
+    </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
+
+    <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:borderCustomRadius="50"
+        app:layout_constraintTop_toBottomOf="@id/casflow_activities_container"
+        app:layout_constraintStart_toEndOf="@id/goals_module"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:visibility="visible"
-        android:id="@+id/notes_field">
-        <TextView
+        android:id="@+id/savings_module">
+
+        <com.news.goodlife.CustomViews.LiquidView
+            android:id="@+id/revenue_liquid_module"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardBackgroundColor="?attr/liquidBackground" />
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_height="wrap_content"
-            android:text="Bank"
-            android:textSize="18sp"
-            android:padding= "10dp"
-            android:id="@+id/bank_pop_title"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"/>
-        <TextView
+            android:layout_width="wrap_content"
+            android:elevation="10dp"
+            android:id="@+id/all_savings_cont"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="16dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Savings"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/saving_module_amount"
+                android:id="@+id/savings_module_title"
+                android:textSize="11sp"
+                android:alpha=".7"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1500,00€"
+                android:textSize="24sp"
+                android:id="@+id/saving_module_amount"
+                app:layout_constraintTop_toBottomOf="@id/savings_module_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Connect your Bank Account"
+            android:id="@+id/available_savings_cont"
+            app:layout_constraintTop_toBottomOf="@id/all_savings_cont"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:textColor="#81A0ED"/>
-    </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:elevation="10dp"
+            >
+            <TextView
+                android:id="@+id/available_savings_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="550,25€"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Available"
+                android:textSize="11sp"
+                app:layout_constraintStart_toEndOf="@id/available_savings_amount"
+                app:layout_constraintBottom_toBottomOf="@id/available_savings_amount"
+                android:textColor="#FFFFFF"
+                android:alpha=".7"
+                android:layout_marginStart="10dp"
+                android:id="@+id/available_savings_title"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/allocated_savings_cont"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/available_savings_cont"
+            android:elevation="10dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/allocated_savings_amount"
+                android:text="950,00€"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reserved"
+                android:textSize="11sp"
+                android:alpha=".7"
+                android:id="@+id/allocated_savings_title"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toEndOf="@id/allocated_savings_amount"
+                app:layout_constraintBottom_toBottomOf="@id/allocated_savings_amount"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
 
         <com.news.goodlife.CustomViews.SpectrumBar
             android:id="@+id/spectrumBar"
@@ -437,7 +883,7 @@
             android:textSize="24sp"
             android:alpha="1"
             android:id="@+id/item_day"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="40dp"
             android:textColor="?attr/textColorPrimary"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -451,9 +897,9 @@
             android:alpha=".6"
             android:textColor="?attr/textColorPrimary"
             android:id="@+id/item_date"
-            android:paddingBottom="10dp"
+            android:paddingBottom="30dp"
             android:paddingTop="5dp"
-            app:layout_constraintBottom_toTopOf="@id/budget_liquid_container"
+            app:layout_constraintBottom_toTopOf="@id/module_status_overview"
             app:layout_constraintTop_toBottomOf="@id/item_day"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,20 +29,22 @@ import com.google.android.flexbox.FlexboxLayout;
 import com.news.goodlife.CustomViews.BulletPointTextView;
 import com.news.goodlife.CustomViews.CustomEntries.LabeledEntryView;
 import com.news.goodlife.CustomViews.CustomEntries.PopUpFrame;
+import com.news.goodlife.CustomViews.IconDoughnutView;
 import com.news.goodlife.CustomViews.LiquidView;
+import com.news.goodlife.CustomViews.RelationshipMapView;
+import com.news.goodlife.Data.Local.Models.Financial.BudgetCategoryModel;
+import com.news.goodlife.Data.Local.Models.Financial.BudgetModel;
 import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
 import com.news.goodlife.Data.Local.Models.WalletEventDayOrderModel;
 import com.news.goodlife.Data.Remote.LookupCompanyLogo;
 import com.news.goodlife.Fragments.WalletMultiDaysFragment;
-import com.news.goodlife.Fragments.PopFragments.CostCategoriesChart;
-import com.news.goodlife.Fragments.PopFragments.IncomingCashPopFragment;
-import com.news.goodlife.Fragments.PopFragments.OutgoingCashPopFragment;
 import com.news.goodlife.Interfaces.WalletDatabaseEvents;
 import com.news.goodlife.Models.CalendarLayoutDay;
-import com.news.goodlife.Models.MonthCashflowModel;
+import com.news.goodlife.Models.ModuleCoords;
+import com.news.goodlife.Models.RelationshipMap;
 import com.news.goodlife.PopWindowData.CashCategoryData;
 import com.news.goodlife.R;
-import com.news.goodlife.Transitions.DetailsTransition;
+import com.news.goodlife.Singletons.SingletonClass;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,6 +81,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
     static ProgressBar spinner;
     boolean editTextOpened = false;
     boolean editCardOpend = false;
+    private SingletonClass singletonMain = SingletonClass.getInstance();
 
 
     private static int balanceamount = 0;
@@ -102,6 +106,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
         listeners();
         loadPopFragments();
+        loadBudgets();
 
         //Get Color Attributes
         TypedValue typedValue = new TypedValue();
@@ -116,6 +121,21 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
 
     }
+
+    List<BudgetModel> allBudgets;
+    boolean budgetsSet = false;
+    private void loadBudgets() {
+
+        allBudgets = singletonMain.getDatabaseController().BudgetController.getAllBudgets();
+
+        if(allBudgets.size() > 0){
+            budgetsSet = true;
+        }
+        else{
+            budgetsSet = false;
+        }
+    }
+
     int fullDisplay = 0;
     private void listeners() {
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -129,34 +149,6 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                 {
                     fullDisplay = r.height();
                 }
-
-
-                int heightDiff = fullDisplay - r.height();
-
-/*
-                if(heightDiff != 0){
-                    //KeyBoard is visible
-
-                    int diff = fullDisplay - (cashflow_pop_container.getTop() + new_cashflow_container.getHeight());
-                    //diff = diff - (root.getHeight() - fullDisplay);
-
-                    Log.i("Math", ""+ diff);
-
-
-
-                    //animateSoftkeyOpend((int) root.getY(),- (heightDiff - diff), false);
-                    softKeyVisible = true;
-                }
-                else{
-                    if(softKeyUp){
-                        animateSoftkeyOpend((int) root.getY(), 0, true);
-                    }
-
-                    softKeyVisible = false;
-                    //hideAddCashflowEntry();
-                }
-                Log.d("Keyboard Size Day", "Size: " + heightDiff);
-*/
             }
         });
     }
@@ -176,12 +168,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
             case "weekend":
                 return new CashflowMainAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.wallet_recycler_weekend_item, parent, false), pos, calDay);
             case "day":
-                if(calDay.isToday()){
-                    return new CashflowMainAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.wallet_recycler_today_item, parent, false), pos, calDay);
-                }
-                else{
-                    return new CashflowMainAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.wallet_recycler_day_item, parent, false), pos, calDay);
-                }
+                return new CashflowMainAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.wallet_recycler_day_item, parent, false), pos, calDay);
             case "monthend":
                 return new CashflowMainAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.wallet_recycler_monthend_item, parent, false), pos, calDay);
 
@@ -212,10 +199,9 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         PopUpFrame costcat, cashout, cashin,budgetliquid, cashflow, weekendcontainer;
-        FlexboxLayout cost_cat_flex;
         LiquidView liquidView;
         TextView itemday, itemDate;
-        View graph, frame;
+        View frame;
 
         TextView minusplus_before;
 
@@ -234,7 +220,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
 
 
-        public ViewHolder(@NonNull View itemView, final int pos, final CalendarLayoutDay dayData) {
+        public ViewHolder(@NonNull final View itemView, final int pos, final CalendarLayoutDay dayData) {
             super(itemView);
 
             itemView.setTag("pos_"+pos);
@@ -244,6 +230,20 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
             switch(dayData.getType()){
                 case "day":
+
+
+                    //TODO Load Views Here
+                    final ViewGroup budgetsContainer = itemView.findViewById(R.id.budget_container);
+                    inflateFixedCost(budgetsContainer);
+                    inflateBudgets(budgetsContainer);
+
+                    //Views to be Mapped
+                    final View overview_module = itemView.findViewById(R.id.module_status_overview);
+                    final View savings_module = itemView.findViewById(R.id.savings_module);
+                    cashout = itemView.findViewById(R.id.events_outgoing);
+                    cashin = itemView.findViewById(R.id.events_incoming);
+                    costcat = itemView.findViewById(R.id.cashcat_frame);
+
 
                     dayCount++;
 
@@ -277,16 +277,15 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                     }
 
                     final TextView add_save = itemView.findViewById(R.id.add_cashflow_button_save);
-                    graph = itemView.findViewById(R.id.graph);
+
                     frame = itemView.findViewById(R.id.frame);
-                    liquidView = itemView.findViewById(R.id.budget_liquid);
+                    liquidView = itemView.findViewById(R.id.revenue_liquid_module);
                     liquidView.setBaseline(randomValue(10, 300));
+                    liquidView.setSavingsBG();
                     itemday = itemView.findViewById(R.id.item_day);
                     itemDate = itemView.findViewById(R.id.item_date);
-                    costcat = itemView.findViewById(R.id.cashcat_frame);
-                    cashout = itemView.findViewById(R.id.events_outgoing);
-                    cashin = itemView.findViewById(R.id.events_incoming);
-                    cost_cat_flex = itemView.findViewById(R.id.cashcat_flex);
+
+
                     minusplus_before = itemView.findViewById(R.id.day_newentry_minusplus_bf);
 
                     amount = itemView.findViewById(R.id.day_newentry_amount);
@@ -325,13 +324,11 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
                     //setBezierDayAmount(pos);
 
-                    setCostCats(cat_count);
+                    //setCostCats(cat_count);
 
                     //Cashcat Variables
                     costcat.setTransitionName(position+"costcat_frame");
                     itemday.setTransitionName(position+"_costcat_dayname");
-                    graph.setTransitionName(position+"costcat_graph");
-                    cost_cat_flex.setTransitionName(position+"costcat_flex");
 
                     //Outgoing Variables
                     cashout.setTransitionName(position+"_cashout");
@@ -477,6 +474,64 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                     });
 
 
+                    //Relationship Map Algorithms
+                    final RelationshipMapView mapView = itemView.findViewById(R.id.overlay_relation_map);
+
+                    itemView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+
+                            //All the Modules are Loaded, start getting there coordinates
+
+                            /*
+                            moduleCenterX = (int)overview_module.getX() + (overview_module.getWidth() / 2);
+                            moduleCenterY = (int)overview_module.getY() + (overview_module.getHeight() / 2);
+                            ModuleCoords mc = new ModuleCoords(moduleCenterX, moduleCenterY, "overview");
+                            moduleCoords.add(mc);
+
+                            moduleCenterX = (int)savings_module.getX() + (savings_module.getWidth() / 2);
+                            moduleCenterY = (int)savings_module.getY() + (savings_module.getHeight() / 2);
+                            mc = new ModuleCoords(moduleCenterX, moduleCenterY, "savings");
+                            moduleCoords.add(mc);
+
+                            moduleCenterX = (int)cashout.getX() + (cashout.getWidth() / 2);
+                            moduleCenterY = (int)cashout.getY() + (cashout.getHeight() / 2);
+                            mc = new ModuleCoords(moduleCenterX, moduleCenterY, "cashout");
+                            moduleCoords.add(mc);
+
+                            moduleCenterX = (int)cashin.getX() + (cashin.getWidth() / 2);
+                            moduleCenterY = (int)cashin.getY() + (cashin.getHeight() / 2);
+                            mc = new ModuleCoords(moduleCenterX, moduleCenterY, "cashin");
+                            moduleCoords.add(mc);
+
+                            moduleCenterX = (int)costcat.getX() + (costcat.getWidth() / 2);
+                            moduleCenterY = (int)costcat.getY() + (costcat.getHeight() / 2);
+                            mc = new ModuleCoords(moduleCenterX, moduleCenterY, "balance");
+                            moduleCoords.add(mc); */
+
+                            //Iterate through Budgets
+
+
+                            //Test Relationships
+                            //relationshipMapData.add(connectRelationships(moduleCoords, "balance", "savings"));
+                            //relationshipMapData.add(connectRelationships(moduleCoords, "savings", "overview"));
+                            //mapView.setMapData(relationshipMapData);
+
+
+
+
+
+
+                            //View savings_module = itemView.findViewById(R.id.savings_module);
+                            //cashout = itemView.findViewById(R.id.events_outgoing);
+                            //cashin = itemView.findViewById(R.id.events_incoming);
+                            //costcat = itemView.findViewById(R.id.cashcat_frame);
+
+
+                            itemView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        }
+                    });
+
                 
                     break;
                 case "weekend":
@@ -492,6 +547,119 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
             }
 
         }
+
+        List<ModuleCoords> moduleCoords = new ArrayList<>();
+        List<RelationshipMap> relationshipMapData = new ArrayList<>();
+
+        private void inflateBudgets(final ViewGroup budgetsContainer) {
+
+
+            if(budgetsSet){
+                //Has Budget Load Them
+                for(final BudgetModel budget: allBudgets){
+
+                    //TODO Check if I can make this Call more Efficient
+                    final BudgetCategoryModel category = singletonMain.getDatabaseController().BudgetCategoryController.getBudgetCategory(Integer.parseInt(budget.getCategoryid()));
+
+                    LayoutInflater inflater = LayoutInflater.from(root.getContext());
+                    final View catitem = inflater.inflate(R.layout.budget_list_item, null);
+
+                    catitem.setTag(budget.id);
+
+                    final IconDoughnutView dv = catitem.findViewById(R.id.icondoughnut);
+                    dv.setCategory(category.getCatcolor(), category.getCaticon());
+
+                    CardView catcard = catitem.findViewById(R.id.category_item);
+                    TextView budget_name = catitem.findViewById(R.id.budget_name);
+
+                    budget_name.setText(category.getCatname());
+
+                    //SetWidth of the Button to match the Screen
+                    ViewGroup.LayoutParams lp = catcard.getLayoutParams();
+
+                    lp.width = budgetButtonSize;
+                    lp.height = budgetButtonSize;
+                    catcard.setLayoutParams(lp);
+
+                    budgetsContainer.addView(catitem);
+
+                    catitem.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            singletonMain.changeFragment.data = new ArrayList<>();
+                            singletonMain.changeFragment.getData().add(budget.getId());
+                            singletonMain.changeFragment.setValue("BudgetModule");
+                        }
+                    });
+
+                }
+                final float budgetFlexTop = budgetsContainer.getY();
+            }
+            else{
+                //No Budgets Encourage User to Set budget
+
+            }
+
+        }
+
+        private RelationshipMap connectRelationships(List<ModuleCoords> moduleCoords, String fromID, String toID){
+            RelationshipMap relationshipConnection = new RelationshipMap();
+
+            for(ModuleCoords moduleCoord: moduleCoords){
+                if(moduleCoord.getName().equals(fromID)){
+                    //From Match Found set relationshipConnection
+                    relationshipConnection.setFromX(moduleCoord.getX());
+                    relationshipConnection.setFromY(moduleCoord.getY());
+                }
+
+                if(moduleCoord.getName().equals(toID)){
+                    //To Match Found setRelationships
+                    relationshipConnection.setToX(moduleCoord.getX());
+                    relationshipConnection.setToY(moduleCoord.getY());
+                }
+            }
+
+            //Todo make sure it is always set
+            return relationshipConnection;
+        }
+
+
+        int moduleCenterX, moduleCenterY;
+        int flexWidth, budgetButtonSize;
+
+        private void inflateFixedCost(ViewGroup budgetsContainer){
+
+            flexWidth = singletonMain.getDisplayWidth() - singletonMain.dpToPx(25);
+            budgetButtonSize = (flexWidth / 5) - singletonMain.dpToPx(10);
+
+            LayoutInflater inflater = LayoutInflater.from(root.getContext());
+            View fixeditem = inflater.inflate(R.layout.budget_list_item, null);
+
+            //TODO Set Parameters to identify fixed cost
+
+            IconDoughnutView dv = fixeditem.findViewById(R.id.icondoughnut);
+            dv.setCategory("#FFFFFF", "icn_regular");
+
+            CardView catcard = fixeditem.findViewById(R.id.category_item);
+
+            ViewGroup.LayoutParams lp = catcard.getLayoutParams();
+
+            lp.width = budgetButtonSize;
+            lp.height = budgetButtonSize;
+            catcard.setLayoutParams(lp);
+
+            budgetsContainer.addView(fixeditem);
+
+            fixeditem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Open Fixed COst Progress
+                    singletonMain.changeFragment.setValue("FixedModule");
+                }
+            });
+
+        }
+
 
         private void inflateData(WalletEventDayOrderModel dataList, ViewGroup cashflowContainer) {
 
@@ -671,63 +839,13 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
             switch (module){
                 case "CostCategories":
-                    CostCategoriesChart costCategoriesChart;
-
-                    graph = costcat.findViewById(R.id.graph);
-                    costCategoriesChart = new CostCategoriesChart(graph.getTransitionName(), costcat.getTransitionName(), cost_cat_flex.getTransitionName(), itemday.getTransitionName(), allCashCategoryData);
-
-                    // Define the shared element transition.
-                    costCategoriesChart.setSharedElementEnterTransition(new DetailsTransition(400));
-                    costCategoriesChart.setSharedElementReturnTransition(new DetailsTransition(400));
-
-                    // Now use the image's view and the target transitionName to define the shared element.
-                    ft.addSharedElement(graph,graph.getTransitionName());
-                    ft.addSharedElement(costcat, costcat.getTransitionName());
-                    //ft.addSharedElement(cost_cat_flex, cost_cat_flex.getTransitionName());
-                    for(BulletPointTextView cat: allCategoriesTextView){
-                        ft.addSharedElement(cat, cat.getTransitionName());
-                    }
-
-                    // Replace the fragment.
-                    ft.replace(popWindow.getId(), costCategoriesChart);
-
-                    // Enable back navigation with shared element transitions.
-                    ft.addToBackStack(costCategoriesChart.getClass().getSimpleName());
 
                     break;
                 case "CashIn":
-
-                    parentFragmentClass.activity.slideInContainerThree(parentFragmentClass.activity.fragment_container_one);
-                    /*IncomingCashPopFragment incomingCashPopFragment;
-
-                    incomingCashPopFragment = new IncomingCashPopFragment(cashin.getTransitionName(), incomeTitle.getTransitionName(), incomeValue.getTransitionName());
-
-                    incomingCashPopFragment.setSharedElementEnterTransition(new DetailsTransition(400));
-                    incomingCashPopFragment.setSharedElementReturnTransition(new DetailsTransition(400));
-
-                    ft.addSharedElement(cashin,cashin.getTransitionName());
-                    ft.addSharedElement(incomeTitle, incomeTitle.getTransitionName());
-                    ft.addSharedElement(incomeValue, incomeValue.getTransitionName());
-
-                    ft.replace(popWindow.getId(), incomingCashPopFragment);
-
-                    ft.addToBackStack(incomingCashPopFragment.getClass().getSimpleName());*/
+                    singletonMain.changeFragment.setValue("IncomeModule");
                     break;
                 case "CashOut":
-                    OutgoingCashPopFragment outgoingCashPopFragment;
-
-                    outgoingCashPopFragment = new OutgoingCashPopFragment(cashout.getTransitionName(), costTitle.getTransitionName(), costValue.getTransitionName());
-
-                    outgoingCashPopFragment.setSharedElementEnterTransition(new DetailsTransition(400));
-                    outgoingCashPopFragment.setSharedElementReturnTransition(new DetailsTransition(400));
-
-                    ft.addSharedElement(cashout,cashout.getTransitionName());
-                    ft.addSharedElement(costTitle, costTitle.getTransitionName());
-                    ft.addSharedElement(costValue, costValue.getTransitionName());
-
-                    ft.replace(popWindow.getId(), outgoingCashPopFragment);
-
-                    ft.addToBackStack(outgoingCashPopFragment.getClass().getSimpleName());
+                    singletonMain.changeFragment.setValue("OutgoingModule");
                     break;
                 default:
                     break;
@@ -741,33 +859,6 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
             //Toggle MainMenu
             parentFragmentClass.activity.toggleMainMenuContainer();
-        }
-
-        private void setCostCats(int cat_count) {
-            int currentID;
-
-            for(int i=1;i <= cat_count; i++){
-                String catname = days[i];
-                String bulletPointColor = colors[i-1];
-                String transitionName = position+"_cat"+i;
-                CashCategoryData cashCategoryData = new CashCategoryData(catname, bulletPointColor, transitionName);
-                //create Costs Category TextView
-                ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                BulletPointTextView tempText = new BulletPointTextView(context,null,bulletPointColor, 4);
-                currentID = View.generateViewId();
-
-                tempText.setText(catname);
-                tempText.setId(currentID);
-                tempText.setTransitionName(transitionName);
-                tempText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
-                tempText.setPadding(30,0,0,0);
-                tempText.setLayoutParams(lp);
-                cost_cat_flex.addView(tempText);
-
-                allCashCategoryData.add(cashCategoryData);
-                allCategoriesTextView.add(tempText);
-            }
-
         }
 
     }

@@ -11,6 +11,7 @@
     <com.news.goodlife.CustomViews.CustomEntries.PageIndicatorBar
         android:layout_width="match_parent"
         android:layout_height="18dp"
+        android:id="@+id/wallet_page_indicator"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="40dp"
         android:outlineProvider="none"
@@ -123,6 +124,7 @@
             app:layout_constraintDimensionRatio="7:4"
             android:layout_marginTop="16dp"
             android:padding="50dp"
+            android:id="@+id/connect_account_one"
             app:cardCornerRadius="3dp"
             android:orientation="vertical"
             app:cardBackgroundColor="@color/white"
@@ -252,15 +254,19 @@
         android:layout_height="match_parent"
         android:visibility="gone"
         android:id="@+id/previewImage"/>
+
+
     <com.news.goodlife.CustomViews.CustomBackground.BehindMenuView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:elevation="104dp"
         android:outlineProvider="none"
+        android:id="@+id/menu_container_base"
         app:layout_constraintTop_toTopOf="@id/blurviewmenu"
         app:layout_constraintBottom_toBottomOf="@id/blurviewmenu"
         app:layout_constraintStart_toStartOf="@id/blurviewmenu"
         app:layout_constraintEnd_toEndOf="@id/blurviewmenu"/>
+
             <eightbitlab.com.blurview.BlurView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -273,14 +279,18 @@
                 android:paddingTop="3dp"
                 android:paddingBottom="5dp"
                 android:layout_margin="10dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"
                 android:elevation="107dp"
                 android:background="@drawable/round_edge_layout_35"
                 android:id="@+id/blurviewmenu">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
                     android:layout_height="match_parent">
                     <com.news.goodlife.CustomViews.CustomIcons.MenuIcons
-                        android:id="@+id/add_transactions"
+                        android:id="@+id/magic_button"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:tag="Add"
@@ -294,10 +304,9 @@
                         android:layout_marginEnd="2dp"
                         android:layout_marginStart="2dp"/>
 
+
                     <!--?attr/standoutButton-->
-
-
-                    <com.news.goodlife.CustomViews.CustomIcons.MenuIcons
+                    <com.news.goodlife.CustomViews.CustomIcons.WalletIcon
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_margin="2dp"
@@ -316,7 +325,7 @@
                         app:layout_constraintDimensionRatio="1:1"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toEndOf="@id/buttonWallet"
-                        app:layout_constraintEnd_toStartOf="@id/add_transactions"/>
+                        app:layout_constraintEnd_toStartOf="@id/magic_button"/>
                     <com.news.goodlife.CustomViews.CustomIcons.MenuIcons
                         android:layout_width="0dp"
                         android:layout_height="0dp"
@@ -325,7 +334,7 @@
                         android:tag="Analysis"
                         app:layout_constraintDimensionRatio="1:1"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/add_transactions"
+                        app:layout_constraintStart_toEndOf="@id/magic_button"
                         app:layout_constraintEnd_toStartOf="@id/buttonHub"/>
                     <com.news.goodlife.CustomViews.CustomIcons.MenuIcons
                         android:layout_width="0dp"
@@ -339,6 +348,19 @@
                         app:layout_constraintEnd_toEndOf="parent"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </eightbitlab.com.blurview.BlurView>
+
+
+    <com.news.goodlife.CustomViews.CustomIcons.WalletIconCard
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:elevation="120dp"
+        app:layout_constraintStart_toStartOf="@id/blurviewmenu"
+        app:layout_constraintTop_toTopOf="@id/blurviewmenu"
+        android:layout_margin="9dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:id="@+id/walletCardOne"
+        />
 
     <FrameLayout
         android:layout_width="match_parent"

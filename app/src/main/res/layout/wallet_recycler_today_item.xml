@@ -48,7 +48,7 @@
 
 
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
-        android:id="@+id/budget_liquid_container"
+        android:id="@+id/module_status_overview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:cardBackgroundColor="#00000000"
@@ -82,7 +82,7 @@
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="1:1"
         android:id="@+id/right_up_frame"
-        app:layout_constraintStart_toEndOf="@id/budget_liquid_container"
+        app:layout_constraintStart_toEndOf="@id/module_status_overview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/wallet_balance_card"
 
@@ -228,7 +228,7 @@
         app:borderCustomRadius="50"
         app:backgroundCustomColor="#1a1b1c"
         android:id="@+id/casflow_activities_container"
-        app:layout_constraintTop_toBottomOf="@id/budget_liquid_container"
+        app:layout_constraintTop_toBottomOf="@id/module_status_overview"
         android:layout_margin="10dp">
         <com.google.android.flexbox.FlexboxLayout
             android:layout_width="match_parent"
