@@ -13,8 +13,9 @@ import android.widget.FrameLayout;
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
-public class ProgressBarLabeld extends FrameLayout {
+public class ProgressBarLabeld extends ConstraintLayout {
 
     Paint bgPaint, progressPaint, textPaint;
     RectF rectF = new RectF(0,0,0,0);
