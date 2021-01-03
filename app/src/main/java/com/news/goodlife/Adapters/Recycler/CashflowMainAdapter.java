@@ -36,6 +36,7 @@ import com.news.goodlife.Data.Local.Models.Financial.BudgetCategoryModel;
 import com.news.goodlife.Data.Local.Models.Financial.BudgetModel;
 import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
 import com.news.goodlife.Data.Local.Models.WalletEventDayOrderModel;
+import com.news.goodlife.Data.Remote.Klarna.Interfaces.Callbacks.KlarnaResponseCallback;
 import com.news.goodlife.Data.Remote.LookupCompanyLogo;
 import com.news.goodlife.Fragments.WalletMultiDaysFragment;
 import com.news.goodlife.Interfaces.WalletDatabaseEvents;
@@ -234,8 +235,10 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
                     //TODO Load Views Here
                     final ViewGroup budgetsContainer = itemView.findViewById(R.id.budget_container);
-                    inflateFixedCost(budgetsContainer);
-                    inflateBudgets(budgetsContainer);
+                    final ViewGroup monthlyBudgetCont = itemView.findViewById(R.id.month_flex);
+                    final ViewGroup yearyBudgetCont = itemView.findViewById(R.id.year_flex);
+                    inflateFixedCost(monthlyBudgetCont, yearyBudgetCont);
+                    inflateBudgets(monthlyBudgetCont, yearyBudgetCont);
 
                     //Views to be Mapped
                     final View overview_module = itemView.findViewById(R.id.module_status_overview);
@@ -551,7 +554,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
         List<ModuleCoords> moduleCoords = new ArrayList<>();
         List<RelationshipMap> relationshipMapData = new ArrayList<>();
 
-        private void inflateBudgets(final ViewGroup budgetsContainer) {
+        private void inflateBudgets(ViewGroup monthlyBudgetCont, ViewGroup yearlyBudgetCont) {
 
 
             if(budgetsSet){
@@ -567,7 +570,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                     catitem.setTag(budget.id);
 
                     final IconDoughnutView dv = catitem.findViewById(R.id.icondoughnut);
-                    dv.setCategory(category.getCatcolor(), category.getCaticon());
+                    dv.setCategory("#64CE65", category.getCaticon());
 
                     CardView catcard = catitem.findViewById(R.id.category_item);
                     TextView budget_name = catitem.findViewById(R.id.budget_name);
@@ -581,7 +584,8 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                     lp.height = budgetButtonSize;
                     catcard.setLayoutParams(lp);
 
-                    budgetsContainer.addView(catitem);
+                    monthlyBudgetCont.addView(catitem);
+                    //yearlyBudgetCont.addView(catitem);
 
                     catitem.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -593,7 +597,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                     });
 
                 }
-                final float budgetFlexTop = budgetsContainer.getY();
+                final float budgetFlexTop = monthlyBudgetCont.getY();
             }
             else{
                 //No Budgets Encourage User to Set budget
@@ -627,10 +631,10 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
         int moduleCenterX, moduleCenterY;
         int flexWidth, budgetButtonSize;
 
-        private void inflateFixedCost(ViewGroup budgetsContainer){
+        private void inflateFixedCost(ViewGroup monthlyBudgetCont, ViewGroup yearlyBudgetCont){
 
             flexWidth = singletonMain.getDisplayWidth() - singletonMain.dpToPx(25);
-            budgetButtonSize = (flexWidth / 5) - singletonMain.dpToPx(10);
+            budgetButtonSize = (flexWidth / 4) - singletonMain.dpToPx(10);
 
             LayoutInflater inflater = LayoutInflater.from(root.getContext());
             View fixeditem = inflater.inflate(R.layout.budget_list_item, null);
@@ -648,7 +652,10 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
             lp.height = budgetButtonSize;
             catcard.setLayoutParams(lp);
 
-            budgetsContainer.addView(fixeditem);
+            //Populate Fixed onBoth YEar and Month
+
+            monthlyBudgetCont.addView(fixeditem);
+            //yearlyBudgetCont.addView(fixeditem);
 
             fixeditem.setOnClickListener(new View.OnClickListener() {
                 @Override

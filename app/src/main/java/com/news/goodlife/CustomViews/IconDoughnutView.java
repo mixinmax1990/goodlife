@@ -67,7 +67,7 @@ public class IconDoughnutView extends FrameLayout {
         ring = new Paint();
         ring.setStyle(Paint.Style.STROKE);
         ring.setAntiAlias(true);
-        ring.setStrokeWidth(10);
+        ring.setStrokeWidth(14);
         ring.setStrokeJoin(Paint.Join.ROUND);
         ring.setStrokeCap(Paint.Cap.ROUND);
         ring.setPathEffect(new CornerPathEffect(20));
@@ -76,7 +76,7 @@ public class IconDoughnutView extends FrameLayout {
         ringbg = new Paint();
         ringbg.setStyle(Paint.Style.STROKE);
         ringbg.setAntiAlias(true);
-        ringbg.setStrokeWidth(10);
+        ringbg.setStrokeWidth(14);
         ringbg.setColor(Color.WHITE);
         ringbg.setAlpha(50);
 
@@ -90,7 +90,7 @@ public class IconDoughnutView extends FrameLayout {
         super.onDraw(canvas);
         sweepAngle = ((float)360 / 100) * 80;
         margin = (int)(getWidth() / 100) * marginPerc;
-        iconmargin = (int)(getWidth()/3f);
+        iconmargin = (int)(getWidth()/2.7f);
 
         if(add){
 

@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
 import com.news.goodlife.Data.Remote.Klarna.Controller.KlarnaRequestController;
+import com.news.goodlife.Data.Remote.Klarna.Models.Consent.POSTgetConsentDataModel;
 import com.news.goodlife.Models.ObservableFragmentChange;
 
 import java.util.Observable;
@@ -14,11 +15,10 @@ import java.util.Observable;
 public class SingletonClass {
 
     private static volatile SingletonClass sSoleInstance;
+    private static volatile KlarnaRequestController klarna;
 
     //private constructor.
     private SingletonClass(){
-
-
 
         //Prevent form the reflection api.
         if (sSoleInstance != null){
@@ -32,7 +32,14 @@ public class SingletonClass {
 
             synchronized (SingletonClass.class) {   //Check for the second time.
                 //if there is no instance available... create new one
-                if (sSoleInstance == null) sSoleInstance = new SingletonClass();
+                if (sSoleInstance == null)
+                {
+                    sSoleInstance = new SingletonClass();
+                    klarna = new KlarnaRequestController();
+
+                    //Check if We have consent to get Bank Account Data
+
+                }
             }
         }
 
@@ -40,7 +47,23 @@ public class SingletonClass {
     }
 
     //Klarna Controller
-    KlarnaRequestController klarna = new KlarnaRequestController();
+
+    public POSTgetConsentDataModel klarnaConsent;
+    public boolean providedConsent(){
+
+        this.klarnaConsent = getDatabaseController().KlarnaConsentDBController.getConsent();
+
+        if(klarnaConsent != null){
+            return true;
+        }
+
+        return false;
+    }
+
+
+    public static KlarnaRequestController getKlarna() {
+        return klarna;
+    }
 
     public ObservableFragmentChange changeFragment = new ObservableFragmentChange("None");
 

@@ -49,7 +49,7 @@ public class BudgetModuleFragment extends Fragment {
 
         topFrameLiquid = root.findViewById(R.id.budgetTopLiquid);
         topFrameLiquid.setHideOil(true);
-        topFrameLiquid.setLiquidColor(categoryData.getCatcolor());
+        topFrameLiquid.setLiquidColor("#64CE65");
         topFrameLiquid.animateWave();
 
         iconView = root.findViewById(R.id.budget_iconview);

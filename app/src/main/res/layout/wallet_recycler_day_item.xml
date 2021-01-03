@@ -256,6 +256,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:paddingBottom="10dp"
         app:borderCustomRadius="50"
         app:backgroundCustomColor="#00595959"
         android:id="@+id/budget_main_container"
@@ -274,6 +275,63 @@
             android:id="@+id/budget_module_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
+        <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/budget_module_title"
+            app:layout_constraintEnd_toStartOf="@id/yearlybudgetcont"
+            app:layout_constraintStart_toStartOf="parent"
+            app:borderCustomRadius="50"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            app:backgroundCustomColor="#2A000000"
+            android:id="@+id/monthlybudgetcont"
+            >
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:flexDirection="row"
+                app:flexWrap="wrap"
+                android:id="@+id/month_flex"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Monthly"
+                android:textSize="12sp"
+                android:alpha=".7"
+                app:layout_constraintTop_toBottomOf="@id/month_flex"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
+        <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/yearlybudgetcont"
+            app:layout_constraintDimensionRatio="1:1"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintTop_toBottomOf="@id/budget_module_title"
+            app:borderCustomRadius="50"
+            app:backgroundCustomColor="#2A000000"
+            app:layout_constraintStart_toEndOf="@id/monthlybudgetcont"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:flexDirection="row"
+                app:flexWrap="wrap"
+                android:id="@+id/year_flex"/>
+        </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
+
         <com.google.android.flexbox.FlexboxLayout
             android:orientation="horizontal"
             app:flexDirection="row"
@@ -485,297 +543,57 @@
         app:layout_constraintDimensionRatio="1:1"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
         app:borderCustomRadius="50"
         app:layout_constraintTop_toBottomOf="@id/casflow_activities_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/savings_module"
         android:visibility="visible"
         android:id="@+id/goals_module">
-
-        <com.google.android.flexbox.FlexboxLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:flexDirection="row"
-            app:flexWrap="wrap"
-            android:paddingTop="15dp"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Savings reserved for Goals"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="10dp"
+            android:id="@+id/allocated_savings_title"/>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+        <com.news.goodlife.CustomViews.LiquidView
+            android:id="@+id/goals_liquid_module"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardBackgroundColor="?attr/liquidBackground" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:elevation="10dp"
+            android:id="@+id/goal_savings_cont"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="16dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp">
-
-                <com.news.goodlife.CustomViews.ProgressBarLabeld
-                    android:id="@+id/goal_progress_1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginTop="5dp"
-                    android:tag=""
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:text="Car"
-                        android:textSize="12sp"
-                        android:id="@+id/module_goal_name"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        />
-
-                    <TextView
-                        android:id="@+id/goal_progress_days"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:alpha=".5"
-                        android:text="32 Days"
-                        android:textSize="11sp"
-                        android:layout_marginStart="10dp"
-                        app:layout_constraintStart_toEndOf="@id/module_goal_name"
-                        app:layout_constraintBottom_toBottomOf="@id/module_goal_name" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="(+1)"
-                        android:textSize="11sp"
-                        android:alpha=".5"
-                        app:layout_constraintStart_toEndOf="@id/goal_progress_days"
-                        app:layout_constraintBottom_toBottomOf="@id/module_goal_name"  />
-
-
-
-
-                </com.news.goodlife.CustomViews.ProgressBarLabeld>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+                android:text="Savings reserved for Goals"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/goal_saving_module_amount"
+                android:id="@+id/goal_savings_module_title"
+                android:textSize="11sp"
+                android:alpha=".7"/>
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp">
+                android:text="726,20€"
+                android:textSize="24sp"
+                android:id="@+id/goal_saving_module_amount"
+                app:layout_constraintTop_toBottomOf="@id/goal_savings_module_title"
+                app:layout_constraintStart_toStartOf="parent"
+                />
 
-                <com.news.goodlife.CustomViews.ProgressBarLabeld
-                    android:id="@+id/goal_progress_1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginTop="5dp"
-                    android:tag=""
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:text="Car"
-                        android:textSize="12sp"
-                        android:id="@+id/module_goal_name"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        />
-
-                    <TextView
-                        android:id="@+id/goal_progress_days"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:alpha=".5"
-                        android:text="32 Days"
-                        android:textSize="11sp"
-                        android:layout_marginStart="10dp"
-                        app:layout_constraintStart_toEndOf="@id/module_goal_name"
-                        app:layout_constraintBottom_toBottomOf="@id/module_goal_name" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="(+1)"
-                        android:textSize="11sp"
-                        android:alpha=".5"
-                        app:layout_constraintStart_toEndOf="@id/goal_progress_days"
-                        app:layout_constraintBottom_toBottomOf="@id/module_goal_name"  />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-
-                </com.news.goodlife.CustomViews.ProgressBarLabeld>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp">
-
-                <com.news.goodlife.CustomViews.ProgressBarLabeld
-                    android:id="@+id/goal_progress_1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginTop="5dp"
-                    android:tag=""
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:text="Car"
-                        android:textSize="12sp"
-                        android:id="@+id/module_goal_name"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        />
-
-                    <TextView
-                        android:id="@+id/goal_progress_days"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:alpha=".5"
-                        android:text="32 Days"
-                        android:textSize="11sp"
-                        android:layout_marginStart="10dp"
-                        app:layout_constraintStart_toEndOf="@id/module_goal_name"
-                        app:layout_constraintBottom_toBottomOf="@id/module_goal_name" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="(+1)"
-                        android:textSize="11sp"
-                        android:alpha=".5"
-                        app:layout_constraintStart_toEndOf="@id/goal_progress_days"
-                        app:layout_constraintBottom_toBottomOf="@id/module_goal_name"  />
-
-
-
-
-                </com.news.goodlife.CustomViews.ProgressBarLabeld>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp">
-
-                <com.news.goodlife.CustomViews.ProgressBarLabeld
-                    android:id="@+id/goal_progress_1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginTop="5dp"
-                    android:tag=""
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:text="Car"
-                        android:textSize="12sp"
-                        android:id="@+id/module_goal_name"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        />
-
-                    <TextView
-                        android:id="@+id/goal_progress_days"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:alpha=".5"
-                        android:text="32 Days"
-                        android:textSize="11sp"
-                        android:layout_marginStart="10dp"
-                        app:layout_constraintStart_toEndOf="@id/module_goal_name"
-                        app:layout_constraintBottom_toBottomOf="@id/module_goal_name" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="(+1)"
-                        android:textSize="11sp"
-                        android:alpha=".5"
-                        app:layout_constraintStart_toEndOf="@id/goal_progress_days"
-                        app:layout_constraintBottom_toBottomOf="@id/module_goal_name"  />
-
-
-
-
-                </com.news.goodlife.CustomViews.ProgressBarLabeld>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp">
-
-                <com.news.goodlife.CustomViews.ProgressBarLabeld
-                    android:id="@+id/goal_progress_1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginTop="5dp"
-                    android:tag=""
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:text="Car"
-                        android:textSize="12sp"
-                        android:id="@+id/module_goal_name"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        />
-
-                    <TextView
-                        android:id="@+id/goal_progress_days"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:alpha=".5"
-                        android:text="32 Days"
-                        android:textSize="11sp"
-                        android:layout_marginStart="10dp"
-                        app:layout_constraintStart_toEndOf="@id/module_goal_name"
-                        app:layout_constraintBottom_toBottomOf="@id/module_goal_name" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="(+1)"
-                        android:textSize="11sp"
-                        android:alpha=".5"
-                        app:layout_constraintStart_toEndOf="@id/goal_progress_days"
-                        app:layout_constraintBottom_toBottomOf="@id/module_goal_name"  />
-
-
-
-
-                </com.news.goodlife.CustomViews.ProgressBarLabeld>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        </com.google.android.flexbox.FlexboxLayout>
     </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
 
     <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
@@ -810,7 +628,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Savings"
+                android:text="Savings free to Use"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/saving_module_amount"
                 android:id="@+id/savings_module_title"
@@ -819,78 +637,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1500,00€"
+                android:text="1530,00€"
                 android:textSize="24sp"
                 android:id="@+id/saving_module_amount"
                 app:layout_constraintTop_toBottomOf="@id/savings_module_title"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/available_savings_cont"
-            app:layout_constraintTop_toBottomOf="@id/all_savings_cont"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:elevation="10dp"
-            >
-            <TextView
-                android:id="@+id/available_savings_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="550,25€"
-                android:textSize="16sp"
-                android:textColor="#FFFFFF"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Available"
-                android:textSize="11sp"
-                app:layout_constraintStart_toEndOf="@id/available_savings_amount"
-                app:layout_constraintBottom_toBottomOf="@id/available_savings_amount"
-                android:textColor="#FFFFFF"
-                android:alpha=".7"
-                android:layout_marginStart="10dp"
-                android:id="@+id/available_savings_title"
-                />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/allocated_savings_cont"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/available_savings_cont"
-            android:elevation="10dp"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/allocated_savings_amount"
-                android:text="950,00€"
-                android:textSize="16sp"
-                android:textColor="#FFFFFF"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Reserved"
-                android:textSize="11sp"
-                android:alpha=".7"
-                android:id="@+id/allocated_savings_title"
-                android:layout_marginStart="10dp"
-                app:layout_constraintStart_toEndOf="@id/allocated_savings_amount"
-                app:layout_constraintBottom_toBottomOf="@id/allocated_savings_amount"
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

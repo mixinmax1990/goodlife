@@ -2,6 +2,7 @@ package com.news.goodlife;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -27,9 +28,11 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.hardware.biometrics.BiometricPrompt;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CancellationSignal;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -58,13 +61,15 @@ import com.news.goodlife.CustomViews.CustomIcons.WalletIconCard;
 import com.news.goodlife.CustomViews.ElasticEdgeView;
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
 import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
+import com.news.goodlife.Data.Remote.Klarna.Interfaces.Callbacks.KlarnaResponseCallback;
+import com.news.goodlife.Data.Remote.Klarna.Models.Consent.POSTgetConsentDataModel;
 import com.news.goodlife.Fragments.SlideInFragments.BankTransactionsFragment;
 import com.news.goodlife.Fragments.SlideInFragments.BudgetManagementFragment;
 import com.news.goodlife.Fragments.SlideInFragments.BudgetModuleFragment;
 import com.news.goodlife.Fragments.SlideInFragments.FixedCostsFragment;
 import com.news.goodlife.Fragments.SlideInFragments.FixedIncomeFragment;
 import com.news.goodlife.Fragments.SlideInFragments.FixedModuleFragment;
-import com.news.goodlife.Fragments.SlideInFragments.KlarnaAccountOne;
+import com.news.goodlife.Fragments.SlideInFragments.KlarnaApp;
 import com.news.goodlife.Fragments.SlideInFragments.SubcriptionsFragment;
 import com.news.goodlife.Fragments.WalletCalendarFragment;
 import com.news.goodlife.Fragments.WalletTodayFragment;
@@ -97,6 +102,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -113,6 +119,10 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
     public ImageView fragment_container_three_backarrow;
     public BorderRoundView frame_one_border, frame_two_border;
     public TextView frame_one_title, frame_two_title;
+
+    //Authentications
+    public BlurView biometric_cover;
+    //private BiometricPrompt.
 
 
     private Fragment fragment;
@@ -263,7 +273,19 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         myDB = new DatabaseController(this);
         //setup app
         singletonClass.setDatabaseController(myDB);
+
+        //Check if we have Klarna Consent
+        if(singletonClass.providedConsent()){
+            Log.i("PROVIDED_CONSENT", ""+singletonClass.getDatabaseController().KlarnaConsentDBController.getConsent().getData().getConsent_id());
+        }
+        else{
+            Log.i("PROVIDED_CONSENT", "No Consent");
+        }
+
+
         SetupApp setup = new SetupApp();
+
+
 
         singletonClass.changeFragment.addObserver(changeFragment);
 
@@ -315,9 +337,20 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
         //callbacks
        //walletDaysCallback = (WalletDaysCallback) this.context;
-        blurViewMenu = findViewById(R.id.blurviewmenu);
 
-        blur(20);
+        //Biometric Authentication
+        biometric_cover = findViewById(R.id.biometric_cover);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            biometricAuthentication();
+            //biometric_cover.setVisibility(View.GONE);
+        }
+        else{
+            //No Authentication Needed Hide the cover
+
+        }
+
+        blurViewMenu = findViewById(R.id.blurviewmenu);
+        blur(10);
 
         //setWalletCards();
 
@@ -357,7 +390,10 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                 fragment_container_three_backarrow.setX(displayWidth);
 
                 centerScaledWidth = (int)((int)(displayWidth * .5)/2.2);
-                overviewFragments();
+
+                frame_one_border.animate().alpha(0);
+                frame_two_border.animate().alpha(0);
+
 
                 singletonClass.setDisplayHeight(displayHeight);
                 singletonClass.setDisplayWidth(displayWidth);
@@ -376,6 +412,95 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                 menu_drawer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    private void biometricAuthentication() {
+
+        Log.i("BIOMETRUNS", "YES");
+
+        //TODO Make sure all pitfalls are checked
+
+        /*
+        //Max 25f
+        View decorView = getWindow().getDecorView();
+        //ViewGroup you want to start blur from. Choose root as close to BlurView in hierarchy as possible.
+        ViewGroup rootView = (ViewGroup) decorView.findViewById(android.R.id.content);
+        //Set drawable to draw in the beginning of each blurred frame (Optional).
+        //Can be used in case your layout has a lot of transparent space and your content
+        //gets kinda lost after after blur is applied.
+        Drawable windowBackground = decorView.getBackground();
+        biometric_cover.setClipToOutline(true);
+
+        biometric_cover.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
+
+        biometric_cover.setupWith(rootView)
+                .setFrameClearDrawable(windowBackground)
+                .setBlurAlgorithm(new RenderScriptBlur(this))
+                .setBlurRadius(6)
+                .setHasFixedTransformationMatrix(true);
+        */
+        CancellationSignal signal = new CancellationSignal();
+        Executor executor = ContextCompat.getMainExecutor(this);
+        BiometricPrompt biometricPrompt = new BiometricPrompt.Builder(getApplicationContext())
+                .setTitle("Authenticate")
+                .setSubtitle("")
+                .setDescription("Remove Authentication in App Settings")
+                .setNegativeButton("CANCEL", getMainExecutor(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .build();
+        biometricPrompt.authenticate(signal, executor, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                Log.i("Authentication", "Error");
+            }
+
+            @Override
+            public void onAuthenticationHelp(int helpCode, CharSequence helpString) {
+                super.onAuthenticationHelp(helpCode, helpString);
+                Log.i("Authentication", "Help");
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                Log.i("Authentication", "Success");
+                biometric_cover.animate().alpha(0).setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        biometric_cover.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Log.i("Authentication", "Failed");
+            }
+        });
+
+
     }
 
     private void setWalletCards() {
@@ -426,6 +551,9 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                 case "FixedModule":
                     slideInContainerThree(fragment_container_one);
                     openSideFragment("FixedModule");
+                    break;
+                case "AuthKlarna":
+                    Log.i("Client_Token", ""+singletonClass.changeFragment.data.get(0));
                     break;
                 default:
                     break;
@@ -667,7 +795,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                 vibratedSlideIn = false;
                 vibratedSlideOut = false;
                 walletCalendarFragment.resetIndicator(dpToPx(2));
-                walletTodayFragment.resetIndicator(displayWidth - dpToPx(8));
+                walletMultiDaysFragment.resetIndicator(displayWidth - dpToPx(8));
 
             }
 
@@ -731,6 +859,18 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         if(movedView != null){
             x = movedView.getX();
         }
+
+        if(opendSideFragment instanceof KlarnaApp){
+
+            Log.i("Is Instance", "KlarnaAPP");
+            //Make sure to close Session if User Goes back
+            fragment_container_three_backarrow.setVisibility(View.VISIBLE);
+
+        }
+        else{
+            Log.i("Is Instance", "Something else");
+        }
+
         ValueAnimator va;
         va = ValueAnimator.ofInt(0, displayWidth);
         va.setDuration(300);
@@ -1181,7 +1321,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
     private void doMagic(boolean action){
         if(action){
-            if(selectedFragment == 5){
+            if(selectedFragment == 3){
                 //Multidays is opened get All Visible Day Views
 
                 RelationshipMapping relationshipMapping = new RelationshipMapping();
@@ -1203,7 +1343,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         }
         else{
 
-            if(selectedFragment == 5){
+            if(selectedFragment == 3){
                 //Multidays is opened get All Visible Day Views
 
                 RelationshipMapping relationshipMapping = new RelationshipMapping();
@@ -1322,8 +1462,49 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                 ft.replace(fragment_container_three.getId(), opendSideFragment);
                 break;
             case "AccountOne":
-                opendSideFragment = new KlarnaAccountOne();
+                //opendSideFragment = new KlarnaAccountOne();
+                //ft.replace(fragment_container_three.getId(), opendSideFragment);
+                //Check if there is an Account
+
+                if(singletonClass.klarnaConsent != null){
+
+                    //Leave Break if no Session should be Started
+                    //break;
+                }
+
+                //If THERE IS NO CONSENT Then start Klarna Process to get the Consent from the User
+                opendSideFragment = new KlarnaApp();
                 ft.replace(fragment_container_three.getId(), opendSideFragment);
+                singletonClass.getKlarna().getSessionController().startSession( new KlarnaResponseCallback() {
+                    @Override
+                    public void success() {
+                        //Succesfully Started Klarna Session
+                        //Now Start a Flow
+                        singletonClass.getKlarna().getFlowsController().startBalanceFlow(new KlarnaResponseCallback() {
+                            @Override
+                            public void success() {
+                                String client_token = singletonClass.getKlarna().getFlowsController().getFlowData().getData().getClient_token();
+                                //Then Launch the Klarna APP
+                                ((KlarnaApp)opendSideFragment).setClient_token(client_token);
+                            }
+
+                            @Override
+                            public void error() {
+                                Log.i("Error", "Something went Wrongs");
+
+                            }
+                        });
+
+
+                    }
+
+                    @Override
+                    public void error() {
+
+                        Log.i("Callback Works", "error");
+
+                    }
+                });
                 break;
             default:
                 break;
@@ -1366,10 +1547,10 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
 
                 walletCalendarFragment = new WalletCalendarFragment();
-                walletTodayFragment = new WalletTodayFragment();
+                walletMultiDaysFragment = new WalletMultiDaysFragment(menuTop, fragment_container_one, menu_container, null, myDB);
                 //financeCashflow.setSharedElementReturnTransition(new DetailsTransition());
                 //financeCashflow.setExitTransition(new DetailsTransition());
-                ft.replace(fragment_container_one.getId(), walletTodayFragment);
+                ft.replace(fragment_container_one.getId(), walletMultiDaysFragment);
                 //ft.addToBackStack(walletMultiDaysFragment.getClass().getSimpleName());
                 //Today Frame
                 ft.replace(fragment_container_two.getId(), walletCalendarFragment);

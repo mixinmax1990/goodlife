@@ -44,6 +44,7 @@
         android:outlineProvider="none"
         android:visibility="gone"
         android:id="@+id/elasticEdge"/>
+        <!--TODO Remove th Calender Overlay-->
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +53,7 @@
         app:backgroundCustomColor="#2B2D32"
         android:layout_height="wrap_content"
         app:borderCustomRadius="20"
-        android:visibility="visible"
+        android:visibility="gone"
         android:elevation="30dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"

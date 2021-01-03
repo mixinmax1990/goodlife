@@ -71,7 +71,7 @@ public class BorderRoundView extends ConstraintLayout {
         }
 
         if(expandable){
-            canvas.drawCircle(getWidth() - 35, getHeight() -35, 5, expandableArcPaint);
+            //canvas.drawCircle(getWidth() - 35, getHeight() -35, 5, expandableArcPaint);
         }
         super.onDraw(canvas);
     }

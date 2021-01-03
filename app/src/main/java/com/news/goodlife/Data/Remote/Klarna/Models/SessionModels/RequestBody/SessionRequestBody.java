@@ -1,4 +1,6 @@
-package com.news.goodlife.Data.Remote.Klarna.Models;
+package com.news.goodlife.Data.Remote.Klarna.Models.SessionModels.RequestBody;
+
+import com.news.goodlife.Data.Remote.Klarna.Models.PsuModel;
 
 public class SessionRequestBody {
     String language;
@@ -19,4 +21,6 @@ public class SessionRequestBody {
     public void setPsu(PsuModel psu) {
         this.psu = psu;
     }
+
+
 }

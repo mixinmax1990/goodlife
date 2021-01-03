@@ -6,6 +6,8 @@ import com.news.goodlife.Data.Local.Controller.Financial.BudgetCategoryControlle
 import com.news.goodlife.Data.Local.Controller.Financial.BudgetController;
 import com.news.goodlife.Data.Local.Controller.Financial.WalletEventController;
 import com.news.goodlife.Data.Local.Controller.Financial.FinancialProfileController;
+import com.news.goodlife.Data.Local.Controller.KlarnaConsent.KlarnaConsentDBController;
+import com.news.goodlife.Data.Remote.Klarna.Controller.KlarnaConsentController;
 
 public class DatabaseController {
 
@@ -14,6 +16,7 @@ public class DatabaseController {
     public FinancialProfileController FinancialProfile;
     public BudgetCategoryController BudgetCategoryController;
     public BudgetController BudgetController;
+    public KlarnaConsentDBController KlarnaConsentDBController;
 
     public DatabaseController(Context context) {
 
@@ -22,5 +25,6 @@ public class DatabaseController {
         this.FinancialProfile = new FinancialProfileController(context);
         this.BudgetCategoryController = new BudgetCategoryController(context);
         this.BudgetController = new BudgetController(context);
+        this.KlarnaConsentDBController = new KlarnaConsentDBController(context);
     }
 }

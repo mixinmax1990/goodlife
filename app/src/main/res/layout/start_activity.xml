@@ -8,6 +8,12 @@
     android:background="?attr/baseBackground"
     tools:context=".StartActivity">
 
+    <eightbitlab.com.blurview.BlurView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="300dp"
+        android:background="#9C000000"
+        android:id="@+id/biometric_cover"/>
     <com.news.goodlife.CustomViews.CustomEntries.PageIndicatorBar
         android:layout_width="match_parent"
         android:layout_height="18dp"

@@ -254,10 +254,9 @@ public class WalletCalendarFragment extends Fragment {
         //clear TimeZone
         today.clear(Calendar.ZONE_OFFSET);
 
-        //Todo make first da a Date - for now go 60 days back
+        //Todo make first day a Date - for now go 60 days back
 
         int forecastDays = forecastYears * 365;// * 365
-
 
         //Go X years back
         Calendar loopDay = Calendar.getInstance();
@@ -273,12 +272,18 @@ public class WalletCalendarFragment extends Fragment {
             //Set The Day Object
             CalendarLayoutDay calendarLayoutDay = new CalendarLayoutDay("day", loopDay);
 
+
             //Check if WEEK,MONTH,YEAR ends
             allCalendarDays.add(calendarLayoutDay);
+            Log.i("InLoop Calendadays", ""+allCalendarDays.size());
             analysisPoints(loopDay);
+
         }
 
-        allCalendarDays.get(allCalendarDays.size() - 1).setToday(true);
+        Log.i("CalRangeSize", ""+allCalendarDays.size());
+
+        //TODO GET TODAY TO WORK IN THE CALENDAR
+        //allCalendarDays.get(allCalendarDays.size() - 1).setToday(true);
 
         todayItemPosition = allMonths.size();
         
@@ -290,14 +295,10 @@ public class WalletCalendarFragment extends Fragment {
             //Set The Day Object
             CalendarLayoutDay calendarLayoutDay = new CalendarLayoutDay("day", loopDay);
 
-
             //Check if WEEK,MONTH,YEAR ends
             allCalendarDays.add(calendarLayoutDay);
             analysisPoints(loopDay);
         }
-
-
-
         //allCalendarDates.get(0).getTime();
 
         //c.add(Calendar.DATE, 40);  // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE

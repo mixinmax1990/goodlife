@@ -50,7 +50,7 @@ public class SetupApp {
 
         category = new BudgetCategoryModel();
         category.setCatname("Food");
-        category.setCatcolor("#5affac");
+        category.setCatcolor("#64CE65");
         category.setCaticon("budget_icon_kitchen");
 
         allCategories.add(category);
@@ -58,7 +58,7 @@ public class SetupApp {
         category = new BudgetCategoryModel();
 
         category.setCatname("Birthday");
-        category.setCatcolor("#ff5a7d");
+        category.setCatcolor("#64CE65");
         category.setCaticon("budget_icon_cake");
 
         allCategories.add(category);
@@ -66,7 +66,7 @@ public class SetupApp {
         category = new BudgetCategoryModel();
 
         category.setCatname("Clothes");
-        category.setCatcolor("#ffee5a");
+        category.setCatcolor("#64CE65");
         category.setCaticon("budget_icon_clothes");
 
         allCategories.add(category);
