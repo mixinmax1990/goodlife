@@ -130,6 +130,7 @@ public class NewBudget extends Fragment {
                         first.itemView.setAlpha(.2f);
                         last.itemView.setAlpha(.2f);
                         middle.itemView.setAlpha(1f);
+                        
 
                     }
                     catch(Exception e){
