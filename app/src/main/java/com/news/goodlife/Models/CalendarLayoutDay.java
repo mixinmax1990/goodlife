@@ -9,12 +9,13 @@ import java.util.Locale;
 public class CalendarLayoutDay {
 
         private String type;
+        private int position;
         private Calendar calendar;
         private boolean today = false;
         private Date date;
        // public String dayofMonth;
 
-        private String DAY_OF_WEEK_NUMBER, DAY_OF_WEEK_NAME, MONTH_DAY_NUMBER, YEAR, MONTH_NUMBER, MONTH_NAME;
+        private String DAY_OF_WEEK_NUMBER, DAY_OF_WEEK_NAME, MONTH_DAY_NUMBER, YEAR, MONTH_NUMBER, MONTH_NAME, MONTH_NAME_SHORT;
 
         public CalendarLayoutDay(String type, Calendar calendar) {
             this.type = type;
@@ -26,6 +27,7 @@ public class CalendarLayoutDay {
             setMONTH_DAY_NUMBER(""+calendar.get(Calendar.DAY_OF_MONTH));
             setYEAR(""+calendar.get(Calendar.YEAR));
             setMONTH_NAME(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
+            setMONTH_NAME_SHORT(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
             setMONTH_NUMBER(""+calendar.get(Calendar.MONTH));
             setDate(calendar.getTime());
 
@@ -109,5 +111,13 @@ public class CalendarLayoutDay {
 
     public void setMONTH_NAME(String MONTH_NAME) {
         this.MONTH_NAME = MONTH_NAME;
+    }
+
+    public String getMONTH_NAME_SHORT() {
+        return MONTH_NAME_SHORT;
+    }
+
+    public void setMONTH_NAME_SHORT(String MONTH_NAME_SHORT) {
+        this.MONTH_NAME_SHORT = MONTH_NAME_SHORT;
     }
 }

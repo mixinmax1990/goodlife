@@ -6,14 +6,13 @@ public class BudgetCategoryTable {
 
     private static final String BUDGET_CATEGORY_ID = "budget_category_id";
     private static final String BUDGET_CATEGORY_NAME = "budget_category_name";
-    private static final String BUDGET_CATEGORY_ICON = "budget_category_icon";
-    private static final String BUDGET_CATEGORY_COLOR = "budget_category_color";
+    private static final String BUDGET_CATEGORY_CHILDCOUNT = "budget_category_childcount";
+
 
     private static final String CREATE_BUDGET_CATEGORY_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
             + BUDGET_CATEGORY_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + BUDGET_CATEGORY_NAME + " TEXT,"
-            + BUDGET_CATEGORY_ICON + " TEXT,"
-            + BUDGET_CATEGORY_COLOR + " TEXT"+
+            + BUDGET_CATEGORY_CHILDCOUNT + " TEXT"+
             ")";
 
     public static String getCreateBudgetCategoryTable() {
@@ -32,11 +31,7 @@ public class BudgetCategoryTable {
         return BUDGET_CATEGORY_NAME;
     }
 
-    public static String getBudgetCategoryIcon() {
-        return BUDGET_CATEGORY_ICON;
-    }
-
-    public static String getBudgetCategoryColor() {
-        return BUDGET_CATEGORY_COLOR;
+    public static String getBudgetCategoryChildcount() {
+        return BUDGET_CATEGORY_CHILDCOUNT;
     }
 }

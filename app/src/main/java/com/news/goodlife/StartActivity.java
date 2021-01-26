@@ -42,6 +42,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -62,20 +63,21 @@ import com.news.goodlife.CustomViews.ElasticEdgeView;
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
 import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
 import com.news.goodlife.Data.Remote.Klarna.Interfaces.Callbacks.KlarnaResponseCallback;
-import com.news.goodlife.Data.Remote.Klarna.Models.Consent.POSTgetConsentDataModel;
 import com.news.goodlife.Fragments.SlideInFragments.BankTransactionsFragment;
-import com.news.goodlife.Fragments.SlideInFragments.BudgetManagementFragment;
+import com.news.goodlife.Fragments.BudgetManagementFragment;
 import com.news.goodlife.Fragments.SlideInFragments.BudgetModuleFragment;
 import com.news.goodlife.Fragments.SlideInFragments.FixedCostsFragment;
 import com.news.goodlife.Fragments.SlideInFragments.FixedIncomeFragment;
 import com.news.goodlife.Fragments.SlideInFragments.FixedModuleFragment;
 import com.news.goodlife.Fragments.SlideInFragments.KlarnaApp;
 import com.news.goodlife.Fragments.SlideInFragments.SubcriptionsFragment;
+import com.news.goodlife.Fragments.SlideInFragments.SubscribeFragment;
 import com.news.goodlife.Fragments.WalletCalendarFragment;
 import com.news.goodlife.Fragments.WalletTodayFragment;
 import com.news.goodlife.Functions.RelationshipMapping;
 import com.news.goodlife.Interfaces.OnClickedCashflowItemListener;
 import com.news.goodlife.Interfaces.CalendarSelectDayListener;
+import com.news.goodlife.Interfaces.SuccessCallback;
 import com.news.goodlife.Interfaces.WalletDatabaseEvents;
 import com.news.goodlife.LayoutManagers.MultiDaysLinearLayoutManager;
 import com.news.goodlife.Models.CalendarLayoutDay;
@@ -84,7 +86,6 @@ import com.news.goodlife.Tools.CameraScan.CameraScanFragment;
 import com.news.goodlife.Fragments.WalletMultiDaysFragment;
 import com.news.goodlife.Fragments.FinancialFragment;
 import com.news.goodlife.Fragments.GoalsFragment;
-import com.news.goodlife.Fragments.HealthFragment;
 import com.news.goodlife.Fragments.PhysicalFragment;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -149,7 +150,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
 
     //MenuIcons
-    MenuIcons goalsBTN, analysisBTN, hubBTN, magicButton;
+    MenuIcons goalsBTN, budgetsBTN, hubBTN, magicButton;
     WalletIcon walletBTN;
     PageIndicatorBar walletPageIndicator;
 
@@ -265,6 +266,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         setContentView(R.layout.start_activity);
         transparentStatus();
         setStatusbarspace();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         //SIngleton Classes
         singletonClass = SingletonClass.getInstance();
@@ -274,14 +276,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         //setup app
         singletonClass.setDatabaseController(myDB);
 
-        //Check if we have Klarna Consent
-        if(singletonClass.providedConsent()){
-            Log.i("PROVIDED_CONSENT", ""+singletonClass.getDatabaseController().KlarnaConsentDBController.getConsent().getData().getConsent_id());
-        }
-        else{
-            Log.i("PROVIDED_CONSENT", "No Consent");
-        }
-
+        //SetUp App
 
         SetupApp setup = new SetupApp();
 
@@ -293,7 +288,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
         walletBTN = findViewById(R.id.buttonWallet);
         goalsBTN = findViewById(R.id.buttonGoals);
-        analysisBTN = findViewById(R.id.buttonAnalysis);
+        budgetsBTN = findViewById(R.id.buttonBudgets);
         hubBTN = findViewById(R.id.buttonHub);
         magicButton = findViewById(R.id.magic_button);
         walletPageIndicator = findViewById(R.id.wallet_page_indicator);
@@ -421,25 +416,6 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
         //TODO Make sure all pitfalls are checked
 
-        /*
-        //Max 25f
-        View decorView = getWindow().getDecorView();
-        //ViewGroup you want to start blur from. Choose root as close to BlurView in hierarchy as possible.
-        ViewGroup rootView = (ViewGroup) decorView.findViewById(android.R.id.content);
-        //Set drawable to draw in the beginning of each blurred frame (Optional).
-        //Can be used in case your layout has a lot of transparent space and your content
-        //gets kinda lost after after blur is applied.
-        Drawable windowBackground = decorView.getBackground();
-        biometric_cover.setClipToOutline(true);
-
-        biometric_cover.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
-
-        biometric_cover.setupWith(rootView)
-                .setFrameClearDrawable(windowBackground)
-                .setBlurAlgorithm(new RenderScriptBlur(this))
-                .setBlurRadius(6)
-                .setHasFixedTransformationMatrix(true);
-        */
         CancellationSignal signal = new CancellationSignal();
         Executor executor = ContextCompat.getMainExecutor(this);
         BiometricPrompt biometricPrompt = new BiometricPrompt.Builder(getApplicationContext())
@@ -537,23 +513,26 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             switch(newValue.toString()){
                 case "IncomeModule":
                     slideInContainerThree(fragment_container_one);
-                    openSideFragment("IncomingModule");
+                    openSideFragment("IncomingModule", null);
                     break;
                 case "OutgoingModule":
                     slideInContainerThree(fragment_container_one);
-                    openSideFragment("OutgoingModule");
+                    openSideFragment("OutgoingModule", null);
                     break;
                 case "BudgetModule":
                     slideInContainerThree(fragment_container_one);
-                    openSideFragment("BudgetModule");
+                    openSideFragment("BudgetModule", null);
                     //Contains ID as Data
                     break;
                 case "FixedModule":
                     slideInContainerThree(fragment_container_one);
-                    openSideFragment("FixedModule");
+                    openSideFragment("FixedModule", null);
                     break;
                 case "AuthKlarna":
                     Log.i("Client_Token", ""+singletonClass.changeFragment.data.get(0));
+                    break;
+                case "KlarnaApp":
+                    openSideFragment("KlarnaApp", null);
                     break;
                 default:
                     break;
@@ -571,7 +550,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             public void onClick(View v) {
                 Log.i("Clicked", "MneuOne");
                 slideInContainerThree(null);
-                openSideFragment("BudgetManagement");
+                openSideFragment("BudgetManagement", null);
             }
         });
         menutwo = findViewById(R.id.menu_two);
@@ -579,7 +558,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             @Override
             public void onClick(View v) {
                 slideInContainerThree(null);
-                openSideFragment("FixedCosts");
+                openSideFragment("FixedCosts", null);
             }
         });
         menuthree = findViewById(R.id.menu_three);
@@ -587,7 +566,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             @Override
             public void onClick(View v) {
                 slideInContainerThree(null);
-                openSideFragment("FixedIncome");
+                openSideFragment("FixedIncome", null);
             }
         });
         menufour = findViewById(R.id.menu_four);
@@ -595,7 +574,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             @Override
             public void onClick(View v) {
                 slideInContainerThree(null);
-                openSideFragment("Subscriptions");
+                openSideFragment("Subscriptions", null);
             }
         });
         menufive = findViewById(R.id.menu_five);
@@ -603,7 +582,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             @Override
             public void onClick(View v) {
                 slideInContainerThree(null);
-                openSideFragment("BankTransactions");
+                openSideFragment("BankTransactions", null);
             }
         });
 
@@ -632,7 +611,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             slideProgess = (float)(displayWidth - move) / displayWidth;
             if(slideProgess > .7f){
                 if(!vibratedSlideIn){
-                    vibrator.vibrate(5);
+                    //vibrator.vibrate(5);
                     vibratedSlideIn = true;
                 }
             }
@@ -641,7 +620,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             slideProgess = Math.abs((float)move / displayWidth);
             if(slideProgess > .3f){
                 if(!vibratedSlideIn){
-                    vibrator.vibrate(5);
+                    //vibrator.vibrate(5);
                     vibratedSlideIn = true;
                 }
             }
@@ -896,6 +875,31 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
             }
 
+        });
+
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+                opendSideFragment = null;
+                fragment_container_three.removeAllViews();
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
         });
         va.start();
     }
@@ -1212,15 +1216,15 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             }
         });
 
-        analysisBTN.setOnTouchListener(new View.OnTouchListener() {
+        budgetsBTN.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch(motionEvent.getActionMasked()){
                     case MotionEvent.ACTION_DOWN:
-                        if(selectedFragment != 3){
+                        if(selectedFragment != 1){
                             resetButtonTint();
-                            analysisBTN.animateEnter();
-                            selectedFragment = 3;
+                            budgetsBTN.animateEnter();
+                            selectedFragment = 1;
                             changeSelectedColor();
                         }
                         break;
@@ -1311,8 +1315,21 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         connectAccountOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                slideInContainerThree(fragment_container_one);
-                openSideFragment("AccountOne");
+                openSideFragment("AccountOne", new SuccessCallback() {
+                    @Override
+                    public void success() {
+                        slideInContainerThree(null);
+                    }
+
+                    @Override
+                    public void error() {
+
+                    }
+                });
+
+                //Wait a couple of seconds
+
+
             }
         });
 
@@ -1423,7 +1440,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
     public Fragment opendSideFragment = null;
 
-    public void openSideFragment(String actionName){
+    public void openSideFragment(String actionName, @Nullable SuccessCallback callback){
         FragmentTransaction ft;
         ft = getSupportFragmentManager().beginTransaction();
         switch(actionName){
@@ -1462,49 +1479,18 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                 ft.replace(fragment_container_three.getId(), opendSideFragment);
                 break;
             case "AccountOne":
-                //opendSideFragment = new KlarnaAccountOne();
-                //ft.replace(fragment_container_three.getId(), opendSideFragment);
-                //Check if there is an Account
-
-                if(singletonClass.klarnaConsent != null){
-
-                    //Leave Break if no Session should be Started
-                    //break;
+                //check if we have a Subscription
+                if(singletonClass.isSubscribed()){
+                    startKlarnaConsentSessionApp(ft);
                 }
-
-                //If THERE IS NO CONSENT Then start Klarna Process to get the Consent from the User
-                opendSideFragment = new KlarnaApp();
-                ft.replace(fragment_container_three.getId(), opendSideFragment);
-                singletonClass.getKlarna().getSessionController().startSession( new KlarnaResponseCallback() {
-                    @Override
-                    public void success() {
-                        //Succesfully Started Klarna Session
-                        //Now Start a Flow
-                        singletonClass.getKlarna().getFlowsController().startBalanceFlow(new KlarnaResponseCallback() {
-                            @Override
-                            public void success() {
-                                String client_token = singletonClass.getKlarna().getFlowsController().getFlowData().getData().getClient_token();
-                                //Then Launch the Klarna APP
-                                ((KlarnaApp)opendSideFragment).setClient_token(client_token);
-                            }
-
-                            @Override
-                            public void error() {
-                                Log.i("Error", "Something went Wrongs");
-
-                            }
-                        });
-
-
-                    }
-
-                    @Override
-                    public void error() {
-
-                        Log.i("Callback Works", "error");
-
-                    }
-                });
+                else{
+                    //Start Subscription Page
+                    opendSideFragment = new SubscribeFragment(callback);
+                    ft.replace(fragment_container_three.getId(), opendSideFragment);
+                }
+                break;
+            case "KlarnaApp":
+                startKlarnaConsentSessionApp(ft);
                 break;
             default:
                 break;
@@ -1515,7 +1501,56 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
     }
 
-    private HealthFragment healthFragment;
+    private FragmentTransaction startKlarnaConsentSessionApp(FragmentTransaction ft){
+        //opendSideFragment = new KlarnaAccountOne();
+        //ft.replace(fragment_container_three.getId(), opendSideFragment);
+        //Check if there is an Account
+
+        if(singletonClass.klarnaConsent != null){
+
+            //Leave Break if no Session should be Started
+            //break;
+        }
+
+        //If THERE IS NO CONSENT Then start Klarna Process to get the Consent from the User
+        opendSideFragment = new KlarnaApp();
+        ft.replace(fragment_container_three.getId(), opendSideFragment);
+        singletonClass.getKlarna().getSessionController().startSession( new KlarnaResponseCallback() {
+            @Override
+            public void success() {
+                //Succesfully Started Klarna Session
+                //Now Start a Flow
+                singletonClass.getKlarna().getFlowsController().startBalanceFlow(new KlarnaResponseCallback() {
+                    @Override
+                    public void success() {
+                        String client_token = singletonClass.getKlarna().getFlowsController().getFlowData().getData().getClient_token();
+                        //Then Launch the Klarna APP
+                        ((KlarnaApp)opendSideFragment).setClient_token(client_token);
+                    }
+
+                    @Override
+                    public void error() {
+                        Log.i("Error", "Something went Wrongs");
+
+                    }
+                });
+
+
+            }
+
+            @Override
+            public void error() {
+
+                Log.i("Callback Works", "error");
+
+            }
+        });
+
+        return ft;
+
+    }
+
+    private BudgetManagementFragment budgetFragment;
     private PhysicalFragment physicalFragment;
     private FinancialFragment financialFragment;
     public WalletMultiDaysFragment walletMultiDaysFragment;
@@ -1530,9 +1565,9 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
         switch(selectedFragment){
             case 1:
-                healthFragment = new HealthFragment();
-                ft.replace(fragment_container_one.getId(), healthFragment);
-                ft.addToBackStack(healthFragment.getClass().getSimpleName());
+                budgetFragment = new BudgetManagementFragment();
+                ft.replace(fragment_container_one.getId(), budgetFragment);
+                ft.addToBackStack(budgetFragment.getClass().getSimpleName());
 
                 break;
             case 2:
@@ -1544,8 +1579,6 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             case 3:
                 //overviewFragments();
                 //Calendar Frame
-
-
                 walletCalendarFragment = new WalletCalendarFragment();
                 walletMultiDaysFragment = new WalletMultiDaysFragment(menuTop, fragment_container_one, menu_container, null, myDB);
                 //financeCashflow.setSharedElementReturnTransition(new DetailsTransition());

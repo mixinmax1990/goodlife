@@ -33,8 +33,7 @@ public class BudgetCategoryController extends DatabaseHelper {
         values = new ContentValues();
 
         values.put(budgetCategoryTable.getBudgetCategoryName(), model.getCatname());
-        values.put(budgetCategoryTable.getBudgetCategoryIcon(), model.getCaticon());
-        values.put(budgetCategoryTable.getBudgetCategoryColor(), model.getCatcolor());
+        values.put(budgetCategoryTable.getBudgetCategoryChildcount(), model.getChildcount());
 
         long insert = db.insert(budgetCategoryTable.getTableName(), null, values);
         return insert;
@@ -55,8 +54,27 @@ public class BudgetCategoryController extends DatabaseHelper {
 
         category.setId(c.getString(c.getColumnIndex(budgetCategoryTable.getBudgetCategoryId())));
         category.setCatname(c.getString(c.getColumnIndex(budgetCategoryTable.getBudgetCategoryName())));
-        category.setCaticon(c.getString(c.getColumnIndex(budgetCategoryTable.getBudgetCategoryIcon())));
-        category.setCatcolor(c.getString(c.getColumnIndex(budgetCategoryTable.getBudgetCategoryColor())));
+        category.setChildcount(c.getString(c.getColumnIndex(budgetCategoryTable.getBudgetCategoryChildcount())));
+
+        return category;
+    }
+
+    public BudgetCategoryModel getLatestBudget(){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String selectQuery = "SELECT * FROM " + budgetCategoryTable.getTableName() + " ORDER BY " + budgetCategoryTable.getBudgetCategoryId() + " DESC LIMIT 1";
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c != null){
+            c.moveToFirst();
+        }
+
+        BudgetCategoryModel category = new BudgetCategoryModel();
+
+        category.setId(c.getString(c.getColumnIndex(budgetCategoryTable.getBudgetCategoryId())));
+        category.setCatname(c.getString(c.getColumnIndex(budgetCategoryTable.getBudgetCategoryName())));
+        category.setChildcount(c.getString(c.getColumnIndex(budgetCategoryTable.getBudgetCategoryChildcount())));
 
         return category;
     }
@@ -76,8 +94,7 @@ public class BudgetCategoryController extends DatabaseHelper {
 
                 category.setId(c.getString(c.getColumnIndex(budgetCategoryTable.getBudgetCategoryId())));
                 category.setCatname(c.getString(c.getColumnIndex(budgetCategoryTable.getBudgetCategoryName())));
-                category.setCaticon(c.getString(c.getColumnIndex(budgetCategoryTable.getBudgetCategoryIcon())));
-                category.setCatcolor(c.getString(c.getColumnIndex(budgetCategoryTable.getBudgetCategoryColor())));
+                category.setChildcount(c.getString(c.getColumnIndex(budgetCategoryTable.getBudgetCategoryChildcount())));
 
                 datalist.add(category);
             }

@@ -1,0 +1,45 @@
+{
+    "logs": [
+        {
+            "outputFile": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v27/values-v27.xml",
+            "map": [
+                {
+                    "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/values-v27/styles.xml",
+                    "from": {
+                        "startLines": "2,48",
+                        "startColumns": "4,4",
+                        "startOffsets": "53,2357",
+                        "endLines": "46,52",
+                        "endColumns": "12,12",
+                        "endOffsets": "2351,2593"
+                    },
+                    "to": {
+                        "startLines": "4,49",
+                        "startColumns": "4,4",
+                        "startOffsets": "127,2430",
+                        "endLines": "48,53",
+                        "endColumns": "12,12",
+                        "endOffsets": "2425,2666"
+                    }
+                },
+                {
+                    "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/values-v27/strings.xml",
+                    "from": {
+                        "startLines": "3,2",
+                        "startColumns": "4,4",
+                        "startOffsets": "92,55",
+                        "endColumns": "34,36",
+                        "endOffsets": "122,87"
+                    },
+                    "to": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,90",
+                        "endColumns": "34,36",
+                        "endOffsets": "85,122"
+                    }
+                }
+            ]
+        }
+    ]
+}

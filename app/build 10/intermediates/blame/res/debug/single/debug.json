@@ -1,0 +1,602 @@
+[
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_wallet_main.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/wallet_main.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_cashflow_list_item_center.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/cashflow_list_item_center.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_data_usage_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_data_usage_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_cashflow_list_item_bottom_long.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/cashflow_list_item_bottom_long.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_budget_icon_cake.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/budget_icon_cake.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_today_layout.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/today_layout.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_icn_regular.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/icn_regular.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_notifications_none_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_notifications_none_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_calendar_today_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_calendar_today_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_credit_card_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_credit_card_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_all_inclusive_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_all_inclusive_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ripple_button_primary.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ripple_button_primary.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_cat_ic_home.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/cat_ic_home.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_wallet_recycler_day_cashflow_item_neg.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/wallet_recycler_day_cashflow_item_neg.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_cashflow_list_item_top.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/cashflow_list_item_top.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_view_module_custom_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_view_module_custom_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_cat_ic_car.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/cat_ic_car.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_slidein_banktransactions_layout.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/slidein_banktransactions_layout.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_cashflow_list_item_bottom_verylong.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/cashflow_list_item_bottom_verylong.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_cashflow_list_item_center.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/cashflow_list_item_center.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_image_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_image_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_favorite_border_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_favorite_border_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_round_edge_layout_35.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/round_edge_layout_35.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_mental_fragment.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/mental_fragment.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_health_fragment.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/health_fragment.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_sparkasse_logo.png.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/sparkasse_logo.png"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_pie_chart_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_pie_chart_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_check_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_check_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_popup_cashflow.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/popup_cashflow.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_rounded_date_overflow.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/rounded_date_overflow.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_budget_icon_clothes.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/budget_icon_clothes.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_wallet_recycler_weekend_item.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/wallet_recycler_weekend_item.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_cat_ic_grocery.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/cat_ic_grocery.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_cashflow_list_item_bottom.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/cashflow_list_item_bottom.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_sentiment_satisfied_alt_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_sentiment_satisfied_alt_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_wallet_calendar.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/wallet_calendar.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_custom_switch_one.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/finance/async_layout_modules/drawable/custom_switch_one.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_slidein_module_fixed.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/slidein_module_fixed.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ripple_button.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ripple_button.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_remove_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_remove_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_wallet_multi_days.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/wallet_multi_days.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_month_cashflow_space_item.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/month_cashflow_space_item.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_slidein_budget_new_category.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/slidein_budget_new_category.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_wallet_recycler_day_cashflow_item_pos.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/wallet_recycler_day_cashflow_item_pos.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_test.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/test.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_start_activity.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/start_activity.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_wallet_main_month_graph.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/wallet_main_month_graph.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_start_navigation_content.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/start_navigation_content.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_calendar_picker_layout.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/async_layout_modules/layout/calendar_picker_layout.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_slidein_fixed_costs_layout.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/slidein_fixed_costs_layout.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_financial_fragment_newentry.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/financial_fragment_newentry.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_close_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_close_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_cashflow_recycler_item_week_analysis.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/cashflow_recycler_item_week_analysis.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_remove_circle_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_remove_circle_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_pop_cost_fragment.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/pop_cost_fragment.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_expand_more_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_expand_more_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_wallet_fix.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/wallet_fix.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_tab_transparent.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/tab_transparent.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_month_wallet_today_item.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/month_wallet_today_item.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_month_main_item.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/month_main_item.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_wallet_recycler_today_item.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/wallet_recycler_today_item.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_apps_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_apps_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_keyboard_arrow_up_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_keyboard_arrow_up_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_spa_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_spa_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_today_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_today_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_wallet_recycler_day_item.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/wallet_recycler_day_item.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_slidein_budget_manage_layout.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/slidein_budget_manage_layout.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_dark.webp.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/dark.webp"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_attach_file_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_attach_file_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_cat_ic_transportation.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/cat_ic_transportation.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_fragment_cashflow_regular.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/fragment_cashflow_regular.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_cashflow_list_item_single_verylong.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/cashflow_list_item_single_verylong.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_bubble_chart_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_bubble_chart_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_blur_on_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_blur_on_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_budget_icon_kitchen.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/budget_icon_kitchen.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_filter_drama_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_filter_drama_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_round_edge_layout_25.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/round_edge_layout_25.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_volksbank_logo.png.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/volksbank_logo.png"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_add_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_add_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_brain.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_brain.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_pop_costcat_fragment.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/pop_costcat_fragment.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_cashflow_list_item.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/cashflow_list_item.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_outline_show_chart_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_outline_show_chart_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_graph_bg_gradient.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/graph_bg_gradient.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_insert_drive_file_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_insert_drive_file_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_photo_camera_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_photo_camera_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_month_wallet_monthend_item.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/month_wallet_monthend_item.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_financial_fragment.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/financial_fragment.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_analysis_main.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/analysis_main.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_sync_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_sync_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_goal_detail_layout.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/finance/async_layout_modules/layout/goal_detail_layout.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_cashflow_card.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/cashflow_card.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_cashflow_list_item_solo.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/cashflow_list_item_solo.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_charts.jpg.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/charts.jpg"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_rounded_date_btn.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/finance/async_layout_modules/drawable/rounded_date_btn.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ssh.jpg.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ssh.jpg"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_chart_finacial_layout.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/chart_finacial_layout.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_month_wallet_weekened_item.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/month_wallet_weekened_item.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_slidein_fixed_income_layout.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/slidein_fixed_income_layout.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_slidein_module_budget.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/slidein_module_budget.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_top_tab.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/top_tab.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_slidein_subscriptions_layout.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/slidein_subscriptions_layout.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_account_balance_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_account_balance_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_wallet_recycler_monthend_item.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/wallet_recycler_monthend_item.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_cat_ic_sport.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/cat_ic_sport.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_goals_fragment.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/goals_fragment.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_physical_fragment.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/physical_fragment.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_tools_camerascan.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/tools_camerascan.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_cashflow_list_item_bottom.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/cashflow_list_item_bottom.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_slidein_budget_breakdown_layout.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/slidein_budget_breakdown_layout.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_cashflow_list_item_top.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/cashflow_list_item_top.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_add_box_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_add_box_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_launcher_background.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_pop_income_fragment.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/pop_income_fragment.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_event_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_event_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_add_goal_layout.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/finance/async_layout_modules/layout/add_goal_layout.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_edit_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_edit_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_cashflow_display_menu.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/cashflow_display_menu.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_notifications_active_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_notifications_active_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_fragment_cashflow_once.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/fragment_cashflow_once.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_unfold_less_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_unfold_less_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable-v24_ic_launcher_foreground.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable-v24/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_month_wallet_yearend_item.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/month_wallet_yearend_item.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_cashflow_list_item_single_long.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/cashflow_list_item_single_long.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_klarnawebview.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/klarnawebview.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_budget_list_item.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/budget_list_item.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_month_wallet_day_item.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/month_wallet_day_item.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_chartstwo.jpg.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/chartstwo.jpg"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_pop_event_fragment.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/pop_event_fragment.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_custom_switch_one_track.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/finance/async_layout_modules/drawable/custom_switch_one_track.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_popup_cashflow_invisible.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/popup_cashflow_invisible.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_wallet_recycler_yearend.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/wallet_recycler_yearend.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_budget_category_item.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/budget_category_item.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_unfold_more_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_unfold_more_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_arrow_back_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_fragment_cashflow_timeline.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/fragment_cashflow_timeline.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/drawable_ic_baseline_view_comfy_custom_24.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/drawable/ic_baseline_view_comfy_custom_24.xml"
+    },
+    {
+        "merged": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/build/intermediates/res/merged/debug/layout_finacial_fragment_cash_expanded.xml.flat",
+        "source": "/Users/Danny/Desktop/Programming/Android/GoodLife/app/src/main/res/layout/finacial_fragment_cash_expanded.xml"
+    }
+]

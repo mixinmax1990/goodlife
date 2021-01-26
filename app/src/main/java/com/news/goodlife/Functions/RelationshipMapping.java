@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.news.goodlife.CustomViews.IconDoughnutView;
 import com.news.goodlife.CustomViews.RelationshipMapView;
 import com.news.goodlife.Models.ModuleCoords;
 import com.news.goodlife.Models.RelationshipMap;
@@ -51,7 +50,7 @@ public class RelationshipMapping {
 
 
             //Get all the Views
-            spend_module = viewHolder.itemView.findViewById(R.id.events_outgoing);
+            spend_module = viewHolder.itemView.findViewById(R.id.fixed_costs_module);
             income_module = viewHolder.itemView.findViewById(R.id.events_incoming);
             balance_module = viewHolder.itemView.findViewById(R.id.cashcat_frame);
             budget_container = viewHolder.itemView.findViewById(R.id.budget_container);

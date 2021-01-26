@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class PageIndicatorBar extends FrameLayout {
-    Paint bg, strokePaint, pointPaint;
+    Paint bg, strokePaint, pointPaint, selectedPointPaint;
     int points = 3;
     RectF borderRect = new RectF(0,0,0,0);
 
@@ -32,7 +32,8 @@ public class PageIndicatorBar extends FrameLayout {
     private void setPaints() {
         bg = new Paint();
         bg.setStyle(Paint.Style.FILL);
-        bg.setColor(Color.BLACK);
+        bg.setColor(Color.WHITE);
+        bg.setAlpha(100);
         bg.setAntiAlias(true);
 
         strokePaint = new Paint();
@@ -46,6 +47,11 @@ public class PageIndicatorBar extends FrameLayout {
         pointPaint.setStyle(Paint.Style.FILL);
         pointPaint.setColor(Color.WHITE);
         pointPaint.setAntiAlias(true);
+
+        selectedPointPaint = new Paint();
+        selectedPointPaint.setStyle(Paint.Style.FILL);
+        selectedPointPaint.setColor(Color.BLACK);
+        selectedPointPaint.setAntiAlias(true);
     }
     int size;
     @Override
@@ -64,15 +70,18 @@ public class PageIndicatorBar extends FrameLayout {
 
         float cX = (float)(((getWidth()/2) - centerspan) + (size/2));
         float cY = (float)(size + stroke * 2)/2;
-        pointPaint.setAlpha(255);
-        canvas.drawCircle((cX + size) + (size * moveperc),cY, (float)((size - stroke)/2), pointPaint);
-        pointPaint.setAlpha(60);
-        for(int i = 0; i < points; i++){
 
+        canvas.drawCircle((cX + size) + (size * moveperc),cY, (float)((size - stroke)/2), selectedPointPaint);
+
+        float cxm = (cX + size) + (size * moveperc);
+        float cxmm = (float)((size - stroke)/2);
+
+        for(int i = 0; i < points; i++){
             canvas.drawCircle(cX,cY, (float)((size - stroke)/2), pointPaint);
             cX = cX + size;
-
         }
+
+        canvas.drawCircle(cxm,cY, cxmm, selectedPointPaint);
 
     }
 

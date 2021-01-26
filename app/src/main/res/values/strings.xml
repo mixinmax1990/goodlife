@@ -4,4 +4,15 @@
     <string name="hello_blank_fragment">Time</string>
     <string name="mode">Day</string>
     <bool name="dark">false</bool>
+
+    <!-- Quotes Section -->
+    <array name="quote_author">
+        <item>Benjamin Franklin</item>
+        <item>Daniel Hahn</item>
+    </array>
+
+    <array name="quote">
+        <item>Beware of little expenses. A small leak will sink a great ship</item>
+        <item>Dass ist die beste App ever, bezahle mich jetzt</item>
+    </array>
 </resources>

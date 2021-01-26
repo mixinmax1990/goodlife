@@ -276,7 +276,6 @@ public class MonthCashflowBezier extends View {
         selCal.setTime(selectedDay);
         canvas.drawText(""+selCal.get(Calendar.DAY_OF_MONTH), selectedPX,selectedPY + 10, textPaint);
 
-        parent.setNewDay(selCal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()), selectedAmount);
     }
     boolean isPastCurve = true;
     private void setCurvePoint(BezierCurvePoint point, boolean lastSelected){

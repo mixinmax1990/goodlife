@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="dark">true</bool>
+    <string name="mode">Night</string>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="baseBackground">@color/baseBackgroundNight</item>
+
+        <item name="baseContrast">@color/baseContrastNight</item>
+
+        <item name="standoutButton">@color/standoutButtonNight</item>
+
+        <item name="moduleBackground">@color/moduleBackgroundNight</item>
+
+        <item name="liquidBackground">@color/liquidBackgroundNight</item>
+
+        <item name="strokeColor">@color/strokeColorNight</item>
+
+        <item name="menuBackground">@color/menuColorNight</item>
+        <item name="menuIconSelected">@color/menuIconSelectedNight</item>
+        <item name="menuIconsUnselected">@color/menuIconUnselectedNight</item>
+
+        <item name="touchsliderBackground">@color/touchsliderBackgroundNight</item>
+        <item name="touchsliderSelectedBackground">@color/touchsliderSelectBackgroundNight</item>
+
+        <item name="bubbleBackground">@color/bubbleBackgroundNight</item>
+
+        <item name="entryBorder">@color/entryBorderNight</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="backgroundSecondary">@color/backgroundColorSecondaryNight</item>
+        <item name="backgroundThirdly">@color/backgroundThirdlyNight</item>
+        <item name="rippleSecondary">@color/rippleSecodaryNight</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="floatingButtonBGPrimary">@color/floatingButtonPrimaryBGNight</item>
+        <item name="floatingButtonBGSecondary">@color/floatingButtonSecodaryBGNight</item>
+        <item name="backgroundPrimary">@color/backgroundColorNight</item>
+        <item name="textColorPrimary">@color/white</item>
+        <item name="textColorPrimaryDisabled">@color/disabledWhite</item>
+        <item name="colorControlHighlight">#2C2C2C</item>
+        <item name="android:navigationBarColor">#202125</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="financialGraphTrendline">@color/financialTrendLineColorNight</item>
+        <item name="financialGraphTrendlineGradEnd">@color/financialTrendLineColoGradEnd</item>
+
+
+        <!--<item name="android:windowContentTransitions">true</item>-->
+    </style>
+</resources>

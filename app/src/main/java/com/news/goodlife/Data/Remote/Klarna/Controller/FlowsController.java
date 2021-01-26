@@ -3,12 +3,21 @@ package com.news.goodlife.Data.Remote.Klarna.Controller;
 import android.util.Log;
 
 import com.news.goodlife.Data.Remote.Klarna.Interfaces.DELETEKlarnaFlow;
+import com.news.goodlife.Data.Remote.Klarna.Interfaces.GETBalanceData;
 import com.news.goodlife.Data.Remote.Klarna.Interfaces.KlarnaApiBalanceFlow;
 import com.news.goodlife.Data.Remote.Klarna.Interfaces.Callbacks.KlarnaResponseCallback;
+import com.news.goodlife.Data.Remote.Klarna.Interfaces.POSTTransactionInterface;
+import com.news.goodlife.Data.Remote.Klarna.Models.AccountDataModels.TransactionsAllModel;
+import com.news.goodlife.Data.Remote.Klarna.Models.Consent.POSTgetConsentDataModel;
+import com.news.goodlife.Data.Remote.Klarna.Models.FlowModels.GETBalanceModel;
+import com.news.goodlife.Data.Remote.Klarna.Models.FlowModels.KeysModel;
 import com.news.goodlife.Data.Remote.Klarna.Models.FlowModels.PUTFlowDataModel;
+import com.news.goodlife.Data.Remote.Klarna.Models.FlowModels.RequestBody.POSTTransactionsRequestBody;
+import com.news.goodlife.Data.Remote.Klarna.Models.PsuModel;
 import com.news.goodlife.Data.Remote.Klarna.Models.SessionModels.PUTStartSessionDataModel;
 import com.news.goodlife.Singletons.SingletonClass;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +32,7 @@ public class FlowsController {
     String token;
     SingletonClass singletonClass = SingletonClass.getInstance();
     PUTFlowDataModel flowData = null;
+    GETBalanceModel balanceData = null;
 
 
     String activeFlow = null;
@@ -55,7 +65,8 @@ public class FlowsController {
                 activeFlow = flowData.getData().getFlow_id();
                 //Send The client of the FLow to start the Authentication App
 
-                Log.i("StartedFlowID", ""+flowData.getData().getFlow_id());
+                Log.i("StartedFlowSelf", ""+flowData.getData().getSelf());
+
                 callback.success();
             }
 
@@ -68,6 +79,100 @@ public class FlowsController {
 
     }
 
+    public void getBalanceFlow(String flow_id, KlarnaResponseCallback callback){
+
+        Retrofit client = getClient("https://api.playground.openbanking.klarna.com/xs2a/v1/sessions/"+singletonClass.getKlarna().getSessionController().getSessionData().getData().getSession_id()+"/");
+
+        GETBalanceData getBalanceData = client.create(GETBalanceData.class);
+        Call<GETBalanceModel> call = getBalanceData.getBalance(flow_id,"Bearer "+token);
+
+
+        //Run Async task to make API call
+        call.enqueue(new Callback<GETBalanceModel>() {
+            @Override
+            public void onResponse(Call<GETBalanceModel> call, Response<GETBalanceModel> response) {
+                if (!response.isSuccessful()) {
+                    callback.error();
+                    return;
+                }
+
+                balanceData = response.body();
+
+                activeFlow = flowData.getData().getFlow_id();
+                //TODO check if the flow has to be finished
+
+                callback.success();
+            }
+
+            @Override
+            public void onFailure(Call<GETBalanceModel> call, Throwable t) {
+
+                callback.error();
+            }
+        });
+
+    }
+
+    TransactionsAllModel latestTransactions = null;
+    public void getTransactions(String account_klarna_id, KlarnaResponseCallback callback){
+
+        POSTgetConsentDataModel consent = singletonClass.getDatabaseController().KlarnaConsentDBController.getConsent();
+
+        Retrofit client = getClient("https://api.playground.openbanking.klarna.com/xs2a/v1/consents/"+consent.getData().getConsent_id()+"/");
+
+        POSTTransactionInterface postTransactionInterface = client.create(POSTTransactionInterface.class);
+        Call<TransactionsAllModel> call = postTransactionInterface.getTransactions(getTranasctionBody(account_klarna_id, consent), "Bearer "+token);
+
+
+        call.enqueue(new Callback<TransactionsAllModel>() {
+            @Override
+            public void onResponse(Call<TransactionsAllModel> call, Response<TransactionsAllModel> response) {
+                if(!response.isSuccessful()){
+                    callback.error();
+                    try {
+                        Log.i("GETTRANSACTION","FAILED"+response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return;
+                }
+
+                latestTransactions = response.body();
+                Log.i("GETTRANSACTION","Works");
+                callback.success();
+            }
+
+            @Override
+            public void onFailure(Call<TransactionsAllModel> call, Throwable t) {
+                callback.error();
+                Log.i("GETTRANSACTION","FAILED 2");
+
+            }
+        });
+
+
+    }
+
+    private POSTTransactionsRequestBody getTranasctionBody(String AccountID, POSTgetConsentDataModel consent){
+        POSTTransactionsRequestBody requestBody = new POSTTransactionsRequestBody();
+
+        PsuModel psu = new PsuModel();
+        KeysModel keys = new KeysModel();
+
+        requestBody.setAccount_id(AccountID);
+        requestBody.setConsent_token(consent.getData().getConsent_token());
+
+
+        //GET TRansactions from the last 3 Months
+        requestBody.setFrom_date("2020-10-18");
+        requestBody.setTo_date("2021-01-18");
+
+        requestBody.setPsu(psu);
+        requestBody.setKeys(keys);
+
+        return requestBody;
+
+    }
     //START ANOTHER FLOW
 
     public void stopAllFlows(KlarnaResponseCallback callback){
@@ -123,5 +228,11 @@ public class FlowsController {
         return flowData;
     }
 
+    public GETBalanceModel getBalanceData() {
+        return balanceData;
+    }
 
+    public TransactionsAllModel getLatestTransactions() {
+        return latestTransactions;
+    }
 }

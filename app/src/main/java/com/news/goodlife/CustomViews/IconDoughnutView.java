@@ -122,15 +122,18 @@ public class IconDoughnutView extends FrameLayout {
             canvas.drawArc(ringRectF, -90, sweepAngle, false, ring);
 
             //Draw Icon
-            icon.setBounds(
-                    iconmargin,
-                    iconmargin,
-                    getWidth() - iconmargin,
-                    getHeight() - iconmargin
-            );
-            icon.setAlpha(180);
+            if(icon != null){
+                icon.setBounds(
+                        iconmargin,
+                        iconmargin,
+                        getWidth() - iconmargin,
+                        getHeight() - iconmargin
+                );
+                icon.setAlpha(180);
 
-            icon.draw(canvas);
+                icon.draw(canvas);
+
+            }
         }
         }
     }
@@ -139,7 +142,13 @@ public class IconDoughnutView extends FrameLayout {
     public void setCategory(String catcolor, String caticon){
         catPaint.setColor(Color.parseColor(catcolor));
         ring.setColor(Color.parseColor(catcolor));
-        icon = getResources().getDrawable(getResources().getIdentifier(caticon, "drawable", getContext().getPackageName()), null);
+
+        if(caticon == null){
+            icon = null;
+        }
+        else{
+            icon = getResources().getDrawable(getResources().getIdentifier(caticon, "drawable", getContext().getPackageName()), null);
+        }
         draw = true;
         invalidate();
     }

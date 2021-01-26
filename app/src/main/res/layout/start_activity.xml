@@ -21,6 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="40dp"
         android:outlineProvider="none"
+        android:visibility="invisible"
         android:elevation="250dp"/>
 
     <include layout="@layout/start_navigation_content"
@@ -304,7 +305,7 @@
                         app:cardCornerRadius="40dp"
                         app:cardBackgroundColor="?attr/standoutButton"
                         app:layout_constraintStart_toEndOf="@id/buttonGoals"
-                        app:layout_constraintEnd_toStartOf="@id/buttonAnalysis"
+                        app:layout_constraintEnd_toStartOf="@id/buttonBudgets"
                         app:layout_constraintTop_toTopOf="parent"
                         android:layout_marginTop="3dp"
                         android:layout_marginEnd="2dp"
@@ -336,7 +337,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_margin="2dp"
-                        android:id="@+id/buttonAnalysis"
+                        android:id="@+id/buttonBudgets"
                         android:tag="Analysis"
                         app:layout_constraintDimensionRatio="1:1"
                         app:layout_constraintTop_toTopOf="parent"
@@ -350,7 +351,7 @@
                         android:tag="Hub"
                         app:layout_constraintDimensionRatio="1:1"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/buttonAnalysis"
+                        app:layout_constraintStart_toEndOf="@id/buttonBudgets"
                         app:layout_constraintEnd_toEndOf="parent"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </eightbitlab.com.blurview.BlurView>

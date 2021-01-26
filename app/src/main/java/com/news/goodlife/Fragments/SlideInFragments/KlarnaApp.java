@@ -19,8 +19,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.news.goodlife.Data.Local.Models.Financial.AccountModel;
 import com.news.goodlife.Data.Remote.Klarna.Interfaces.Callbacks.KlarnaResponseCallback;
+import com.news.goodlife.Data.Remote.Klarna.Interfaces.GETBalanceData;
 import com.news.goodlife.Data.Remote.Klarna.Models.Consent.POSTgetConsentDataModel;
+import com.news.goodlife.Data.Remote.Klarna.Models.FlowModels.GETBalanceModel;
 import com.news.goodlife.R;
 import com.news.goodlife.Singletons.SingletonClass;
 
@@ -122,7 +125,6 @@ public class KlarnaApp extends Fragment {
                 break;
             case "KlarnaOnFinished":
                 //Get The Consent And save it
-
                 //singletonClass.getKlarna().clearSession();
                 success_finish = true;
                 //Get The Data
@@ -137,15 +139,46 @@ public class KlarnaApp extends Fragment {
                     singletonClass.getKlarna().getConsentController().getConsent(sessionID, new KlarnaResponseCallback() {
                         @Override
                         public void success() {
+
+                            //Get the Consent Data
                             POSTgetConsentDataModel consentData = singletonClass.getKlarna().getConsentController().getConsentDataModel();
 
-                            Log.i("Consent_ID", ""+consentData.getData().getConsent_id());
+                            String flow_id = singletonClass.getKlarna().getFlowsController().getFlowData().getData().getFlow_id();
+
+                            //Get Balance Data and retrieve the Account ID
+
+                            singletonClass.getKlarna().getFlowsController().getBalanceFlow(flow_id, new KlarnaResponseCallback() {
+                                @Override
+                                public void success() {
+
+                                    Log.i("Balance Data", "We should now have the Balance Data. Account Id = "+ singletonClass.getKlarna().getFlowsController().getBalanceData().getData().getResult().getAccount().getId());
+
+                                    //Store the Balance Data into the Database
+
+                                    singletonClass.getDatabaseController().AccountsController.addAccount(convertLocalAccount());
+
+
+                                    //Then Clear the Klarna Session
+                                    singletonClass.getKlarna().clearSession();
+                                }
+
+                                @Override
+                                public void error() {
+
+                                    Log.i("Balance Data", "SOmething went Wrong");
+
+                                    singletonClass.getKlarna().clearSession();
+
+                                }
+                            });
                             //Save Consent To DataBase
 
                             singletonClass.getDatabaseController().KlarnaConsentDBController.updateConsent(consentData);
 
 
-                            singletonClass.getKlarna().clearSession();
+                            //Get Account Data here
+
+
                         }
 
                         @Override
@@ -167,6 +200,26 @@ public class KlarnaApp extends Fragment {
                 break;
 
         }
+
+    }
+
+
+    private AccountModel convertLocalAccount(){
+
+        AccountModel account = new AccountModel();
+
+        com.news.goodlife.Data.Remote.Klarna.Models.AccountDataModels.AccountModel apiAccount = singletonClass.getKlarna().getFlowsController().getBalanceData().getData().getResult().getAccount();
+
+        account.setId(null);
+        account.setKlarna_id(apiAccount.getId());
+        account.setAlias(apiAccount.getAlias());
+        account.setAccount_number(apiAccount.getAccount_number());
+        account.setIban(apiAccount.getIban());
+        account.setBic(apiAccount.getBic());
+        account.setBank_address_country(apiAccount.getBank_address().getCountry());
+        account.setTransfer_type(apiAccount.getAccount_type());
+
+        return account;
 
     }
 }

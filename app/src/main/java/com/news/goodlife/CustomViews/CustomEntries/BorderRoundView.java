@@ -182,6 +182,11 @@ public class BorderRoundView extends ConstraintLayout {
         this.backgroundColor = backgroundColor;
     }
 
+    public void dynamicallySetBackgroundColor(String color){
+        paintFill.setColor(Color.parseColor(color));
+        invalidate();
+    }
+
     public int getBorderRadius() {
         return borderRadius;
     }

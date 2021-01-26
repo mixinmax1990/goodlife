@@ -149,7 +149,7 @@ public class BudgetNew extends Fragment implements TextWatcher {
             });
 
             IconDoughnutView dv = catitem.findViewById(R.id.icondoughnut);
-            dv.setCategory(category.getCatcolor(), category.getCaticon());
+            //dv.setCategory(category.getCatcolor(), category.getCaticon());
             categories_flex.addView(catitem);
         };
 

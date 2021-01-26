@@ -5,6 +5,8 @@ import android.view.SurfaceControl;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class TransactionsAllModel {
 
     @SerializedName("data")
@@ -38,7 +40,7 @@ public class TransactionsAllModel {
 
         @SerializedName("transactions")
         @Expose
-        TransactionModel transactions;
+        List<TransactionModel> transactions;
 
         @SerializedName("from_date")
         @Expose
@@ -48,7 +50,7 @@ public class TransactionsAllModel {
         @Expose
         String to_date;
 
-        public TransactionModel getTransactions() {
+        public List<TransactionModel> getTransactions() {
             return transactions;
         }
 

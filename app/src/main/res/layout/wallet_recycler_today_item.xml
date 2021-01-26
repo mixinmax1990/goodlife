@@ -109,7 +109,7 @@
         app:layout_constraintEnd_toStartOf="@id/events_incoming"
         app:layout_constraintTop_toTopOf="@id/right_up_frame"
         app:borderCustomRadius="50"
-        android:id="@+id/events_outgoing"
+        android:id="@+id/fixed_costs_module"
         >
         <TextView
             android:layout_width="wrap_content"
@@ -145,7 +145,7 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintTop_toTopOf="@id/right_up_frame"
         app:layout_constraintEnd_toEndOf="@id/right_up_frame"
-        app:layout_constraintStart_toEndOf="@id/events_outgoing"
+        app:layout_constraintStart_toEndOf="@id/fixed_costs_module"
         app:backgroundCustomColor="#1a1b1c"
         app:borderCustomRadius="50"
         android:id="@+id/events_incoming"
@@ -183,7 +183,7 @@
         app:layout_constraintTop_toBottomOf="@id/events_incoming"
         app:layout_constraintBottom_toBottomOf="@id/right_up_frame"
         app:layout_constraintEnd_toEndOf="@id/events_incoming"
-        app:layout_constraintStart_toStartOf="@id/events_outgoing"
+        app:layout_constraintStart_toStartOf="@id/fixed_costs_module"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="0dp"
         app:backgroundCustomColor="#000000"

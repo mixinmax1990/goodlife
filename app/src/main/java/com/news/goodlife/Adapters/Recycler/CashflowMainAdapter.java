@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,6 +40,7 @@ import com.news.goodlife.Data.Local.Models.WalletEventDayOrderModel;
 import com.news.goodlife.Data.Remote.Klarna.Interfaces.Callbacks.KlarnaResponseCallback;
 import com.news.goodlife.Data.Remote.LookupCompanyLogo;
 import com.news.goodlife.Fragments.WalletMultiDaysFragment;
+import com.news.goodlife.Functions.InflateDayDetails;
 import com.news.goodlife.Interfaces.WalletDatabaseEvents;
 import com.news.goodlife.Models.CalendarLayoutDay;
 import com.news.goodlife.Models.ModuleCoords;
@@ -169,7 +171,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
             case "weekend":
                 return new CashflowMainAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.wallet_recycler_weekend_item, parent, false), pos, calDay);
             case "day":
-                return new CashflowMainAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.wallet_recycler_day_item, parent, false), pos, calDay);
+                return new CashflowMainAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.wallet_recycler_day_cover, parent, false), pos, calDay);
             case "monthend":
                 return new CashflowMainAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.wallet_recycler_monthend_item, parent, false), pos, calDay);
 
@@ -218,7 +220,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
         //CashOut Variable
         TextView costTitle, costValue, incomeTitle, incomeValue;
 
-
+        InflateDayDetails AsyncDay;
 
 
         public ViewHolder(@NonNull final View itemView, final int pos, final CalendarLayoutDay dayData) {
@@ -226,15 +228,17 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
             itemView.setTag("pos_"+pos);
 
-
-
-
             switch(dayData.getType()){
                 case "day":
 
+                    //ViewGroup dayDetailsContainer = itemView.findViewById(R.id.day_detail_container);
+                    //AsyncDay = new InflateDayDetails(new AsyncLayoutInflater(context), dayDetailsContainer, dayData);
+
+
 
                     //TODO Load Views Here
-                    final ViewGroup budgetsContainer = itemView.findViewById(R.id.budget_container);
+
+                    /*
                     final ViewGroup monthlyBudgetCont = itemView.findViewById(R.id.month_flex);
                     final ViewGroup yearyBudgetCont = itemView.findViewById(R.id.year_flex);
                     inflateFixedCost(monthlyBudgetCont, yearyBudgetCont);
@@ -510,7 +514,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                             moduleCenterX = (int)costcat.getX() + (costcat.getWidth() / 2);
                             moduleCenterY = (int)costcat.getY() + (costcat.getHeight() / 2);
                             mc = new ModuleCoords(moduleCenterX, moduleCenterY, "balance");
-                            moduleCoords.add(mc); */
+                            moduleCoords.add(mc);
 
                             //Iterate through Budgets
 
@@ -535,7 +539,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                         }
                     });
 
-                
+                    */
                     break;
                 case "weekend":
                     break;
@@ -570,13 +574,12 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                     catitem.setTag(budget.id);
 
                     final IconDoughnutView dv = catitem.findViewById(R.id.icondoughnut);
-                    dv.setCategory("#64CE65", category.getCaticon());
+                    //dv.setCategory("#64CE65", category.getCaticon());
 
                     CardView catcard = catitem.findViewById(R.id.category_item);
                     TextView budget_name = catitem.findViewById(R.id.budget_name);
 
                     budget_name.setText(category.getCatname());
-
                     //SetWidth of the Button to match the Screen
                     ViewGroup.LayoutParams lp = catcard.getLayoutParams();
 

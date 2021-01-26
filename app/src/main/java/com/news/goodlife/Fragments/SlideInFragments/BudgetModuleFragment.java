@@ -57,8 +57,8 @@ public class BudgetModuleFragment extends Fragment {
 
         budgetNameView.setText(categoryData.catname);
 
-        iconDrawable = getResources().getDrawable(getResources().getIdentifier(categoryData.getCaticon(), "drawable", getContext().getPackageName()), null);
-        iconView.setImageDrawable(iconDrawable);
+        //iconDrawable = getResources().getDrawable(getResources().getIdentifier(categoryData.getCaticon(), "drawable", getContext().getPackageName()), null);
+        //iconView.setImageDrawable(iconDrawable);
 
         budget_cont = root.findViewById(R.id.budget_modfrag_container);
         subtleSlide();

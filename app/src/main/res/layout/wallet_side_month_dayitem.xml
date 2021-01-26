@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
+    android:layout_height="20dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:backgroundCustomColor="#212226"
+    app:borderCustomRadius="15"
+    android:layout_marginBottom="5dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:id="@+id/sidemonth_daynumber"
+        android:textSize="12sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>

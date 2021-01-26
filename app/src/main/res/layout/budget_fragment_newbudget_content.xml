@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="46dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.news.goodlife.CustomViews.DownBubbleTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/budget_category"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Category Name"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+    <androidx.recyclerview.widget.RecyclerView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/budget_category"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/budget_period_recycler"
+        app:layout_constraintDimensionRatio="2:1"/>
+
+    <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/budget_period_recycler"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:borderCustomRadius="30"
+        android:minWidth="200dp"
+        android:layout_marginTop="26dp"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:padding="9dp"
+            android:hint="Budget Name"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textAlignment="center"/>
+
+    </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

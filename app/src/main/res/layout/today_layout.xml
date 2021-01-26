@@ -53,7 +53,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:backgroundCustomColor="#0FFFFFFF"
                 app:borderCustomRadius="50"
-                android:id="@+id/events_outgoing"
+                android:id="@+id/fixed_costs_module"
                 >
                 <TextView
                     android:layout_width="wrap_content"

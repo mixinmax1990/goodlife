@@ -2,6 +2,7 @@ package com.news.goodlife.Data.Local.Controller;
 
 import android.content.Context;
 
+import com.news.goodlife.Data.Local.Controller.Financial.AccountsController;
 import com.news.goodlife.Data.Local.Controller.Financial.BudgetCategoryController;
 import com.news.goodlife.Data.Local.Controller.Financial.BudgetController;
 import com.news.goodlife.Data.Local.Controller.Financial.WalletEventController;
@@ -17,6 +18,7 @@ public class DatabaseController {
     public BudgetCategoryController BudgetCategoryController;
     public BudgetController BudgetController;
     public KlarnaConsentDBController KlarnaConsentDBController;
+    public AccountsController AccountsController;
 
     public DatabaseController(Context context) {
 
@@ -26,5 +28,6 @@ public class DatabaseController {
         this.BudgetCategoryController = new BudgetCategoryController(context);
         this.BudgetController = new BudgetController(context);
         this.KlarnaConsentDBController = new KlarnaConsentDBController(context);
+        this.AccountsController = new AccountsController(context);
     }
 }

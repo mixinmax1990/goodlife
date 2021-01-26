@@ -1,5 +1,7 @@
 package com.news.goodlife.Singletons;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.res.Resources;
 import android.view.View;
 
@@ -8,9 +10,8 @@ import androidx.fragment.app.FragmentManager;
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
 import com.news.goodlife.Data.Remote.Klarna.Controller.KlarnaRequestController;
 import com.news.goodlife.Data.Remote.Klarna.Models.Consent.POSTgetConsentDataModel;
+import com.news.goodlife.Interfaces.SuccessCallback;
 import com.news.goodlife.Models.ObservableFragmentChange;
-
-import java.util.Observable;
 
 public class SingletonClass {
 
@@ -137,5 +138,75 @@ public class SingletonClass {
 
     public int dpToPx(int dp) {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    boolean Subscribed;
+
+    public boolean isSubscribed() {
+        return Subscribed;
+    }
+
+    public void setSubscribed(boolean connectedAccounts) {
+        this.Subscribed = connectedAccounts;
+    }
+
+    public void toggleFadeView(boolean in, View view, SuccessCallback callback){
+        float scale = .2f;
+        if(in){
+            view.setAlpha(0);
+            view.setVisibility(View.VISIBLE);
+        }
+        else{
+            view.setAlpha(1);
+        }
+
+
+        ValueAnimator va = ValueAnimator.ofFloat(0,1);
+        va.setDuration(250);
+
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float animVal = (float) animation.getAnimatedValue();
+
+                if(!in){
+                    animVal = 1 - animVal;
+                }
+                float animScale = scale * (1 - animVal);
+                view.setScaleY(1f - animScale);
+                view.setScaleX(1f - animScale);
+
+                view.setAlpha(animVal);
+
+            }
+        });
+
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+                callback.success();
+                if(!in){
+                    view.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+        va.start();
     }
 }

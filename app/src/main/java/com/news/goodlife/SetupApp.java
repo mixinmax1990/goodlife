@@ -3,6 +3,9 @@ package com.news.goodlife;
 import android.util.Log;
 
 import com.news.goodlife.Data.Local.Models.Financial.BudgetCategoryModel;
+import com.news.goodlife.Data.Remote.Klarna.Interfaces.Callbacks.KlarnaResponseCallback;
+import com.news.goodlife.Data.Remote.Klarna.Models.AccountDataModels.TransactionModel;
+import com.news.goodlife.Data.Remote.Klarna.Models.Consent.POSTgetConsentDataModel;
 import com.news.goodlife.Singletons.SingletonClass;
 
 import java.util.ArrayList;
@@ -15,7 +18,49 @@ public class SetupApp {
     public SetupApp() {
 
         //checkBudgetCategories();
+        singletonClass.setSubscribed(checkSubscription());
+        checkBankConsent();
     }
+
+
+    private boolean checkSubscription(){
+        boolean connected = false;
+
+        return connected;
+    }
+
+    private void checkBankConsent() {
+        POSTgetConsentDataModel consentData = singletonClass.getDatabaseController().KlarnaConsentDBController.getConsent();
+        if(consentData == null){
+            Log.i("Consent", "No Consent");
+        }
+        else{
+            Log.i("Consent", "You have the FOllowing Consent ID "+consentData.getData().getConsent_id());
+            Log.i("Consent", "You have the FOllowing Consent Token "+consentData.getData().getConsent_token());
+        }
+
+        singletonClass.getKlarna().getFlowsController().getTransactions("NzRiOWMzOWItNDQxYi00ZGYzLWIyZjItODA5Y2Y1MWFjNzQ0", new KlarnaResponseCallback() {
+            @Override
+            public void success() {
+
+                List<TransactionModel> allTransactions = singletonClass.getKlarna().getFlowsController().getLatestTransactions().getData().getResult().getTransactions();
+                for(TransactionModel transaction : allTransactions){
+                    Log.i("Transaction", " Reference:"+transaction.getReference() + " -- Amount:"+transaction.getAmount().getAmount());
+
+                }
+
+            }
+
+            @Override
+            public void error() {
+                Log.i("Getting Transactions", "-null-");
+
+            }
+        });
+
+    }
+
+
 
     List<BudgetCategoryModel> budgetCatData;
     private void checkBudgetCategories() {
@@ -34,44 +79,8 @@ public class SetupApp {
 
     public void resetBaseCategories() {
 
-        //Delete all Categories
-        singletonClass.getDatabaseController().BudgetCategoryController.deleteAllBudgetCategories();
 
-        for(BudgetCategoryModel category: getBaseCategories()){
 
-            singletonClass.getDatabaseController().BudgetCategoryController.addBudgetCategory(category);
-
-        }
-
-    }
-    BudgetCategoryModel category;
-    private List<BudgetCategoryModel> getBaseCategories(){
-        List<BudgetCategoryModel> allCategories = new ArrayList<>();
-
-        category = new BudgetCategoryModel();
-        category.setCatname("Food");
-        category.setCatcolor("#64CE65");
-        category.setCaticon("budget_icon_kitchen");
-
-        allCategories.add(category);
-
-        category = new BudgetCategoryModel();
-
-        category.setCatname("Birthday");
-        category.setCatcolor("#64CE65");
-        category.setCaticon("budget_icon_cake");
-
-        allCategories.add(category);
-
-        category = new BudgetCategoryModel();
-
-        category.setCatname("Clothes");
-        category.setCatcolor("#64CE65");
-        category.setCaticon("budget_icon_clothes");
-
-        allCategories.add(category);
-
-        return allCategories;
     }
 
 

@@ -1,7 +1,7 @@
 package com.news.goodlife.Data.Local.Models.Financial;
 
 public class BudgetCategoryModel {
-    public String id, catname, caticon, catcolor;
+    public String id, catname, childcount;
 
     public BudgetCategoryModel() {
     }
@@ -22,19 +22,11 @@ public class BudgetCategoryModel {
         this.catname = catname;
     }
 
-    public String getCaticon() {
-        return caticon;
+    public String getChildcount() {
+        return childcount;
     }
 
-    public void setCaticon(String caticon) {
-        this.caticon = caticon;
-    }
-
-    public String getCatcolor() {
-        return catcolor;
-    }
-
-    public void setCatcolor(String catcolor) {
-        this.catcolor = catcolor;
+    public void setChildcount(String childcount) {
+        this.childcount = childcount;
     }
 }

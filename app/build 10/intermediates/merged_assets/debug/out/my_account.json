@@ -1,0 +1,682 @@
+[
+  {
+    "reference": "DISNEY PLUS - 800-022-1476, NLD",
+    "amount": {
+      "amount": 699,
+      "currency": "EUR"
+    },
+    "date": "2020-11-17",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Eingehende Überweisung vom 17.11.2020",
+    "amount": {
+      "amount": 0,
+      "currency": "EUR"
+    },
+    "date": "2020-11-17",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Lohn/Gehalt 02110918/202010",
+    "amount": {
+      "amount": 180580,
+      "currency": "EUR"
+    },
+    "counter_party": {
+      "iban": "DE90450700020207063900",
+      "holder_name": "persona service AG + Co. KG",
+      "bic": "45070002"
+    },
+    "date": "2020-11-17",
+    "state": "PROCESSED",
+    "type": "CREDIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "AZV-Ref.Nr 20704224-56 305-8202457-0632305 AMZN Mktp DE 6GCLUIDN4091LOG7",
+    "amount": {
+      "amount": 990,
+      "currency": "EUR"
+    },
+    "counter_party": {
+      "iban": "DE87300308801908262006",
+      "holder_name": "AMAZON PAYMENTS EUROPE S.C.",
+      "bic": "TUBDDEDD"
+    },
+    "date": "2020-11-17",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "AZV-Ref.Nr 20704224-56 305-8202457-0632305 AMZN Mktp DE 6GCLUIDN4091LOG7",
+    "amount": {
+      "amount": 990,
+      "currency": "EUR"
+    },
+    "counter_party": {
+      "iban": "DE87300308801908262006",
+      "holder_name": "AMAZON PAYMENTS EUROPE S.C.",
+      "bic": "TUBDDEDD"
+    },
+    "date": "2020-11-17",
+    "state": "PROCESSED",
+    "type": "CREDIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "SSB TICKETSHOP LOGPAY - ESCHBORN, DEU",
+    "amount": {
+      "amount": 397,
+      "currency": "EUR"
+    },
+    "date": "2020-11-16",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "PAYPAL *TOPUP - 35314369001, NLD",
+    "amount": {
+      "amount": 2099,
+      "currency": "EUR"
+    },
+    "date": "2020-11-16",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Überweisung aus Kartenguthaben vom 12.11.2020",
+    "amount": {
+      "amount": 60,
+      "currency": "EUR"
+    },
+    "date": "2020-11-12",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Danny Bar",
+    "amount": {
+      "amount": 15000,
+      "currency": "EUR"
+    },
+    "counter_party": {
+      "iban": "DE82600901000186572000",
+      "holder_name": "Fabian Feyer",
+      "bic": "VOBADESS"
+    },
+    "date": "2020-11-12",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Überweisung aus Kartenguthaben vom 10.11.2020",
+    "amount": {
+      "amount": 60,
+      "currency": "EUR"
+    },
+    "date": "2020-11-10",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "703718848 PXP FINANCIAL",
+    "amount": {
+      "amount": 2000,
+      "currency": "EUR"
+    },
+    "counter_party": {
+      "iban": "AT672010028961980429",
+      "holder_name": "PXP Financial Limited",
+      "bic": "GIBAATWGXXX"
+    },
+    "date": "2020-11-10",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Eingehende Überweisung vom 09.11.2020",
+    "amount": {
+      "amount": 0,
+      "currency": "EUR"
+    },
+    "date": "2020-11-09",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "PP.5195.PP YYR1010999528725",
+    "amount": {
+      "amount": 1,
+      "currency": "EUR"
+    },
+    "counter_party": {
+      "iban": "DE88500700100175526303",
+      "holder_name": "PayPal (Europe) S.a.r.l. et",
+      "bic": "50070010"
+    },
+    "date": "2020-11-09",
+    "state": "PROCESSED",
+    "type": "CREDIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Überweisung aus Kartenguthaben vom 09.11.2020",
+    "amount": {
+      "amount": 60,
+      "currency": "EUR"
+    },
+    "date": "2020-11-09",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Einkauf und TV",
+    "amount": {
+      "amount": 65000,
+      "currency": "EUR"
+    },
+    "counter_party": {
+      "iban": "DE82600901000186572000",
+      "holder_name": "Fabian Feyer",
+      "bic": "VOBADESS"
+    },
+    "date": "2020-11-09",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "AMZN Mktp DE*M77H28CW4 - 800-279-6620, LUX",
+    "amount": {
+      "amount": 5166,
+      "currency": "EUR"
+    },
+    "date": "2020-11-03",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "PLAYSTATIONNETWORK - LONDON, GBR",
+    "amount": {
+      "amount": 999,
+      "currency": "EUR"
+    },
+    "date": "2020-11-02",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "SSB TICKETSHOP LOGPAY - ESCHBORN, DEU",
+    "amount": {
+      "amount": 397,
+      "currency": "EUR"
+    },
+    "date": "2020-11-02",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Amazon.de - AMAZON.DE, LUX",
+    "amount": {
+      "amount": 1628,
+      "currency": "EUR"
+    },
+    "date": "2020-11-02",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "MCDONALDS 01027 - SUNDERN, DEU",
+    "amount": {
+      "amount": 1698,
+      "currency": "EUR"
+    },
+    "date": "2020-11-02",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Überweisung aus Kartenguthaben vom 02.11.2020",
+    "amount": {
+      "amount": 60,
+      "currency": "EUR"
+    },
+    "date": "2020-11-02",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "140980021",
+    "amount": {
+      "amount": 6099,
+      "currency": "EUR"
+    },
+    "counter_party": {
+      "iban": "DE20503104000438022901",
+      "holder_name": "WorldRemit Belgium SA",
+      "bic": "BARCDEFFXXX"
+    },
+    "date": "2020-11-02",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Eingehende Überweisung vom 02.11.2020",
+    "amount": {
+      "amount": 0,
+      "currency": "EUR"
+    },
+    "date": "2020-11-02",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Fur Geschenk",
+    "amount": {
+      "amount": 3000,
+      "currency": "EUR"
+    },
+    "counter_party": {
+      "iban": "DE71600501010007493483",
+      "holder_name": "Axel Schied",
+      "bic": "60050101"
+    },
+    "date": "2020-11-02",
+    "state": "PROCESSED",
+    "type": "CREDIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Überweisung aus Kartenguthaben vom 02.11.2020",
+    "amount": {
+      "amount": 60,
+      "currency": "EUR"
+    },
+    "date": "2020-11-02",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "1620020 112293-302743-5FA05BA9-EA61",
+    "amount": {
+      "amount": 2884,
+      "currency": "EUR"
+    },
+    "counter_party": {
+      "iban": "DE83700111105118930004",
+      "holder_name": "Dampfdorado GmbH Co. KG",
+      "bic": "DEKTDE7GXXX"
+    },
+    "date": "2020-11-02",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Monatliche Kontofunktion vom 01.11.2020",
+    "amount": {
+      "amount": 500,
+      "currency": "EUR"
+    },
+    "date": "2020-11-01",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Gebührenabrechnung 01.11.2020",
+    "amount": {
+      "amount": 0,
+      "currency": "EUR"
+    },
+    "date": "2020-11-01",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "PlaystationNetwork - London, GBR",
+    "amount": {
+      "amount": 899,
+      "currency": "EUR"
+    },
+    "date": "2020-10-31",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "AMZNPrime DE*MC6HT0RQ4 - amzn.de/info, LUX",
+    "amount": {
+      "amount": 799,
+      "currency": "EUR"
+    },
+    "date": "2020-10-31",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "SPOTIFY - STOCKHOLM, SWE",
+    "amount": {
+      "amount": 974,
+      "currency": "EUR"
+    },
+    "date": "2020-10-29",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Überweisung aus Kartenguthaben vom 29.10.2020",
+    "amount": {
+      "amount": 60,
+      "currency": "EUR"
+    },
+    "date": "2020-10-29",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "2OFBKJE MONEYGRAM GERMANY 68568-581258-5F9AA8E9-B565",
+    "amount": {
+      "amount": 60399,
+      "currency": "EUR"
+    },
+    "counter_party": {
+      "iban": "DE38700111100002520508",
+      "holder_name": "PPRO Financial Ltd",
+      "bic": "DEKTDE7GXXX"
+    },
+    "date": "2020-10-29",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Eingehende Überweisung vom 29.10.2020",
+    "amount": {
+      "amount": 0,
+      "currency": "EUR"
+    },
+    "date": "2020-10-29",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Lohn/Gehalt 02110918/202010",
+    "amount": {
+      "amount": 92500,
+      "currency": "EUR"
+    },
+    "counter_party": {
+      "iban": "DE90450700020207063900",
+      "holder_name": "persona service AG + Co. KG",
+      "bic": "45070002"
+    },
+    "date": "2020-10-29",
+    "state": "PROCESSED",
+    "type": "CREDIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Überweisung aus Kartenguthaben vom 29.10.2020",
+    "amount": {
+      "amount": 60,
+      "currency": "EUR"
+    },
+    "date": "2020-10-29",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Miete ",
+    "amount": {
+      "amount": 36000,
+      "currency": "EUR"
+    },
+    "counter_party": {
+      "iban": "DE82600901000186572000",
+      "holder_name": "Fabian Feyer",
+      "bic": "VOBADESS"
+    },
+    "date": "2020-10-29",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Überweisung aus Kartenguthaben vom 29.10.2020",
+    "amount": {
+      "amount": 60,
+      "currency": "EUR"
+    },
+    "date": "2020-10-29",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "S.20.2055805.01.6-131",
+    "amount": {
+      "amount": 5000,
+      "currency": "EUR"
+    },
+    "counter_party": {
+      "iban": "DE86660100750140305757",
+      "holder_name": "Rainer Haas und Kollegen",
+      "bic": "PBNKDEFFXXX"
+    },
+    "date": "2020-10-29",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Lidl Vertriebs GmbH & - Sundern, DEU",
+    "amount": {
+      "amount": 2627,
+      "currency": "EUR"
+    },
+    "date": "2020-10-28",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "SSB TICKETSHOP LOGPAY - ESCHBORN, DEU",
+    "amount": {
+      "amount": 397,
+      "currency": "EUR"
+    },
+    "date": "2020-10-26",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "GOOGLE *Stadia - g.co/helppay#, GBR",
+    "amount": {
+      "amount": 999,
+      "currency": "EUR"
+    },
+    "date": "2020-10-26",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "PAYPAL *BUEROSHOP24 - 0800888333, DEU",
+    "amount": {
+      "amount": 2462,
+      "currency": "EUR"
+    },
+    "date": "2020-10-26",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "DB BAHN A-NR 6AP1NQ - INTERNET, DEU",
+    "amount": {
+      "amount": 10290,
+      "currency": "EUR"
+    },
+    "date": "2020-10-24",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Überweisung aus Kartenguthaben vom 24.10.2020",
+    "amount": {
+      "amount": 60,
+      "currency": "EUR"
+    },
+    "date": "2020-10-24",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "EINKAUF",
+    "amount": {
+      "amount": 12000,
+      "currency": "EUR"
+    },
+    "counter_party": {
+      "iban": "DE82600901000186572000",
+      "holder_name": "Fabian Feyer",
+      "bic": "VOBADESS"
+    },
+    "date": "2020-10-24",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Monatlicher Kontoauszug per eMail vom 29.10.2020",
+    "amount": {
+      "amount": 0,
+      "currency": "EUR"
+    },
+    "date": "2020-10-23",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Monatliches Entgelt vom 29.10.2020",
+    "amount": {
+      "amount": 0,
+      "currency": "EUR"
+    },
+    "date": "2020-10-23",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "AMZNPrime DE - amzn.de/info, LUX",
+    "amount": {
+      "amount": 20,
+      "currency": "EUR"
+    },
+    "date": "2020-10-22",
+    "state": "PROCESSED",
+    "type": "CREDIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "PAYPAL *ROGERBECKER - 35314369001, DEU",
+    "amount": {
+      "amount": 1000,
+      "currency": "EUR"
+    },
+    "date": "2020-10-22",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "GOOGLE *Google Storage - g.co/helppay#, GBR",
+    "amount": {
+      "amount": 199,
+      "currency": "EUR"
+    },
+    "date": "2020-10-21",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Penny An der Sorpe - Sundern, DEU",
+    "amount": {
+      "amount": 1048,
+      "currency": "EUR"
+    },
+    "date": "2020-10-21",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "AMZN Mktp DE*H64IL26Z5 - 800-279-6620, LUX",
+    "amount": {
+      "amount": 15608,
+      "currency": "EUR"
+    },
+    "date": "2020-10-21",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "Prime Video*1S6SJ6Q75 - 442-011518546, LUX",
+    "amount": {
+      "amount": 389,
+      "currency": "EUR"
+    },
+    "date": "2020-10-19",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  },
+  {
+    "reference": "NETFLIX.COM - 866-579-7172, NLD",
+    "amount": {
+      "amount": 1559,
+      "currency": "EUR"
+    },
+    "date": "2020-10-19",
+    "state": "PROCESSED",
+    "type": "DEBIT",
+    "method": "UNKNOWN"
+  }
+]

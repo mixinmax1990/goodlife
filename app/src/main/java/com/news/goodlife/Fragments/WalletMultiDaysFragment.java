@@ -3,6 +3,7 @@ package com.news.goodlife.Fragments;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -32,12 +34,16 @@ import com.news.goodlife.CustomViews.BubbleChartCategories;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.CustomViews.ElasticEdgeView;
 import com.news.goodlife.CustomViews.LiquidView;
+import com.news.goodlife.CustomViews.MarkedConstraintLayout;
 import com.news.goodlife.CustomViews.MonthCashflowBezier;
 import com.news.goodlife.CustomViews.SpectrumBar;
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
 import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
 import com.news.goodlife.Data.Local.Models.WalletEventDayOrderModel;
+import com.news.goodlife.Functions.InflateDayDetails;
+import com.news.goodlife.Functions.InflateSideMonthDay;
 import com.news.goodlife.Interfaces.MonthCashflowBezierCallback;
+import com.news.goodlife.Interfaces.SuccessCallback;
 import com.news.goodlife.LayoutManagers.MultiDaysLinearLayoutManager;
 import com.news.goodlife.Models.CalendarLayoutDay;
 import com.news.goodlife.Models.CalendarLayoutMonth;
@@ -69,25 +75,15 @@ import static androidx.recyclerview.widget.RecyclerView.*;
 
 public class WalletMultiDaysFragment extends Fragment{
 
-    //Account Tabs
-    //TODO For testing Purposes (these will have to be created dynamically)
-
-    FrameLayout cashflow_input_frame;
-
 
     //RecylcerView
     RecyclerView cashflow_recycler;
     MultiDaysLinearLayoutManager llm;
     CashflowMainAdapter cashflowMainAdapter;
-    ElasticEdgeView elasticEdgeView;
-    ConstraintLayout cashflow_display_menu;
-    FrameLayout elasticContentSkeleton;
     ConstraintLayout.LayoutParams skeletonLP;
     FrameLayout popContainer;
     FrameLayout menu_container;
-    View monthviewIcon;
     public StartActivity activity;
-    TextView overflowDate;
     BlurView blurTopGraph;
 
     BorderRoundView slideIndicator;
@@ -96,9 +92,9 @@ public class WalletMultiDaysFragment extends Fragment{
     DatabaseController myDB;
     SingletonClass singletonClass;
 
-    //Bezier Graph
-    MonthCashflowBezier bezier_curve_cont;
-    View monthGraph;
+
+
+    View wallet_side_container;
 
     public DatabaseController getMyDB() {
         return myDB;
@@ -148,39 +144,10 @@ public class WalletMultiDaysFragment extends Fragment{
             getCalendarRange(null);
         }
 
-
-
-        for(MonthCashflowModel month: bezierData){
-            Log.i("Month", ""+month.getMonthName());
-            for(DayCashflowModel day: month.getMonthCashflow()){
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(day.getDate());
-                Log.i("Day", ""+cal.get(Calendar.DAY_OF_MONTH)+ " Amount:"+day.getAmount());
-            }
-        }
-
-
-
-        Log.i("JSONOBject", ""+orderedData.toString());
-
-        //bezier curve
-        bezier_curve_cont = root.findViewById(R.id.graph_container);
-        bezier_curve_cont.setBezierData(bezierData);
-        bezier_curve_cont.setSmallestAmmount(smallesAmount);
-        bezier_curve_cont.setLargestAmount(largestAmount);
-        bezier_curve_cont.setParent(this);
-
-        bezierMonth = root.findViewById(R.id.monthbezier_month);
-        bezierBalance = root.findViewById(R.id.monthbezier_balance);
-        monthGraph = root.findViewById(R.id.multidaysmonthgraph);
         //blurTopGraph = root.findViewById(R.id.blurtopgraph);
         //blur(20, blurTopGraph);
 
         //Tab Sections
-        cashflow_input_frame = root.findViewById(R.id.cashflow_input_frame);
-        ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) cashflow_input_frame.getLayoutParams();
-        lp.setMargins(0,0,0, menuTop);
-        cashflow_input_frame.setLayoutParams(lp);
         cashflow_recycler = root.findViewById(R.id.cashflow_recycler);
         cashflowMainAdapter = new CashflowMainAdapter(getContext(), popContainer, this, root, getActivity().getWindow().getDecorView(), allCalendarDays, orderedData);
         llm = new MultiDaysLinearLayoutManager(getContext());
@@ -192,22 +159,33 @@ public class WalletMultiDaysFragment extends Fragment{
         cashflow_recycler.setLayoutManager(llm);
         cashflow_recycler.setNestedScrollingEnabled(true);
         cashflow_recycler.setAdapter(cashflowMainAdapter);
-        elasticEdgeView = root.findViewById(R.id.elasticEdge);
-        cashflow_display_menu = root.findViewById(R.id.cashflow_display_menu);
-        elasticContentSkeleton = root.findViewById(R.id.elasticContentSkeleton);
-        skeletonLP = (ConstraintLayout.LayoutParams) elasticContentSkeleton.getLayoutParams();
-        //skeletonLP.width = 0;
-        //elasticContentSkeleton.setLayoutParams(skeletonLP);
-        monthviewIcon = root.findViewById(R.id.monthview_icon);
-        overflowDate = root.findViewById(R.id.overflow_date);
+
         slideIndicator = root.findViewById(R.id.slide_indicator);
 
         cashflow_recycler.scrollToPosition(todayItemPosition);
 
+        sideMonthDayHolder = root.findViewById(R.id.side_month_dayholder);
+        int maxHeight = (int)(singletonClass.getDisplayHeight() * 0.6);
+        sideMonthDayHolder.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                sideMonthDayHolder.getLayoutParams().height = maxHeight;
+                sideMonthDayHolder.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+
+        sideMonthName = root.findViewById(R.id.side_month_monthname);
+        wallet_side_container = root.findViewById(R.id.wallet_side_month_container);
+        wallet_side_container.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                wallet_side_container.setX(singletonClass.getDisplayWidth() + wallet_side_container.getWidth());
+                wallet_side_container.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+
         final LiquidView[] countVisibleLiquid = new LiquidView[1];
         final TextView[] countVisibleDayNames = new TextView[1];
-
-
 
 
         cashflow_recycler.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -244,6 +222,71 @@ public class WalletMultiDaysFragment extends Fragment{
         listeners();
 
         return root;
+    }
+
+
+    ViewGroup sideMonthDayHolder;
+    TextView sideMonthName;
+    String selectedMonth = "none";
+    private void setSideCalendar(int position) {
+
+        CalendarLayoutDay selectedDay = allCalendarDays.get(position);
+
+        if(!selectedDay.getMONTH_NUMBER().equals(selectedMonth)){
+            //Draw a new Month
+            Log.i("Drawing Month", "True");
+            sideMonthDayHolder.removeAllViews();
+            selectedMonth = selectedDay.getMONTH_NUMBER();
+            drawMonthDays();
+        }
+        else{
+            //select the Day
+            Log.i("Selecting Month", "True");
+            selectSideDay(selectedDay);
+        }
+    }
+
+    private void drawMonthDays(){
+        boolean calnameset = false;
+
+        for(CalendarLayoutDay calDay: allCalendarDays){
+
+            if(calDay.getMONTH_NUMBER().equals(selectedMonth) & calDay.getType().equals("day")){
+                //The Day belongs to the Month
+                //Asyncinflate the Day
+
+                sideMonthName.setText(calDay.getMONTH_NAME_SHORT());
+
+                new InflateSideMonthDay(new AsyncLayoutInflater(getContext()), sideMonthDayHolder, calDay, new SuccessCallback() {
+                    @Override
+                    public void success() {
+
+                    }
+
+                    @Override
+                    public void error() {
+
+                    }
+                });
+            }
+        }
+    }
+
+    BorderRoundView selectedDayButton = null;
+    TextView selectedDayNumber = null;
+    private void selectSideDay(CalendarLayoutDay selectedDay){
+
+        if(selectedDayButton != null){
+            selectedDayNumber.setTextColor(Color.WHITE);
+            selectedDayButton.dynamicallySetBackgroundColor("#212226");
+        }
+
+        //Get the Date of item at that Position
+        selectedDayButton = sideMonthDayHolder.findViewWithTag(selectedDay.getMONTH_DAY_NUMBER());
+        selectedDayNumber = selectedDayButton.findViewById(R.id.sidemonth_daynumber);
+        selectedDayButton.dynamicallySetBackgroundColor("#FFFFFF");
+        selectedDayNumber.setTextColor(Color.BLACK);
+
     }
 
     public MultiDaysLinearLayoutManager getLlm() {
@@ -351,7 +394,7 @@ public class WalletMultiDaysFragment extends Fragment{
 
         //Todo make first da a Date - for now go 60 days back
 
-        int forecastDays = 100;// * 365
+        int forecastDays = 200;// * 365
 
 
         //Go X years back
@@ -574,15 +617,11 @@ public class WalletMultiDaysFragment extends Fragment{
                         slidingFragment = false;
                         elTDX = e.getX();
                         elTDY = e.getY();
-                        if(menuVisible) {
-                            showDisplayMenu(false);
-                        }
 
                         slidevelocoty = System.currentTimeMillis();
                         //elasticEdgeView.setTouchDown((int)e.getY());
                         break;
                     case MotionEvent.ACTION_UP:
-                        elasticEdgeView.animateCloseEdge();
                         activity.resetScrollDist();
                         if(slidingFragment){
                             //Check how far We are and animate the rest
@@ -654,163 +693,9 @@ public class WalletMultiDaysFragment extends Fragment{
             }
         });
 
-
-        cashflow_display_menu.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                //showDisplayMenu(true);
-                if(!cashflow_menu_rendered){
-                    elasticContWidth = cashflow_display_menu.getWidth() + 30;
-                    cashflow_menu_rendered = true;
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                                //showDisplayMenu(true);
-                            }
-                    }, 200);   //5 seconds
-                }
-            }
-        });
-
-
-        monthviewIcon.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openMonthFragment();
-            }
-        });
-
-
-
-    }
-
-    private void openMonthFragment() {
-
-        List<LiquidView> allVisibleLiquids = new ArrayList<>();
-        List<TextView> allVisibleDayNames = new ArrayList<>();
-        List<toCalendarViewTransition> allTransitionNames = new ArrayList<>();
-        LiquidView countVisibleLiquid;
-        TextView dayName;
-        String liquidTransitionName, daynameTransitionName;
-        toCalendarViewTransition transDataInstance;
-
-
-        for(int i = llm.findFirstVisibleItemPosition(); i <= llm.findLastVisibleItemPosition(); i++){
-            try {
-
-                ViewHolder vh = cashflow_recycler.findViewHolderForAdapterPosition(i);
-                liquidTransitionName = i+"_trans";
-                daynameTransitionName = i+"_dayname";
-                transDataInstance = new toCalendarViewTransition(liquidTransitionName, daynameTransitionName, "test");
-                countVisibleLiquid = vh.itemView.findViewById(R.id.budget_liquid);
-                dayName = vh.itemView.findViewById(R.id.item_day);
-                dayName.setTransitionName(daynameTransitionName);
-                countVisibleLiquid.setTransitionName(liquidTransitionName);
-                allVisibleDayNames.add(dayName);
-                allVisibleLiquids.add(countVisibleLiquid);
-                allTransitionNames.add(transDataInstance);
-            }
-            catch (Exception e){
-
-                e.printStackTrace();
-            }
-        }
-
-
-        WalletCalendarFragment walletCalendarFragment = new WalletCalendarFragment();
-        FragmentTransaction ft = ((StartActivity)getContext()).getSupportFragmentManager().beginTransaction();
-
-        //TODO Soffisticate Transition to MonthView
-
-        walletCalendarFragment.setSharedElementEnterTransition(new DetailsTransition(350));
-        walletCalendarFragment.setSharedElementReturnTransition(new DetailsTransition(350));
-        walletCalendarFragment.setEnterTransition(new Explode().setDuration(350));
-        //TODO GET EXIT TRANSITION ERROR FREE
-        //setExitTransition(new Fade().setDuration(450));
-
-        for(LiquidView visibleLiquid: allVisibleLiquids){
-            ft.addSharedElement(visibleLiquid, visibleLiquid.getTransitionName());
-        }
-
-        for(TextView dayname : allVisibleDayNames){
-            ft.addSharedElement(dayname, dayname.getTransitionName());
-        }
-
-        // Replace the fragment.
-        ft.replace(popContainer.getId(), walletCalendarFragment);
-
-        // Enable back navigation with shared element transitions.
-        ft.addToBackStack(walletCalendarFragment.getClass().getSimpleName());
-
-        // Finally press play.
-        ft.commit();
-
-        activity.checkBackstack();
     }
 
     boolean cashflow_menu_rendered = false;
-
-    float alpha = 0;
-    private void showDisplayMenu(boolean show) {
-        ValueAnimator va;
-
-        if(show){
-            va = ValueAnimator.ofInt(0, elasticContWidth);
-            menuVisible = true;
-        }
-        else{
-            va = ValueAnimator.ofInt(elasticContWidth, 0);
-            menuVisible = false;
-        }
-
-        va.setDuration(150);
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                int animval = (int)valueAnimator.getAnimatedValue();
-                skeletonLP.width = animval;
-                elasticContentSkeleton.setLayoutParams(skeletonLP);
-                alpha = 1f/elasticContWidth * animval;
-                //Log.i("Alpha", "--"+alpha);
-                cashflow_display_menu.setAlpha(alpha);
-            }
-
-        });
-
-        va.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-                //waveEnergy = waveEnergy - 0.2f;
-                //if(waveEnergy < 0){
-                // waveEnergy = 0;
-                //}
-                //Log.i("Energy", ""+waveEnergy);
-
-            }
-        });
-
-
-            va.start();
-
-
-    }
 
     @Override
     public void onDestroy() {
@@ -822,24 +707,10 @@ public class WalletMultiDaysFragment extends Fragment{
         super.onDestroyView();
     }
 
-    boolean pauseAnim = false;
 
-    int scrollingDist = 0;
-
-    TextView bezierMonth, bezierBalance;
-    public void setNewDay(String monthName, String balance) {
-        //Change The Data On BezierView
-        try {
-            bezierMonth.setText(monthName);
-            String rounded = round(Float.parseFloat(balance), 2) + "€";
-            bezierBalance.setText(rounded);
-            Log.i("Data Returned", "" + monthName + "--" + balance);
-        }
-        catch (Exception e){
-
-        }
-    }
-
+    InflateDayDetails AsyncDay;
+    int expandedItemNo = 0;
+    boolean detailedView = false;
     public class CustomScrollListener extends RecyclerView.OnScrollListener {
         public CustomScrollListener() {
         }
@@ -849,12 +720,66 @@ public class WalletMultiDaysFragment extends Fragment{
                 case RecyclerView.SCROLL_STATE_IDLE:
                     //System.out.println("The RecyclerView is not scrolling");
                     //Log.i("FirstVisible =", "View "+llm.findFirstVisibleItemPosition());
+
+
+                    if(markedWeekday){
+
+                        if(!detailedView){
+                            expandedItemNo = currentFirst;
+                            detailedView = true;
+
+                            ViewGroup detailcont = lastSelected.findViewById(R.id.day_detail_container);
+                            View overview_cover = lastSelected.findViewById(R.id.overview_cover);
+                            //cashflow_recycler.smoothScrollToPosition(expandedItemNo);
+
+                            cashflow_recycler.smoothScrollBy(0, (int)lastSelected.getY());
+                            //recyclerView.smooth
+                            AsyncDay = new InflateDayDetails(new AsyncLayoutInflater(getContext()), detailcont, overview_cover, null, new SuccessCallback() {
+                                @Override
+                                public void success(){
+                                    Log.i("Expand Day is ", "Inside");
+                                    try{
+
+                                        toggleSideMonth(false);
+                                    }
+                                    catch(Exception e){
+
+                                    }
+                                }
+
+                                @Override
+                                public void error() {
+
+                                }
+                            });
+                        }
+                    }
+
+
+                    /*
                     monthGraph.setVisibility(GONE);
 
+
                     ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(llm.findFirstCompletelyVisibleItemPosition());
-                    if(!activity.mainMenuVisible) {
-                        //activity.toggleMainMenuContainer();
+                    try{
+                        View overview_cover = vh.itemView.findViewById(R.id.overview_cover);
+                        //overview_cover.setVisibility(GONE);
+                        ViewGroup container = vh.itemView.findViewById(R.id.day_detail_container);
+
+                        InflateDayDetails AsyncDay;
+                        AsyncDay = new InflateDayDetails(new AsyncLayoutInflater(getContext()), container, overview_cover, null);
+                        if(!activity.mainMenuVisible) {
+                            //activity.toggleMainMenuContainer();
+                        }
+
+
                     }
+                    catch(Exception e){
+
+                    }
+                    */
+
+
                     break;
                 case RecyclerView.SCROLL_STATE_DRAGGING:
                     //System.out.println("Scrolling now");
@@ -885,6 +810,8 @@ public class WalletMultiDaysFragment extends Fragment{
 
         }
 
+        int currentFirst = 0;
+        boolean markedWeekday = false;
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             if (dx > 0) {
                 //System.out.println("Scrolled Right");
@@ -895,37 +822,67 @@ public class WalletMultiDaysFragment extends Fragment{
             }
 
             if (dy > 0) {
-               // System.out.println("Scrolled Downwards - "+dy);
+
+                if(!sideMenuOpened){
+                    toggleSideMonth(false);
+                }
                // Log.i("Scrolling", "Downward");
+                int firstItem = llm.findFirstVisibleItemPosition() + 1;
+
 
                 try{
-                    getTopDay();
-                    ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(llm.findFirstVisibleItemPosition());
-                    bezier_curve_cont.setScrolledDate(vh.itemView.findViewById(R.id.item_date).getTag().toString());
+                    if(currentFirst != firstItem){
+                        currentFirst = firstItem;
+                        ViewHolder firstVH = recyclerView.findViewHolderForAdapterPosition(firstItem);
 
-                    Log.i("DaysString" ,""+vh.itemView.findViewById(R.id.item_date).getTag().toString());
+                        if(firstVH.itemView instanceof MarkedConstraintLayout){
+                            markDay((MarkedConstraintLayout)firstVH.itemView);
+                            markedWeekday = true;
+                            setSideCalendar(currentFirst);
+                        }
+                        else{
+                            //Not a weekday
+                            unmarkDay();
+                            markedWeekday = false;
+
+                        }
+
+                    }
                 }
                 catch(Exception e){
 
-                };
-                activity.scrollHeightMenu(dy, false);
+                }
 
             } else if (dy < 0) {
-                //System.out.println("Scrolled Upwards - " +dy);
-                //Log.i("Scrolling", "Upward");
+
+                if(!sideMenuOpened){
+                    toggleSideMonth(false);
+                }
+                // Log.i("Scrolling", "Upward");
+                int firstItem = llm.findFirstVisibleItemPosition() + 1;
+
+
                 try{
-                    getTopDay();
+                    if(currentFirst != firstItem){
+                        currentFirst = firstItem;
+                        ViewHolder firstVH = recyclerView.findViewHolderForAdapterPosition(firstItem);
 
-                    ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(llm.findFirstVisibleItemPosition());
-                    bezier_curve_cont.setScrolledDate(vh.itemView.findViewById(R.id.item_date).getTag().toString());
+                        if(firstVH.itemView instanceof MarkedConstraintLayout){
+                            markDay((MarkedConstraintLayout)firstVH.itemView);
+                            markedWeekday = true;
+                            setSideCalendar(currentFirst);
+                        }
+                        else{
+                            unmarkDay();
+                            markedWeekday = false;
+                        }
 
-                    Log.i("DaysString" ,""+vh.itemView.findViewById(R.id.item_date).getTag().toString());
+                    }
                 }
                 catch(Exception e){
 
-                };
+                }
 
-                activity.scrollHeightMenu(dy, true);
 
             } else {
                 //System.out.println("No Vertical Scrolled");
@@ -959,6 +916,156 @@ public class WalletMultiDaysFragment extends Fragment{
         }
     }
 
+    boolean sideMenuOpened = false;
+    private void toggleSideMonth(boolean open) {
+        sideMenuOpened = open;
+        int start, end;
+        float from, to;
+
+        start = singletonClass.getDisplayWidth() - wallet_side_container.getWidth();
+        end = singletonClass.getDisplayWidth() + wallet_side_container.getWidth();
+        int dist = end - start;
+        float scaleRecycler = 0.8f;
+        if(open){
+            from = 1;
+            to = 0;
+        }
+        else{
+            from = 0;
+            to = 1;
+        }
+
+        ValueAnimator va = ValueAnimator.ofFloat(from, to);
+        va.setDuration(250);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float animVal = (float)animation.getAnimatedValue();
+                float moveside = start + (dist * animVal);
+                float recyclerScale = 0.9f + (0.1f * animVal);
+                float recyclerMove = 0 + ((singletonClass.getDisplayWidth() * 0.025f) * (1 - animVal));
+
+                wallet_side_container.setX(moveside);
+
+                cashflow_recycler.setScaleX(recyclerScale);
+                cashflow_recycler.setScaleY(recyclerScale);
+                cashflow_recycler.setX(-recyclerMove);
+            }
+        });
+
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if(markedItem){
+                    lastSelected.fadeOutBorder();
+                }
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+        va.start();
+    }
+
+
+    MarkedConstraintLayout lastSelected = null;
+    boolean markedItem = false;
+
+    private void markDay(MarkedConstraintLayout mark){
+        if(detailedView){
+            //Delete Expanded Details
+            AsyncDay.collapseDay(new SuccessCallback() {
+                @Override
+                public void success() {
+
+                }
+
+                @Override
+                public void error() {
+
+                }
+            });
+
+            expandedItemNo = 0;
+            detailedView = false;
+        }
+
+        if(lastSelected != null){
+            lastSelected.selectView(false);
+        }
+        mark.selectView(true);
+        markedItem = true;
+        lastSelected = mark;
+
+    }
+
+    private void unmarkDay(){
+        if(detailedView){
+            //Delete Expanded Details
+
+            AsyncDay.collapseDay(new SuccessCallback() {
+                @Override
+                public void success() {
+
+                }
+
+                @Override
+                public void error() {
+
+                }
+            });
+
+            expandedItemNo = 0;
+            detailedView = false;
+        }
+
+        if(lastSelected != null){
+            lastSelected.selectView(false);
+            markedItem = false;
+        }
+        lastSelected = null;
+    }
+    private float getScreenSizeRatio(View item){
+
+        float perc;
+
+        float top = item.getTop();
+        float bottom = item.getBottom();
+        singletonClass.getDisplayHeight();
+
+        if(top > 0){
+            //The item is within the Screen
+            if(bottom > singletonClass.getDisplayHeight()){
+                float difference = bottom - singletonClass.getDisplayHeight();
+                Log.i("difference", ""+difference);
+                perc = 0f;
+            }
+            else{
+                perc = 100f;
+            }
+        }
+        else{
+            perc = 0f;
+        }
+        //Determin What the screenHeight
+
+        return perc;
+    }
+
     public static float round(float value, int scale) {
         int pow = 10;
         for (int i = 1; i < scale; i++) {
@@ -976,30 +1083,6 @@ public class WalletMultiDaysFragment extends Fragment{
         // Below will only handles +ve values
         // return ( (float) ( (int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp) ) ) / pow;
     }
-
-    //SOme Test Stuff
-    TextView topdate;
-    TextView topday;
-    ViewHolder scrollingTopViewHolder;
-    TextView hiddenDay, hiddenDate;
-    private void getTopDay() {
-        //Log.i("Function","is Running");
-        //llm.findFirstVisibleItemPosition();
-        scrollingTopViewHolder = cashflow_recycler.findViewHolderForAdapterPosition(llm.findFirstVisibleItemPosition());
-        topdate = scrollingTopViewHolder.itemView.findViewById(R.id.item_date);
-        topday = scrollingTopViewHolder.itemView.findViewById(R.id.item_day);
-        //Log.i("TopDay",""+topdate.getText());
-        if(overflowDate.getText() != topdate.getText()){
-
-
-            overflowDate.setText(topdate.getText());
-            hiddenDate = topdate;
-
-        }
-
-
-    }
-
 
     private int randomValue(int rangeStart, int rangeEnd){
 
