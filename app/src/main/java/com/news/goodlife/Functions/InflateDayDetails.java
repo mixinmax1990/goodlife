@@ -84,8 +84,8 @@ public class InflateDayDetails {
             //Inflate Budgets Async separately after data is Loaded
 
             loadData();
-            loadFixedCosts(view);
-            loadBudgets();
+            loadFixed(view);
+
 
             module_rev = view.findViewById(R.id.module_status_overview);
             module_exp = view.findViewById(R.id.fixed_costs_module);
@@ -154,19 +154,23 @@ public class InflateDayDetails {
 
     }
 
-    IconDoughnutView fixedCost;
-    private void loadFixedCosts(View root) {
+    IconDoughnutView fixedCost, fixedIncome;
+    private void loadFixed(View root) {
 
         //InflateDayFixedCosts AsyncFixed = new InflateDayFixedCosts(inflater, monthFlex);
         fixedCost = root.findViewById(R.id.fixed_cost_doughnut);
         fixedCost.setCategory("#FFFFFF", null);
 
+        fixedIncome = root.findViewById(R.id.fixed_income_doughnut);
+        fixedIncome.setCategory("#FFFFFF", null);
+
 
     }
 
-    private void loadBudgets(){
+    public void loadBudgets(){
 
-        //InflateDayBudgets AsyncBudgets = new InflateDayBudgets(inflater, monthFlex);
+        new InflateDayBudgets(inflater, monthFlex);
+
     }
 
     private void loadData() {
@@ -261,6 +265,7 @@ public class InflateDayDetails {
                 reserved_liquid.animateWave();
                 cover.setVisibility(View.GONE);
                 successCallback.success();
+
 
             }
 

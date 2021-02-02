@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.flexbox.FlexboxLayout;
+import com.news.goodlife.CustomViews.BudgetCircleMini;
 import com.news.goodlife.CustomViews.IconDoughnutView;
 import com.news.goodlife.Data.Local.Models.Financial.BudgetCategoryModel;
 import com.news.goodlife.Data.Local.Models.Financial.BudgetModel;
@@ -29,6 +30,7 @@ import com.news.goodlife.Fragments.PopFragments.NewBudget;
 import com.news.goodlife.Fragments.SlideInFragments.BudgetBreakdown;
 import com.news.goodlife.Fragments.SlideInFragments.BudgetNew;
 import com.news.goodlife.Interfaces.SuccessCallback;
+import com.news.goodlife.Interfaces.SuccessNewBudgetCallback;
 import com.news.goodlife.R;
 import com.news.goodlife.Singletons.SingletonClass;
 
@@ -72,11 +74,13 @@ public class BudgetManagementFragment extends Fragment {
     int inflatedCategories = 0;
     int catNo;
     boolean startItem = true;
+
     private void inflateCategories(AsyncLayoutInflater inflater) {
         //SET this as Category size
 
         List<BudgetCategoryModel> allCategories = singletonMain.getDatabaseController().BudgetCategoryController.getAllBudgetCategories();
         catNo = allCategories.size();
+
 
         Log.i("CatSIze" , "="+catNo);
         if(catNo == 0){
@@ -85,17 +89,32 @@ public class BudgetManagementFragment extends Fragment {
         }
 
         for(int i = 0; i  < catNo; i++){
+            final String catname = allCategories.get(i).getCatname();
+            final String catid = allCategories.get(i).getId();
+
+            //Inside the Category
+            List<BudgetModel> allCategoryBudgets = singletonMain.getDatabaseController().BudgetController.getAllBudgetsByCategory(catid);
 
             int layout;
-            if(startItem){
-                layout = R.layout.budget_fragment_flexitem_start;
-                startItem = false;
+            boolean largeCategory = false;
+            if(allCategoryBudgets.size() > 3){
+
+                layout = R.layout.budget_fragment_flexitem_full;
+                largeCategory = true;
+
             }
             else{
-                layout = R.layout.budget_fragment_flexitem_end;
-                startItem = true;
+                largeCategory = false;
+                if(startItem){
+                    layout = R.layout.budget_fragment_flexitem_start;
+                    startItem = false;
+                }
+                else{
+                    layout = R.layout.budget_fragment_flexitem_end;
+                    startItem = true;
+                }
             }
-            final String catname = allCategories.get(i).getCatname();
+
 
             inflater.inflate(layout, budgetFlexCont, new AsyncLayoutInflater.OnInflateFinishedListener() {
                 @Override
@@ -103,16 +122,80 @@ public class BudgetManagementFragment extends Fragment {
 
                     inflatedCategories++;
                     ViewGroup flexParent = view.findViewById(R.id.budgetitems_flex_container);
+                    //give Flex container the id of the Category so we can call it later
+                    flexParent.setTag("category_"+catid);
+
                     TextView catnameTV = view.findViewById(R.id.category_name);
                     catnameTV.setText(catname);
 
-                    inflateAddBudget(flexParent, inflater);
+                    //inflateAddBudget(flexParent, inflater);
+                    View addBudgetButton = view.findViewById(R.id.add_budget_button);
+                    addBudgetButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            addNewBudget(catid, inflater);
+                        }
+                    });
                     budgetFlexCont.addView(view);
                     inflateAddCategory(inflater);
+                    boolean full;
+                    if(allCategoryBudgets.size() > 3){
+                        full = true;
+                    }
+                    else{
+                        full = false;
+                    }
+
+                    for(BudgetModel budget: allCategoryBudgets){
+
+                        inflateBudget(inflater, budget, flexParent, full);
+
+                    }
                 }
             });
-
         }
+    }
+
+    private void inflateBudget(AsyncLayoutInflater inflater, BudgetModel budget, ViewGroup parent, boolean bigCategory){
+
+        inflater.inflate(R.layout.budget_flexitem_mini, parent, new AsyncLayoutInflater.OnInflateFinishedListener() {
+            @Override
+            public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
+
+
+                testprogress = testprogress - 10;
+                BudgetCircleMini budgetCircleMini = view.findViewById(R.id.budget_circle_mini);
+                budgetCircleMini.setMonths(Integer.parseInt(budget.getMonths()));
+                budgetCircleMini.setPercentage(testprogress);
+
+                TextView budgetName = view.findViewById(R.id.budget_name);
+                budgetName.setText(budget.getName());
+
+                FlexboxLayout.LayoutParams lp = (FlexboxLayout.LayoutParams) view.getLayoutParams();
+                if(bigCategory){
+                    //Change Flex to 25%
+                    lp.setFlexBasisPercent(.25f);
+                }
+                else{
+                    lp.setFlexBasisPercent(.5f);
+                }
+                view.setLayoutParams(lp);
+
+                parent.addView(view);
+                singletonMain.toggleFadeView(true, view, new SuccessCallback() {
+                    @Override
+                    public void success() {
+
+                    }
+
+                    @Override
+                    public void error() {
+
+                    }
+                });
+            }
+        });
+
     }
 
     View addCategoryView = null;
@@ -159,14 +242,14 @@ public class BudgetManagementFragment extends Fragment {
                                     BudgetCategoryModel budgetCategory = new BudgetCategoryModel();
                                     budgetCategory.setCatname(enterCatName.getText().toString());
                                     budgetCategory.setChildcount("0");
-                                    singletonMain.getDatabaseController().BudgetCategoryController.addBudgetCategory(budgetCategory);
+                                    String catid = ""+singletonMain.getDatabaseController().BudgetCategoryController.addBudgetCategory(budgetCategory);
 
                                     //Now Place New Category Container
                                     singletonMain.toggleFadeView(false, view, new SuccessCallback() {
                                         @Override
                                         public void success() {
 
-                                            inflateNewCategory(inflater);
+                                            inflateNewCategory(inflater, catid);
                                         }
 
                                         @Override
@@ -202,7 +285,7 @@ public class BudgetManagementFragment extends Fragment {
         }
     }
 
-    private void inflateNewCategory(AsyncLayoutInflater inflater) {
+    private void inflateNewCategory(AsyncLayoutInflater inflater, String catid) {
         BudgetCategoryModel newCategory = singletonMain.getDatabaseController().BudgetCategoryController.getLatestBudget();
 
         int layout;
@@ -219,11 +302,24 @@ public class BudgetManagementFragment extends Fragment {
             @Override
             public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
                 ViewGroup flexParent = view.findViewById(R.id.budgetitems_flex_container);
+
+                //give Flex container the id of the Category so we can call it later
+                flexParent.setTag("category_"+catid);
+
                 TextView catnameTV = view.findViewById(R.id.category_name);
 
                 catnameTV.setText(newCategory.getCatname());
 
-                inflateAddBudget(flexParent, inflater);
+                //inflateAddBudget(flexParent, inflater);
+
+                View addBudgetButton = view.findViewById(R.id.add_budget_button);
+                addBudgetButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        addNewBudget(catid, inflater);
+                    }
+                });
+
                 budgetFlexCont.addView(view);
                 inflateAddCategory(inflater);
 
@@ -245,64 +341,70 @@ public class BudgetManagementFragment extends Fragment {
 
     }
 
+    int testprogress = 110;
+    private void addNewBudget(String catid, AsyncLayoutInflater inflater){
 
-    private void inflateAddBudget(ViewGroup parent, AsyncLayoutInflater inflater){
-
-        inflater.inflate(R.layout.budget_fragment_category_flexitem_newbudget, parent, new AsyncLayoutInflater.OnInflateFinishedListener() {
+        NewBudget newBudgetFragment = new NewBudget(new SuccessNewBudgetCallback() {
             @Override
-            public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
+            public void success(BudgetModel budgetData) {
+                //Successfully stored new Budget
 
-                view.setOnClickListener(new View.OnClickListener() {
+                singletonMain.toggleFadeView(false, slideinFragmentView, new SuccessCallback() {
                     @Override
-                    public void onClick(View v) {
+                    public void success() {
+                        //find the category view
+                        ViewGroup category_flex = root.findViewWithTag("category_"+catid);
 
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        inflateBudget(inflater, budgetData ,category_flex, false);
+                    }
+                    @Override
+                    public void error() {
 
-                        ft.replace(slideinFragmentView.getId(), new NewBudget(new SuccessCallback() {
-                            @Override
-                            public void success() {
-                                //Successfully stored new Budget
-                            }
+                    }
+                });
+            }
 
-                            @Override
-                            public void error() {
-                                //Closed the Budget Without Saving
-                                singletonMain.toggleFadeView(false, slideinFragmentView, new SuccessCallback() {
-                                    @Override
-                                    public void success() {
-                                        slideinFragmentView.removeAllViews();
+            @Override
+            public void error() {
+                //Closed the Budget Without Saving
+                singletonMain.toggleFadeView(false, slideinFragmentView, new SuccessCallback() {
+                    @Override
+                    public void success() {
+                        slideinFragmentView.removeAllViews();
 
-                                    }
+                    }
 
-                                    @Override
-                                    public void error() {
+                    @Override
+                    public void error() {
 
-                                    }
-                                });
-
-                            }
-                        }));
-
-                        ft.commit();
-
-                        singletonMain.toggleFadeView(true, slideinFragmentView, new SuccessCallback() {
-                            @Override
-                            public void success() {
-
-
-                            }
-
-                            @Override
-                            public void error() {
-
-                            }
-                        });
                     }
                 });
 
-                parent.addView(view);
+            }
+        }, catid);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        ft.replace(slideinFragmentView.getId(), newBudgetFragment);
+
+        ft.commit();
+
+        singletonMain.toggleFadeView(true, slideinFragmentView, new SuccessCallback() {
+            @Override
+            public void success() {
+
+
+            }
+
+            @Override
+            public void error() {
+
             }
         });
+    }
+
+
+    private void inflateAddBudget(ViewGroup parent, AsyncLayoutInflater inflater){
+
 
     }
 

@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.flexbox.FlexboxLayout;
@@ -176,19 +178,39 @@ public class CashflowMonthAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
 
         private void inflateDay(final CalendarLayoutDay dayData){
-            LayoutInflater inflater = LayoutInflater.from(root.getContext());
+           /*
+
+            AsyncLayoutInflater inflater = new AsyncLayoutInflater(context);
             final View day;
             //View day = inflater.inflate(R.layout.month_wallet_day_item, root, false);
             if(dayData.isToday()){
-                 day = inflater.inflate(R.layout.month_wallet_today_item, null);
+                 inflater.inflate(R.layout.month_wallet_today_item, root, new AsyncLayoutInflater.OnInflateFinishedListener() {
+                     @Override
+                     public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
+
+                         setUpDay(view, dayData);
+                         root.addView(view);
+
+                     }
+                 });
             }
             else{
-                 day = inflater.inflate(R.layout.month_wallet_day_item, null);
+                inflater.inflate(R.layout.month_wallet_day_item, root, new AsyncLayoutInflater.OnInflateFinishedListener() {
+                    @Override
+                    public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
+
+                        setUpDay(view, dayData);
+                        root.addView(view);
+                    }
+                });
+                 //day = inflater.inflate(R.layout.month_wallet_day_item, null);
             }
 
-            root.addView(day);
+            */
+            //root.addView(day);
+        }
 
-
+        private void setUpDay(View day, CalendarLayoutDay dayData){
             TextView dayNameTV = day.findViewById(R.id.day_name);
             TextView dayNumberTV = day.findViewById(R.id.monthview_day_number);
             BorderRoundView liquidContainer = day.findViewById(R.id.day_item_liquidcard);
@@ -213,45 +235,63 @@ public class CashflowMonthAdapter extends RecyclerView.Adapter<RecyclerView.View
                 day.setLayoutParams(flexLP);
                 monday = false;
             }
-
         }
 
         private void inflateWeekendAnalysis(CalendarLayoutDay dayData){
-            LayoutInflater inflater = LayoutInflater.from(root.getContext());
+        /*
+            AsyncLayoutInflater inflater = new AsyncLayoutInflater(context);
 
-            //View day = inflater.inflate(R.layout.month_wallet_day_item, root, false);
-            final View weekend = inflater.inflate(R.layout.month_wallet_weekened_item, null);
-            root.addView(weekend);
+            inflater.inflate(R.layout.month_wallet_weekened_item, root, new AsyncLayoutInflater.OnInflateFinishedListener() {
+                @Override
+                public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
+
+                    root.addView(view);
+                }
+            });*/
 
         }
 
         private void inflateMonthendAnalysis(CalendarLayoutDay dayData){
-            LayoutInflater inflaterMonth = LayoutInflater.from(root.getContext());
 
-            //View day = inflater.inflate(R.layout.month_wallet_day_item, root, false);
-            final View monthend = inflaterMonth.inflate(R.layout.month_wallet_monthend_item, null);
-            root.addView(monthend);
+         /*
+            AsyncLayoutInflater inflaterMonth = new AsyncLayoutInflater(context);
 
-            TextView monthEndTextView = monthend.findViewById(R.id.newmonth_text);
-            monthEndTextView.setText(dayData.getMONTH_NAME());
+            inflaterMonth.inflate(R.layout.month_wallet_monthend_item, root, new AsyncLayoutInflater.OnInflateFinishedListener() {
+                @Override
+                public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
 
-            FlexboxLayout.LayoutParams flexLP =
-            (FlexboxLayout.LayoutParams) monthend.getLayoutParams();
-            flexLP.setWrapBefore(true);
-            flexLP.setWidth(displayWidth);
-            monthend.setLayoutParams(flexLP);
+
+                    TextView monthEndTextView = view.findViewById(R.id.newmonth_text);
+                    monthEndTextView.setText(dayData.getMONTH_NAME());
+
+                    FlexboxLayout.LayoutParams flexLP =
+                            (FlexboxLayout.LayoutParams) view.getLayoutParams();
+                    flexLP.setWrapBefore(true);
+                    flexLP.setWidth(displayWidth);
+                    view.setLayoutParams(flexLP);
+
+                    root.addView(view);
+                }
+            });
+
+        */
 
         }
 
         private void inflateYearendAnalysis(CalendarLayoutDay dayData){
-            LayoutInflater inflater = LayoutInflater.from(root.getContext());
+
+            /*AsyncLayoutInflater inflater = new AsyncLayoutInflater(context);
 
             //View day = inflater.inflate(R.layout.month_wallet_day_item, root, false);
-            final View yearend = inflater.inflate(R.layout.month_wallet_yearend_item, null);
-            root.addView(yearend);
-
-            TextView yearTV = yearend.findViewById(R.id.year_text);
-            yearTV.setText(dayData.getYEAR());
+            inflater.inflate(R.layout.month_wallet_yearend_item, root, new AsyncLayoutInflater.OnInflateFinishedListener() {
+                @Override
+                public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
+                    TextView yearTV = view.findViewById(R.id.year_text);
+                    yearTV.setText(dayData.getYEAR());
+                    root.addView(view);
+                }
+            });
+*/
 
         }
 

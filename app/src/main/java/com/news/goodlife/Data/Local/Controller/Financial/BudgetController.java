@@ -35,6 +35,10 @@ public class BudgetController extends DatabaseHelper {
         values = new ContentValues();
 
         values.put(budgetTable.getBudgetcatId(), model.getCategoryid());
+        values.put(budgetTable.getBudgetName(), model.getName());
+        values.put(budgetTable.getMONTHS(), model.getMonths());
+        values.put(budgetTable.getREPEAT(), model.getRepeat());
+        values.put(budgetTable.getCOVERAGE(), model.getCoverage());
         values.put(budgetTable.getAMOUNT(), model.getAmount());
         values.put(budgetTable.getFREQUENCY(), model.getFrequency());
         values.put(budgetTable.getSTARTDATE(), model.getStartdate());
@@ -60,6 +64,10 @@ public class BudgetController extends DatabaseHelper {
         BudgetModel budget = new BudgetModel();
 
         budget.setId(c.getString(c.getColumnIndex(budgetTable.getBudgetId())));
+        budget.setName(c.getString(c.getColumnIndex(budgetTable.getBudgetName())));
+        budget.setMonths(c.getString(c.getColumnIndex(budgetTable.getMONTHS())));
+        budget.setRepeat(c.getString(c.getColumnIndex(budgetTable.getREPEAT())));
+        budget.setCoverage(c.getString(c.getColumnIndex(budgetTable.getCOVERAGE())));
         budget.setAmount(c.getString(c.getColumnIndex(budgetTable.getAMOUNT())));
         budget.setCategoryid(c.getString(c.getColumnIndex(budgetTable.getBudgetcatId())));
         budget.setFrequency(c.getString(c.getColumnIndex(budgetTable.getFREQUENCY())));
@@ -84,6 +92,41 @@ public class BudgetController extends DatabaseHelper {
                 BudgetModel budget = new BudgetModel();
 
                 budget.setId(c.getString(c.getColumnIndex(budgetTable.getBudgetId())));
+                budget.setName(c.getString(c.getColumnIndex(budgetTable.getBudgetName())));
+                budget.setMonths(c.getString(c.getColumnIndex(budgetTable.getMONTHS())));
+                budget.setRepeat(c.getString(c.getColumnIndex(budgetTable.getREPEAT())));
+                budget.setCoverage(c.getString(c.getColumnIndex(budgetTable.getCOVERAGE())));
+                budget.setAmount(c.getString(c.getColumnIndex(budgetTable.getAMOUNT())));
+                budget.setCategoryid(c.getString(c.getColumnIndex(budgetTable.getBudgetcatId())));
+                budget.setFrequency(c.getString(c.getColumnIndex(budgetTable.getFREQUENCY())));
+                budget.setStartdate(c.getString(c.getColumnIndex(budgetTable.getSTARTDATE())));
+                budget.setEnddate(c.getString(c.getColumnIndex(budgetTable.getENDDATE())));
+
+                datalist.add(budget);
+            }
+            while(c.moveToNext());
+        }
+        return datalist;
+    }
+
+    public List<BudgetModel> getAllBudgetsByCategory(String category_id){
+        db = this.getWritableDatabase();
+
+        List<BudgetModel> datalist = new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + budgetTable.TABLE_NAME + " WHERE " + budgetTable.getBudgetcatId()+ " = " + category_id;
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c.moveToFirst()){
+            do{
+                BudgetModel budget = new BudgetModel();
+
+                budget.setId(c.getString(c.getColumnIndex(budgetTable.getBudgetId())));
+                budget.setName(c.getString(c.getColumnIndex(budgetTable.getBudgetName())));
+                budget.setMonths(c.getString(c.getColumnIndex(budgetTable.getMONTHS())));
+                budget.setRepeat(c.getString(c.getColumnIndex(budgetTable.getREPEAT())));
+                budget.setCoverage(c.getString(c.getColumnIndex(budgetTable.getCOVERAGE())));
                 budget.setAmount(c.getString(c.getColumnIndex(budgetTable.getAMOUNT())));
                 budget.setCategoryid(c.getString(c.getColumnIndex(budgetTable.getBudgetcatId())));
                 budget.setFrequency(c.getString(c.getColumnIndex(budgetTable.getFREQUENCY())));

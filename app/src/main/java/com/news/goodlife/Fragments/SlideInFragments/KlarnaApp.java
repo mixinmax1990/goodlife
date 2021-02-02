@@ -6,14 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
-import android.webkit.JavascriptInterface;
-import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,9 +18,8 @@ import androidx.fragment.app.Fragment;
 
 import com.news.goodlife.Data.Local.Models.Financial.AccountModel;
 import com.news.goodlife.Data.Remote.Klarna.Interfaces.Callbacks.KlarnaResponseCallback;
-import com.news.goodlife.Data.Remote.Klarna.Interfaces.GETBalanceData;
+import com.news.goodlife.Data.Remote.Klarna.Models.AccountDataModels.KlarnaAccountModel;
 import com.news.goodlife.Data.Remote.Klarna.Models.Consent.POSTgetConsentDataModel;
-import com.news.goodlife.Data.Remote.Klarna.Models.FlowModels.GETBalanceModel;
 import com.news.goodlife.R;
 import com.news.goodlife.Singletons.SingletonClass;
 
@@ -208,7 +204,7 @@ public class KlarnaApp extends Fragment {
 
         AccountModel account = new AccountModel();
 
-        com.news.goodlife.Data.Remote.Klarna.Models.AccountDataModels.AccountModel apiAccount = singletonClass.getKlarna().getFlowsController().getBalanceData().getData().getResult().getAccount();
+        KlarnaAccountModel apiAccount = singletonClass.getKlarna().getFlowsController().getBalanceData().getData().getResult().getAccount();
 
         account.setId(null);
         account.setKlarna_id(apiAccount.getId());

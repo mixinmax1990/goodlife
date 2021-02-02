@@ -2,7 +2,7 @@ package com.news.goodlife.Data.Remote.Klarna.Models.FlowModels;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.news.goodlife.Data.Remote.Klarna.Models.AccountDataModels.AccountModel;
+import com.news.goodlife.Data.Remote.Klarna.Models.AccountDataModels.KlarnaAccountModel;
 
 public class GETBalanceModel {
     @SerializedName("data")
@@ -41,7 +41,7 @@ public class GETBalanceModel {
         public class Result{
             @SerializedName("account")
             @Expose
-            AccountModel account;
+            KlarnaAccountModel account;
 
             @SerializedName("available")
             @Expose
@@ -51,7 +51,7 @@ public class GETBalanceModel {
             @Expose
             String type;
 
-            public AccountModel getAccount() {
+            public KlarnaAccountModel getAccount() {
                 return account;
             }
 

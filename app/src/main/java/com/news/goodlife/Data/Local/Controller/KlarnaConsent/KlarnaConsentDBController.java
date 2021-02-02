@@ -54,27 +54,44 @@ public class KlarnaConsentDBController extends DatabaseHelper {
         return insert;
     }
 
+    public POSTgetConsentDataModel consentData = null;
     public POSTgetConsentDataModel getConsent(){
-        POSTgetConsentDataModel consent = new POSTgetConsentDataModel();
-        consent.setData();
 
-        String selectQuery = "SELECT * FROM "+ consentTable.getTableName() + " LIMIT 1 ";
+        if(consentData == null){
 
-        Cursor c = db.rawQuery(selectQuery, null);
+            String selectQuery = "SELECT * FROM "+ consentTable.getTableName() + " LIMIT 1 ";
 
-        if (c.moveToFirst())
-        {
-            // DO SOMETHING WITH CURSOR
+            Cursor c = db.rawQuery(selectQuery, null);
+
+
+            POSTgetConsentDataModel consent = null;
+
+
+            if(c.getCount() <= 0){
+                c.close();
+                return consent;
+            }
+
+            consent = new POSTgetConsentDataModel();
+            consent.setData();
+
+            c.moveToFirst();
+
             consent.getData().setConsent_id(c.getString(c.getColumnIndex(consentTable.getKlarnaConsentId())));
             consent.getData().setConsent_token(c.getString(c.getColumnIndex(consentTable.getKlarnaConsentToken())));
 
-        } else
-        {
-            // I AM EMPTY
-            consent = null;
-        }
+            consentData = consent;
 
-        return consent;
+
+            c.close();
+            return consentData;
+
+        }
+        else{
+
+            return consentData;
+
+        }
     }
 
     public boolean deleteConsent(){

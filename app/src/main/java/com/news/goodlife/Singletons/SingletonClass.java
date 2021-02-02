@@ -17,6 +17,7 @@ public class SingletonClass {
 
     private static volatile SingletonClass sSoleInstance;
     private static volatile KlarnaRequestController klarna;
+    private String currencySymbol;
 
     //private constructor.
     private SingletonClass(){
@@ -150,6 +151,14 @@ public class SingletonClass {
         this.Subscribed = connectedAccounts;
     }
 
+    public String getCurrencySymbol() {
+        return currencySymbol;
+    }
+
+    public void setCurrencySymbol(String currencySymbol) {
+        this.currencySymbol = currencySymbol;
+    }
+
     public void toggleFadeView(boolean in, View view, SuccessCallback callback){
         float scale = .2f;
         if(in){
@@ -208,5 +217,21 @@ public class SingletonClass {
         });
 
         va.start();
+    }
+
+    public String monefy(String klarnaAmount){
+        String moneyfied;
+
+        if(klarnaAmount.length() > 2){
+            moneyfied = new StringBuilder(klarnaAmount).insert(klarnaAmount.length()-2, ".").toString() + getCurrencySymbol();
+        }
+        else{
+            moneyfied = "0,00€";
+        }
+
+
+
+        return moneyfied;
+
     }
 }

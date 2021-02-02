@@ -53,7 +53,7 @@ public class RelationshipMapping {
             spend_module = viewHolder.itemView.findViewById(R.id.fixed_costs_module);
             income_module = viewHolder.itemView.findViewById(R.id.events_incoming);
             balance_module = viewHolder.itemView.findViewById(R.id.cashcat_frame);
-            budget_container = viewHolder.itemView.findViewById(R.id.budget_container);
+            budget_container = viewHolder.itemView.findViewById(R.id.month_flex);
             savings_container = viewHolder.itemView.findViewById(R.id.savings_module);
             goals_container = viewHolder.itemView.findViewById(R.id.goals_module);
 
@@ -105,7 +105,7 @@ public class RelationshipMapping {
         int childCount = budgetCont.getChildCount();
 
         Log.i("ChildCount", ""+childCount);
-        for(int i = 0; i < childCount; i++){
+       /* for(int i = 0; i < childCount; i++){
 
             int moduleCenterX, moduleCenterY;
 
@@ -126,7 +126,7 @@ public class RelationshipMapping {
 
             relationshipMapData.add(relationshipConnection);
 
-        }
+        } */
 
         return relationshipMapData;
 

@@ -5,13 +5,13 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class AccountsModel {
+public class KlarnaAccountsModel {
 
     @SerializedName("data")
     @Expose
-    AccountDetailsModel.Data data;
+    KlarnaAccountDetailsModel.Data data;
 
-    public AccountDetailsModel.Data getData() {
+    public KlarnaAccountDetailsModel.Data getData() {
         return data;
     }
 
@@ -36,9 +36,9 @@ public class AccountsModel {
     public class Result{
         @SerializedName("account")
         @Expose
-        List<AccountModel> account;
+        List<KlarnaAccountModel> account;
 
-        public List<AccountModel> getAccount() {
+        public List<KlarnaAccountModel> getAccount() {
             return account;
         }
     }

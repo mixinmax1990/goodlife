@@ -1,13 +1,11 @@
 package com.news.goodlife.Data.Remote.Klarna.Models.AccountDataModels;
 
-import android.view.SurfaceControl;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class TransactionsAllModel {
+public class KlarnaTransactionsAllModel {
 
     @SerializedName("data")
     @Expose
@@ -40,7 +38,7 @@ public class TransactionsAllModel {
 
         @SerializedName("transactions")
         @Expose
-        List<TransactionModel> transactions;
+        List<KlarnaTransactionModel> transactions;
 
         @SerializedName("from_date")
         @Expose
@@ -50,7 +48,7 @@ public class TransactionsAllModel {
         @Expose
         String to_date;
 
-        public List<TransactionModel> getTransactions() {
+        public List<KlarnaTransactionModel> getTransactions() {
             return transactions;
         }
 

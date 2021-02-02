@@ -1,7 +1,7 @@
 package com.news.goodlife.Data.Local.Models.Financial;
 
 public class BudgetModel {
-    public String id, amount, categoryid, frequency, startdate, enddate;
+    public String id, name, months, repeat, coverage ,amount, categoryid, frequency, startdate, enddate;
 
     public BudgetModel() {
     }
@@ -12,6 +12,38 @@ public class BudgetModel {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getMonths() {
+        return months;
+    }
+
+    public void setMonths(String months) {
+        this.months = months;
+    }
+
+    public String getRepeat() {
+        return repeat;
+    }
+
+    public void setRepeat(String repeat) {
+        this.repeat = repeat;
+    }
+
+    public String getCoverage() {
+        return coverage;
+    }
+
+    public void setCoverage(String coverage) {
+        this.coverage = coverage;
     }
 
     public String getAmount() {

@@ -1,26 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="46dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:paddingBottom="300dp"
+    >
     <com.news.goodlife.CustomViews.DownBubbleTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/budget_category"
         app:layout_constraintTop_toTopOf="parent"
         android:text="Category Name"
-        android:textSize="18dp"
+        android:textSize="14dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
     <androidx.recyclerview.widget.RecyclerView
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/budget_category"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="40dp"
         android:id="@+id/budget_period_recycler"
-        app:layout_constraintDimensionRatio="2:1"/>
+        app:layout_constraintDimensionRatio="18:11"/>
 
     <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
         android:layout_width="wrap_content"
@@ -29,21 +36,229 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:borderCustomRadius="30"
-        android:minWidth="200dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="6dp"
+        android:id="@+id/budgetname_cont"
         >
+        <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:borderCustomRadius="30"
+            app:strokeCustomSize="5"
+            app:strokeCustomColor="#4380DC"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/entername_focus"/>
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             android:padding="9dp"
+            android:id="@+id/entername"
             android:hint="Budget Name"
+            android:importantForAutofill="no"
             android:maxLines="1"
             android:singleLine="true"
             android:textAlignment="center"/>
 
     </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0,00€"
+        android:layout_marginTop="32dp"
+        android:textSize="30sp"
+        android:id="@+id/allocated_amount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/budgetname_cont"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Allocated"
+        app:layout_constraintTop_toBottomOf="@id/allocated_amount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:alpha=".5"
+        android:id="@+id/allocated_amount_title"/>
+
+    <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/setting_content"
+        app:layout_constraintTop_toBottomOf="@id/allocated_amount_title"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="16dp"
+        app:borderCustomRadius="50"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="2,653,20€"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="30sp"
+            android:padding="0dp"
+            android:id="@+id/available_amount"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/avalaible_amount_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/available_amount"
+            android:text="Available Amount (Period)"
+            android:alpha=".5"/>
+
+        <SeekBar
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            app:layout_constraintTop_toBottomOf="@id/avalaible_amount_title"
+            android:id="@+id/seekamount"/>
+        <SeekBar
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            app:layout_constraintTop_toBottomOf="@id/seekamount"
+            android:id="@+id/seekamountfine"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/seekamountfine"
+            app:layout_constraintStart_toStartOf="@id/seekamountfine"
+            android:text="Min"
+            android:id="@+id/finemin"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/seekamountfine"
+            app:layout_constraintTop_toTopOf="@id/seekamountfine"
+            android:text="Max"
+            android:id="@+id/finemax"/>
+    </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Budget Type"
+        app:layout_constraintTop_toBottomOf="@id/setting_content"
+        app:layout_constraintStart_toStartOf="parent"
+        android:alpha=".5"
+        android:id="@+id/type_title"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"/>
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:padding="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:id="@+id/period_radiogroup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/type_title"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:layout_margin="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="repeat"
+            android:tag="repeat"
+            android:checked="true"
+            android:id="@+id/repeat"
+            />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/once"
+            android:tag="once"
+            android:text="Once"/>
+    </RadioGroup>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/period_radiogroup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/budget_period_cont"
+        >
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/datescont"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:orientation="horizontal">
+            <com.news.goodlife.CustomViews.CustomEntries.LabeledTextView
+                android:id="@+id/startdate_entry"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:tag="Start"
+                android:text="Today"
+                android:textAlignment="center"
+                android:paddingStart="30dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:paddingEnd="30dp"
+                android:background="?attr/backgroundSecondary"/>
+            <com.news.goodlife.CustomViews.CustomEntries.LabeledTextView
+                android:id="@+id/enddate_entry"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:tag="End"
+                android:text="None"
+                android:textAlignment="center"
+                android:minWidth="100dp"
+                android:paddingStart="30dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:paddingEnd="30dp"
+                android:background="?attr/backgroundSecondary"/>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Coverage"
+        app:layout_constraintTop_toBottomOf="@id/budget_period_cont"
+        app:layout_constraintStart_toStartOf="parent"
+        android:alpha=".5"
+        android:id="@+id/cover_title"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"/>
+
+    <SeekBar
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toBottomOf="@id/cover_title"
+        android:id="@+id/coverage_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progress="100"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

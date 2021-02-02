@@ -418,8 +418,6 @@ public class WalletMultiDaysFragment extends Fragment{
         bezierData.get(bezierData.size()-1).setMonthName(loopDay.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
         //Log.i("FirstDayInrnge",""+ getFirstDayInRange().getTime());
 
-        //Calendar Obj of first day 10 Years back
-
         // Add PastDays
         for(int i = 0; i < forecastDays; i++){
 
@@ -461,13 +459,6 @@ public class WalletMultiDaysFragment extends Fragment{
 
         }
 
-
-
-        //allCalendarDates.get(0).getTime();
-
-        //c.add(Calendar.DATE, 40);  // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE
-        //SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
-        //String output = sdf1.format(c.getTime());
     }
 
     private void dayHasEvents(Date time) {
@@ -711,6 +702,7 @@ public class WalletMultiDaysFragment extends Fragment{
     InflateDayDetails AsyncDay;
     int expandedItemNo = 0;
     boolean detailedView = false;
+    ViewHolder detailedViewHolder = null;
     public class CustomScrollListener extends RecyclerView.OnScrollListener {
         public CustomScrollListener() {
         }
@@ -727,6 +719,7 @@ public class WalletMultiDaysFragment extends Fragment{
                         if(!detailedView){
                             expandedItemNo = currentFirst;
                             detailedView = true;
+                            preventDayMark = true;
 
                             ViewGroup detailcont = lastSelected.findViewById(R.id.day_detail_container);
                             View overview_cover = lastSelected.findViewById(R.id.overview_cover);
@@ -737,10 +730,22 @@ public class WalletMultiDaysFragment extends Fragment{
                             AsyncDay = new InflateDayDetails(new AsyncLayoutInflater(getContext()), detailcont, overview_cover, null, new SuccessCallback() {
                                 @Override
                                 public void success(){
-                                    Log.i("Expand Day is ", "Inside");
+                                    //Log.i("Expand Day is ", "Inside");
                                     try{
 
-                                        toggleSideMonth(false);
+                                        toggleSideMonth(false, new SuccessCallback() {
+                                            @Override
+                                            public void success() {
+                                               AsyncDay.loadBudgets();
+                                               fullyExpandedDetail = true;
+
+                                            }
+
+                                            @Override
+                                            public void error() {
+
+                                            }
+                                        });
                                     }
                                     catch(Exception e){
 
@@ -754,31 +759,6 @@ public class WalletMultiDaysFragment extends Fragment{
                             });
                         }
                     }
-
-
-                    /*
-                    monthGraph.setVisibility(GONE);
-
-
-                    ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(llm.findFirstCompletelyVisibleItemPosition());
-                    try{
-                        View overview_cover = vh.itemView.findViewById(R.id.overview_cover);
-                        //overview_cover.setVisibility(GONE);
-                        ViewGroup container = vh.itemView.findViewById(R.id.day_detail_container);
-
-                        InflateDayDetails AsyncDay;
-                        AsyncDay = new InflateDayDetails(new AsyncLayoutInflater(getContext()), container, overview_cover, null);
-                        if(!activity.mainMenuVisible) {
-                            //activity.toggleMainMenuContainer();
-                        }
-
-
-                    }
-                    catch(Exception e){
-
-                    }
-                    */
-
 
                     break;
                 case RecyclerView.SCROLL_STATE_DRAGGING:
@@ -812,77 +792,132 @@ public class WalletMultiDaysFragment extends Fragment{
 
         int currentFirst = 0;
         boolean markedWeekday = false;
+        boolean preventDayMark = false;
+        boolean fullyExpandedDetail = false;
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            if (dx > 0) {
-                //System.out.println("Scrolled Right");
-            } else if (dx < 0) {
-                //System.out.println("Scrolled Left");
-            } else {
-                //System.out.println("No Horizontal Scrolled");
-            }
+
+            // if (dx > 0) { //System.out.println("Scrolled Right");} else if (dx < 0) { //System.out.println("Scrolled Left"); } else { //System.out.println("No Horizontal Scrolled"); }
 
             if (dy > 0) {
+                // Log.i("Scrolling", "Downward");
 
-                if(!sideMenuOpened){
-                    toggleSideMonth(false);
+                if(preventDayMark){
+
+                    if(fullyExpandedDetail){
+                        //Day is Visible
+                        try{
+                            int bottom = detailedViewHolder.itemView.getBottom();
+
+                            //If Bottom is less than half the Screen then expand stuff Again
+
+                            if(bottom < singletonClass.getDisplayHeight() / 2){
+
+                                Log.i("Less Than Half", "Yes");
+
+                                //detailedView = false;
+                                preventDayMark = false;
+                                fullyExpandedDetail = false;
+
+                            }
+
+                            Log.i("Bottom of VH", ""+bottom);
+                        }
+                        catch(Exception e){
+                            Log.i("Exception", "Yes");
+                        }
+                    }
+
+
                 }
-               // Log.i("Scrolling", "Downward");
-                int firstItem = llm.findFirstVisibleItemPosition() + 1;
+                else{
+                    //Day is Not visible so expand if required
+                    if(!sideMenuOpened){
+                        toggleSideMonth(false, null);
+                    }
+
+                    int firstItem = llm.findFirstVisibleItemPosition() + 1;
 
 
-                try{
-                    if(currentFirst != firstItem){
-                        currentFirst = firstItem;
-                        ViewHolder firstVH = recyclerView.findViewHolderForAdapterPosition(firstItem);
+                    try{
+                        if(currentFirst != firstItem){
+                            currentFirst = firstItem;
+                            detailedViewHolder = recyclerView.findViewHolderForAdapterPosition(firstItem);
 
-                        if(firstVH.itemView instanceof MarkedConstraintLayout){
-                            markDay((MarkedConstraintLayout)firstVH.itemView);
-                            markedWeekday = true;
-                            setSideCalendar(currentFirst);
+                            if(detailedViewHolder.itemView instanceof MarkedConstraintLayout){
+                                markDay((MarkedConstraintLayout)detailedViewHolder.itemView);
+                                markedWeekday = true;
+                                setSideCalendar(currentFirst);
+                            }
+                            else{
+                                //Not a weekday
+                                unmarkDay();
+                                markedWeekday = false;
+
+                            }
+
                         }
-                        else{
-                            //Not a weekday
-                            unmarkDay();
-                            markedWeekday = false;
-
-                        }
+                    }
+                    catch(Exception e){
 
                     }
-                }
-                catch(Exception e){
 
                 }
+
 
             } else if (dy < 0) {
-
-                if(!sideMenuOpened){
-                    toggleSideMonth(false);
-                }
                 // Log.i("Scrolling", "Upward");
-                int firstItem = llm.findFirstVisibleItemPosition() + 1;
 
+                if(preventDayMark){
 
-                try{
-                    if(currentFirst != firstItem){
-                        currentFirst = firstItem;
-                        ViewHolder firstVH = recyclerView.findViewHolderForAdapterPosition(firstItem);
+                    if(fullyExpandedDetail){
+                        //Day is Visible
+                        try{
+                            int top= detailedViewHolder.itemView.getTop();
 
-                        if(firstVH.itemView instanceof MarkedConstraintLayout){
-                            markDay((MarkedConstraintLayout)firstVH.itemView);
-                            markedWeekday = true;
-                            setSideCalendar(currentFirst);
+                            //If Bottom is less than half the Screen then expand stuff Again
+
+                            if(top > singletonClass.getDisplayHeight() / 3){
+
+                                //detailedView = false;
+                                preventDayMark = false;
+                                fullyExpandedDetail = false;
+
+                            }
+
                         }
-                        else{
-                            unmarkDay();
-                            markedWeekday = false;
+                        catch(Exception e){
+                            Log.i("Exception", "Yes");
                         }
+                    }
+                }
+                else{
+                    if(!sideMenuOpened){
+                        toggleSideMonth(false, null);
+                    }
+                    int firstItem = llm.findFirstVisibleItemPosition() + 1;
+
+
+                    try{
+                        if(currentFirst != firstItem){
+                            currentFirst = firstItem;
+                            detailedViewHolder = recyclerView.findViewHolderForAdapterPosition(firstItem);
+
+                            if(detailedViewHolder.itemView instanceof MarkedConstraintLayout){
+                                markDay((MarkedConstraintLayout)detailedViewHolder.itemView);
+                                markedWeekday = true;
+                                setSideCalendar(currentFirst);
+                            }
+                            else{
+                                unmarkDay();
+                                markedWeekday = false;
+                            }
+
+                        }
+                    }
+                    catch(Exception e){
 
                     }
                 }
-                catch(Exception e){
-
-                }
-
 
             } else {
                 //System.out.println("No Vertical Scrolled");
@@ -917,7 +952,7 @@ public class WalletMultiDaysFragment extends Fragment{
     }
 
     boolean sideMenuOpened = false;
-    private void toggleSideMonth(boolean open) {
+    private void toggleSideMonth(boolean open, @Nullable SuccessCallback callback) {
         sideMenuOpened = open;
         int start, end;
         float from, to;
@@ -965,6 +1000,10 @@ public class WalletMultiDaysFragment extends Fragment{
                     lastSelected.fadeOutBorder();
                 }
 
+                if(callback != null){
+                    callback.success();
+                }
+
             }
 
             @Override
@@ -991,6 +1030,8 @@ public class WalletMultiDaysFragment extends Fragment{
             AsyncDay.collapseDay(new SuccessCallback() {
                 @Override
                 public void success() {
+                    expandedItemNo = 0;
+                    detailedView = false;
 
                 }
 
@@ -1000,8 +1041,7 @@ public class WalletMultiDaysFragment extends Fragment{
                 }
             });
 
-            expandedItemNo = 0;
-            detailedView = false;
+
         }
 
         if(lastSelected != null){
@@ -1020,7 +1060,8 @@ public class WalletMultiDaysFragment extends Fragment{
             AsyncDay.collapseDay(new SuccessCallback() {
                 @Override
                 public void success() {
-
+                    expandedItemNo = 0;
+                    detailedView = false;
                 }
 
                 @Override
@@ -1029,8 +1070,7 @@ public class WalletMultiDaysFragment extends Fragment{
                 }
             });
 
-            expandedItemNo = 0;
-            detailedView = false;
+
         }
 
         if(lastSelected != null){

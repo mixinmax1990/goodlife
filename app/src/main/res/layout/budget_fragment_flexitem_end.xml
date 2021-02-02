@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    android:layout_width="0dp"
+    android:layout_width="wrap_content"
     android:orientation="vertical"
     android:layout_height="wrap_content"
     app:layout_flexBasisPercent="50%"
@@ -11,13 +11,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        app:layout_constraintTop_toBottomOf="@id/budget_module_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:borderCustomRadius="30"
-        android:padding="10dp"
-        app:backgroundCustomColor="#2A000000"
+        android:layout_height="wrap_content"
+        app:borderCustomRadius="50"
+        android:padding="5dp"
+        app:backgroundCustomColor="#0AFFFFFF"
         android:id="@+id/budget_cat_cont2"
         >
         <com.google.android.flexbox.FlexboxLayout
@@ -26,15 +23,23 @@
             app:flexWrap="wrap"
             app:flexDirection="row"
             android:id="@+id/budgetitems_flex_container"/>
-
+        <ImageView
+            android:id="@+id/add_budget_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_add_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:id="@+id/category_name"
-        android:textSize="14sp"
+        android:textSize="13sp"
         android:layout_marginTop="5dp"
-        android:alpha="1"
+        android:alpha=".8"
         android:text="Category"/>
 </LinearLayout>

@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#729EE3</color>
+    <color name="colorAccent">#4380DC</color>
 
     <color name="moduleBackgroundNight">#1C2125</color>
     <color name="moduleBackgroundDay">#F3F3F3</color>
@@ -73,6 +73,6 @@
     <color name="financialTrendLineColor">#8C248A</color>
     <color name="financialTrendLineColoGradEnd">#00DBAF</color>
     <color name="financialTrendLineColorNeg">#ff6859</color>
-    <color name="testCOlors">#23000000</color>
+    <color name="testCOlors">#2E2F35</color>
     <color name="testCOlors2">#40464C</color>
 </resources>

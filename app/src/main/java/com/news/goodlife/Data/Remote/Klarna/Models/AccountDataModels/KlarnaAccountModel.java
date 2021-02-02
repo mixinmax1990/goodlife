@@ -3,7 +3,7 @@ package com.news.goodlife.Data.Remote.Klarna.Models.AccountDataModels;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class AccountModel {
+public class KlarnaAccountModel {
 
     @SerializedName("id")
     @Expose

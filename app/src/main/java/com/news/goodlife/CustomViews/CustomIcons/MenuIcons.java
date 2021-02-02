@@ -106,8 +106,7 @@ public class MenuIcons extends FrameLayout {
 
         menuBackground = new Paint(Paint.ANTI_ALIAS_FLAG);
         menuBackground.setStyle(Paint.Style.FILL);
-
-        //menuBackground.setColor(menuBackgroundColor);
+        menuBackground.setColor(Color.parseColor("#2E2F35"));
         //menuBackground.setShadowLayer(2, 0, 0, Color.parseColor("#FFFFFF"));
        // setLayerType(LAYER_TYPE_SOFTWARE, menuBackground);
 
@@ -161,36 +160,14 @@ public class MenuIcons extends FrameLayout {
         buttonPath.addRoundRect(rectFrame, cornerRadius, cornerRadius,Path.Direction.CW);
         buttonPath.close();
 
+        /*
         menuBackground.setShader(new RadialGradient((float)getWidth(), (float)getHeight(),
                 (float)getHeight()*1.5f, Color.parseColor("#17181A"), Color.parseColor("#373C41"),  Shader.TileMode.REPEAT));
+        */
 
         canvas.drawRoundRect(rectFrame, radius[0],radius[1], menuBackground);
         canvas.clipPath(buttonPath);
 
-
-        if(subMenus == 1){
-            start = (width/2 - 10)-14;
-            end = width/2 + 10;
-            if(darkMode){
-                pageIndicatorPaint.setColor(Color.parseColor("#9FBABABA"));
-            }
-            else{
-                pageIndicatorPaint.setColor(Color.parseColor("#585858"));
-            }
-
-            canvas.drawRoundRect(new RectF(start,padding + 20,width/2 - 10, padding + 34), 50,50, pageIndicatorPaint);
-            canvas.drawRoundRect(new RectF(end,padding + 20,end + 14, padding + 34), 50,50, pageIndicatorPaint);
-
-            if(darkMode){
-                pageIndicatorPaint.setColor(Color.parseColor("#FFFFFF"));
-            }
-            else{
-                pageIndicatorPaint.setColor(Color.parseColor("#FFFFFF"));
-            }
-
-            canvas.drawRoundRect(new RectF(start + move,padding + 20,start + 14 + move, padding + 34), 50,50, pageIndicatorPaint);
-
-        }
 
         menuIcon.setAlpha(255);
 

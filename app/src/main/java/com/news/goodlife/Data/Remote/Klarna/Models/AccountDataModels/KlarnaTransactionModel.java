@@ -3,7 +3,7 @@ package com.news.goodlife.Data.Remote.Klarna.Models.AccountDataModels;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class TransactionModel {
+public class KlarnaTransactionModel {
 
     @SerializedName("transaction_id")
     @Expose
@@ -126,7 +126,7 @@ public class TransactionModel {
 
         @SerializedName("holder_address")
         @Expose
-        HolderAdress holder_address;
+        HolderAddress holder_address;
 
         @SerializedName("transfer_type")
         @Expose
@@ -156,7 +156,7 @@ public class TransactionModel {
             return holder_name;
         }
 
-        public HolderAdress getHolder_address() {
+        public HolderAddress getHolder_address() {
             return holder_address;
         }
 
@@ -168,46 +168,47 @@ public class TransactionModel {
             return account_type;
         }
 
-        public class HolderAdress{
-            @SerializedName("street_address")
-            @Expose
-            String street_address;
 
-            @SerializedName("postalcode")
-            @Expose
-            String postalcode;
+    }
+    public class HolderAddress {
+        @SerializedName("street_address")
+        @Expose
+        String street_address;
 
-            @SerializedName("city")
-            @Expose
-            String city;
+        @SerializedName("postalcode")
+        @Expose
+        String postalcode;
 
-            @SerializedName("region")
-            @Expose
-            String region;
+        @SerializedName("city")
+        @Expose
+        String city;
 
-            @SerializedName("country")
-            @Expose
-            String country;
+        @SerializedName("region")
+        @Expose
+        String region;
 
-            public String getStreet_address() {
-                return street_address;
-            }
+        @SerializedName("country")
+        @Expose
+        String country;
 
-            public String getPostalcode() {
-                return postalcode;
-            }
+        public String getStreet_address() {
+            return street_address;
+        }
 
-            public String getCity() {
-                return city;
-            }
+        public String getPostalcode() {
+            return postalcode;
+        }
 
-            public String getRegion() {
-                return region;
-            }
+        public String getCity() {
+            return city;
+        }
 
-            public String getCountry() {
-                return country;
-            }
+        public String getRegion() {
+            return region;
+        }
+
+        public String getCountry() {
+            return country;
         }
     }
 }

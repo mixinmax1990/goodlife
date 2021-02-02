@@ -15,6 +15,10 @@ import com.news.goodlife.Data.Local.Models.Financial.AccountModel;
 import com.news.goodlife.Data.Local.Statements.Financial.AccountTable;
 import com.news.goodlife.Data.Local.Statements.Financial.BudgetTable;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 public class AccountsController extends DatabaseHelper {
 
     AccountTable accountTable;
@@ -49,6 +53,45 @@ public class AccountsController extends DatabaseHelper {
 
             long insert = db.insert(accountTable.getTableName(), null, values);
             return insert;
+
+    }
+
+    public List<AccountModel> getAllAccounts(){
+        db = this.getWritableDatabase();
+
+        List<AccountModel> dataList = null;
+
+        String selectQuery = "SELECT * FROM " + accountTable.getTableName();
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c.getCount() <= 0){
+            c.close();
+            return dataList;
+        }
+
+        dataList = new ArrayList<>();
+
+        if(c.moveToFirst()){
+            do{
+                AccountModel account = new AccountModel();
+
+                account.setId(c.getString(c.getColumnIndex(accountTable.getAccountId())));
+                account.setKlarna_id(c.getString(c.getColumnIndex(accountTable.getKlarnaAccountId())));
+                account.setAlias(c.getString(c.getColumnIndex(accountTable.getALIAS())));
+                account.setAccount_number(c.getString(c.getColumnIndex(accountTable.getAccountNumber())));
+                account.setIban(c.getString(c.getColumnIndex(accountTable.getIBAN())));
+                account.setBic(c.getString(c.getColumnIndex(accountTable.getBIC())));
+                account.setBank_address_country(c.getString(c.getColumnIndex(accountTable.getBankAddressCountry())));
+                account.setTransfer_type(c.getString(c.getColumnIndex(accountTable.getTransferType())));
+                account.setAccount_type(c.getString(c.getColumnIndex(accountTable.getAccountType())));
+
+                dataList.add(account);
+            }
+            while(c.moveToNext());
+        }
+
+        return dataList;
 
     }
 

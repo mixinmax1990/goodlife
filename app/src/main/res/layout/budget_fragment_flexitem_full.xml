@@ -1,6 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_flexBasisPercent="100%"
+    android:paddingEnd="10dp"
+    android:paddingTop="10dp"
+    android:paddingStart="10dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:borderCustomRadius="50"
+        android:padding="10dp"
+        android:tag="category_background"
+        app:backgroundCustomColor="#0AFFFFFF"
+        android:id="@+id/budget_cat_cont1"
+        >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="180dp"
+            app:flexWrap="wrap"
+            app:flexDirection="row"
+            android:id="@+id/budgetitems_flex_container"/>
+        <ImageView
+            android:id="@+id/add_budget_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_add_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@color/colorAccent"
+            android:layout_margin="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/budgetitems_flex_container"/>
+    </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:id="@+id/category_name"
+        android:textSize="13sp"
+        android:layout_marginTop="5dp"
+        android:alpha=".8"
+        android:text="Category"/>
+</LinearLayout>

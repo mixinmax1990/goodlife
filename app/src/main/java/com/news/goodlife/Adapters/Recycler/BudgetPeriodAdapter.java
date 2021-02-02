@@ -69,7 +69,6 @@ public class BudgetPeriodAdapter extends RecyclerView.Adapter<BudgetPeriodAdapte
             BudgetCircle budgetCircle = itemView.findViewById(R.id.budget_circle);
             TextView periodNo = itemView.findViewById(R.id.period_number);
             TextView periodName = itemView.findViewById(R.id.period_name);
-
             switch(pos){
                 case 0:
                     budgetCircle.setMonths(1);
