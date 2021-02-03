@@ -126,6 +126,7 @@ public class BudgetCircle extends FrameLayout {
 
             }
 
+            
 
             geom_center_angle = 270 + (int)(sweepAngle / 2);
             Log.i("Center Angle", ""+ geom_center_angle);
