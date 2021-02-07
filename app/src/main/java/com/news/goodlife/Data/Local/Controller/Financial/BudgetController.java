@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -87,6 +88,9 @@ public class BudgetController extends DatabaseHelper {
 
         Cursor c = db.rawQuery(selectQuery, null);
 
+        Log.i("CCount", " - "+c.getCount());
+
+
         if(c.moveToFirst()){
             do{
                 BudgetModel budget = new BudgetModel();
@@ -106,6 +110,8 @@ public class BudgetController extends DatabaseHelper {
             }
             while(c.moveToNext());
         }
+
+
         return datalist;
     }
 

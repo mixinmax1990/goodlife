@@ -30,7 +30,6 @@ public class InflateDayDetails {
     //Budget Containers
     ViewGroup monthFlex;
     TextView day_weekday, day_date, day_available_cash, day_remaining_budget, day_expenses, day_income, day_savings_reserved, day_savings_available;
-    LiquidView available_liquid, reserved_liquid;
     //Load a Data object holding the Information for the day
 
     ViewGroup parentCont;
@@ -75,11 +74,8 @@ public class InflateDayDetails {
             day_expenses = view.findViewById(R.id.outgoing_value);
             day_income = view.findViewById(R.id.incoming_value);
 
-            day_savings_reserved = view.findViewById(R.id.goal_saving_module_amount);
             day_savings_available = view.findViewById(R.id.saving_module_amount);
 
-            available_liquid = view.findViewById(R.id.revenue_liquid_module);
-            reserved_liquid = view.findViewById(R.id.goals_liquid_module);
 
             //Inflate Budgets Async separately after data is Loaded
 
@@ -93,7 +89,6 @@ public class InflateDayDetails {
             module_burn = view.findViewById(R.id.cashcat_frame);
             module_budg = view.findViewById(R.id.budget_main_container);
             module_trans = view.findViewById(R.id.cashflow_activities_container);
-            module_goal = view.findViewById(R.id.goals_module);
             module_savings = view.findViewById(R.id.savings_module);
             module_date = view.findViewById(R.id.date_container);
 
@@ -106,7 +101,7 @@ public class InflateDayDetails {
     };
 
 
-    View module_date, module_rev, module_exp, module_inc, module_burn, module_budg, module_trans, module_goal, module_savings;
+    View module_date, module_rev, module_exp, module_inc, module_burn, module_budg, module_trans, module_savings;
     float mdate_top, mrev_top, mexp_top, minc_top, mburn_top, mbudg_top, mtrans_top, mgoal_top, msavings_top;
     private void baseCollapseDay() {
 
@@ -116,7 +111,6 @@ public class InflateDayDetails {
         //mtrans_top = module_trans.getTop();
         //mgoal_top = module_goal.getTop();
         msavings_top = module_savings.getY();
-        mgoal_top = module_goal.getY();
         mtrans_top = module_trans.getY();
         mbudg_top = module_budg.getY();
         mexp_top = module_exp.getY();
@@ -126,7 +120,6 @@ public class InflateDayDetails {
         mdate_top = module_date.getY();
 
         module_savings.setY(0);
-        module_goal.setY(0);
         module_trans.setY(0);
         module_budg.setY(0);
         module_exp.setY(0);
@@ -154,7 +147,7 @@ public class InflateDayDetails {
 
     }
 
-    IconDoughnutView fixedCost, fixedIncome;
+    IconDoughnutView fixedCost, fixedIncome, savings;
     private void loadFixed(View root) {
 
         //InflateDayFixedCosts AsyncFixed = new InflateDayFixedCosts(inflater, monthFlex);
@@ -163,6 +156,9 @@ public class InflateDayDetails {
 
         fixedIncome = root.findViewById(R.id.fixed_income_doughnut);
         fixedIncome.setCategory("#FFFFFF", null);
+
+        savings = root.findViewById(R.id.savings_doughnut);
+        savings.setCategory("#FFFFFF", null);
 
 
     }
@@ -190,7 +186,7 @@ public class InflateDayDetails {
         layoutListener(module_burn);
         layoutListener(module_trans);
         layoutListener(module_savings);
-        layoutListener(module_goal);
+
 
 
         module_exp.setOnClickListener(new View.OnClickListener() {
@@ -219,7 +215,7 @@ public class InflateDayDetails {
 
     private void setUpPositions(){
 
-        if(inflated == 9){
+        if(inflated == 8){
             baseCollapseDay();
             expandDay();
         }
@@ -238,7 +234,6 @@ public class InflateDayDetails {
                 float animVal = (float)animation.getAnimatedValue();
 
                 module_savings.setY(msavings_top * animVal);
-                module_goal.setY(mgoal_top * animVal);
                 module_trans.setY(mtrans_top * animVal);
                 module_budg.setY(mbudg_top * animVal);
                 module_exp.setY(mexp_top * animVal);
@@ -261,8 +256,7 @@ public class InflateDayDetails {
             @Override
             public void onAnimationEnd(Animator animation) {
 
-                available_liquid.animateWave();
-                reserved_liquid.animateWave();
+
                 cover.setVisibility(View.GONE);
                 successCallback.success();
 
@@ -300,7 +294,6 @@ public class InflateDayDetails {
                 else animValMove = animVal;
 
                 module_savings.setY(msavings_top * animValMove);
-                module_goal.setY(mgoal_top * animValMove);
                 module_trans.setY(mtrans_top * animValMove);
                 module_budg.setY(mbudg_top * animValMove);
                 module_exp.setY(mexp_top * animValMove);

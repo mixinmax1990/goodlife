@@ -100,6 +100,8 @@ public class BudgetCategoryController extends DatabaseHelper {
             }
             while(c.moveToNext());
         }
+
+
         return datalist;
     }
 

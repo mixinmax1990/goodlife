@@ -29,7 +29,7 @@ public class BudgetCircleMini extends FrameLayout {
     boolean draw = false;
     float barMarginPerc = 0.1f;
     int allocatedMoney = 0;
-    int fontSize =(int)(20 * getResources().getDisplayMetrics().scaledDensity);
+    int fontSize =(int)(13 * getResources().getDisplayMetrics().scaledDensity);
     SingletonClass singletonClass = SingletonClass.getInstance();
 
 
@@ -106,10 +106,10 @@ public class BudgetCircleMini extends FrameLayout {
         width = w;
         strokeSize = (int)(w * 0.07f);
         strokeSizeOuter = (int)(strokeSize * 0.5f);
-        int innerMargin = (int)(strokeSizeOuter * 1.7f);
+        int innerMargin = (int)(strokeSize * 2.5);
 
-        rectF = new RectF(strokeSizeOuter,strokeSizeOuter,w - strokeSizeOuter,h - strokeSizeOuter);
-        rectFinner = new RectF(strokeSize + innerMargin,strokeSize + innerMargin,w - strokeSize - innerMargin,h - strokeSize - innerMargin);
+        rectF = new RectF(strokeSize,strokeSize,w - strokeSize,h - strokeSize);
+        rectFinner = new RectF(strokeSizeOuter + innerMargin,strokeSizeOuter + innerMargin,w - strokeSizeOuter - innerMargin,h - strokeSizeOuter - innerMargin);
         setPaints();
         draw = true;
         invalidate();
@@ -145,7 +145,7 @@ public class BudgetCircleMini extends FrameLayout {
 
             }
 
-            canvas.drawText("0", width/2, height/2 + (fontSize/3), labelPaint);
+            //canvas.drawText("356€", width/2, height/2 + (fontSize/3), labelPaint);
         }
     }
 
@@ -154,7 +154,8 @@ public class BudgetCircleMini extends FrameLayout {
 
         if(percentageAnim < .25){
             //Make it Red
-            barsPaint.setColor(Color.parseColor("#ff6859"));
+            barsPaint.setColor(Color.parseColor("#F18B81"));
+            //barsPaint.setColor(Color.parseColor("#ff6859"));
             return;
         }
 
@@ -165,12 +166,14 @@ public class BudgetCircleMini extends FrameLayout {
         }
         if(percentageAnim < .75f){
             //Make it Green
-            barsPaint.setColor(Color.parseColor("#12BC6C"));
+            barsPaint.setColor(Color.parseColor("#ADD581"));
+            //barsPaint.setColor(Color.parseColor("#12BC6C"));
             return;
         }
 
         //Make it Blue
-        barsPaint.setColor(Color.parseColor("#59B2FF"));
+        barsPaint.setColor(Color.parseColor("#89B3F6"));
+        //barsPaint.setColor(Color.parseColor("#59B2FF"));
 
     }
 
@@ -189,7 +192,7 @@ public class BudgetCircleMini extends FrameLayout {
 
         ValueAnimator va = ValueAnimator.ofFloat(0,1);
 
-        va.setDuration(1500);
+        va.setDuration(1000);
 
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override

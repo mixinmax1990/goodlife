@@ -44,7 +44,7 @@ public class RelationshipMapping {
 
             int moduleCenterX, moduleCenterY;
 
-            View spend_module, income_module, balance_module, savings_container, goals_container;
+            View spend_module, income_module, balance_module, savings_container;
             ViewGroup budget_container;
             RelationshipMapView mapView;
 
@@ -55,7 +55,6 @@ public class RelationshipMapping {
             balance_module = viewHolder.itemView.findViewById(R.id.cashcat_frame);
             budget_container = viewHolder.itemView.findViewById(R.id.month_flex);
             savings_container = viewHolder.itemView.findViewById(R.id.savings_module);
-            goals_container = viewHolder.itemView.findViewById(R.id.goals_module);
 
             //Get the MapView
 
@@ -82,11 +81,6 @@ public class RelationshipMapping {
             moduleCenterX = (int)savings_container.getX() + (savings_container.getWidth() / 2);
             moduleCenterY = (int)savings_container.getY() + (savings_container.getHeight() / 2);
             mc = new ModuleCoords(moduleCenterX, moduleCenterY, "savings");
-            moduleCoords.add(mc);
-
-            moduleCenterX = (int)goals_container.getX() + (goals_container.getWidth() / 2);
-            moduleCenterY = (int)goals_container.getY() + (goals_container.getHeight() / 2);
-            mc = new ModuleCoords(moduleCenterX, moduleCenterY, "goals");
             moduleCoords.add(mc);
 
             relationshipMapData.add(connectRelationships(moduleCoords, "balance", "savings"));

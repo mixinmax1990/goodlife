@@ -69,6 +69,7 @@ public class InflateDayBudgets {
 
                     TextView catnameTV = view.findViewById(R.id.category_name);
                     catnameTV.setText(catname);
+                    catnameTV.setVisibility(View.GONE);
 
                     //inflateAddBudget(flexParent, inflater);
                     View addBudgetButton = view.findViewById(R.id.add_budget_button);

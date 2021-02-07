@@ -49,5 +49,5 @@
         android:id="@+id/add_category_title"
         android:textSize="12sp"
         android:padding="5dp"
-        android:alpha=".7"/>
+        android:alpha=".3"/>
 </LinearLayout>

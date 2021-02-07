@@ -56,6 +56,7 @@ import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.CustomViews.CustomEntries.PageIndicatorBar;
+import com.news.goodlife.CustomViews.CustomIcons.FunctionsIcon;
 import com.news.goodlife.CustomViews.CustomIcons.MenuIcons;
 import com.news.goodlife.CustomViews.CustomIcons.WalletIcon;
 import com.news.goodlife.CustomViews.CustomIcons.WalletIconCard;
@@ -150,7 +151,8 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
 
     //MenuIcons
-    MenuIcons goalsBTN, budgetsBTN, hubBTN, magicButton;
+    MenuIcons goalsBTN, budgetsBTN, hubBTN;
+    FunctionsIcon magicButton;
     WalletIcon walletBTN;
     PageIndicatorBar walletPageIndicator;
 

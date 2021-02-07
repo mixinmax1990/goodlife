@@ -59,6 +59,15 @@ public class IconDoughnutView extends FrameLayout {
         invalidate();
     }
 
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        int strokeWidth = w / 15;
+
+        ring.setStrokeWidth(strokeWidth);
+        ringbg.setStrokeWidth(strokeWidth);
+    }
+
     private void setPaints() {
         catPaint = new Paint();
         catPaint.setStyle(Paint.Style.FILL);
@@ -67,7 +76,6 @@ public class IconDoughnutView extends FrameLayout {
         ring = new Paint();
         ring.setStyle(Paint.Style.STROKE);
         ring.setAntiAlias(true);
-        ring.setStrokeWidth(14);
         ring.setStrokeJoin(Paint.Join.ROUND);
         ring.setStrokeCap(Paint.Cap.ROUND);
         ring.setPathEffect(new CornerPathEffect(20));
@@ -76,7 +84,6 @@ public class IconDoughnutView extends FrameLayout {
         ringbg = new Paint();
         ringbg.setStyle(Paint.Style.STROKE);
         ringbg.setAntiAlias(true);
-        ringbg.setStrokeWidth(14);
         ringbg.setColor(Color.WHITE);
         ringbg.setAlpha(50);
 
@@ -121,19 +128,6 @@ public class IconDoughnutView extends FrameLayout {
             ring.setAlpha(255);
             canvas.drawArc(ringRectF, -90, sweepAngle, false, ring);
 
-            //Draw Icon
-            if(icon != null){
-                icon.setBounds(
-                        iconmargin,
-                        iconmargin,
-                        getWidth() - iconmargin,
-                        getHeight() - iconmargin
-                );
-                icon.setAlpha(180);
-
-                icon.draw(canvas);
-
-            }
         }
         }
     }

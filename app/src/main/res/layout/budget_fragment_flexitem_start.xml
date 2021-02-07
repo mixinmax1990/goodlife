@@ -7,7 +7,6 @@
     app:layout_flexBasisPercent="50%"
     android:paddingEnd="5dp"
     android:paddingTop="10dp"
-    android:paddingStart="10dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
         android:layout_width="match_parent"
