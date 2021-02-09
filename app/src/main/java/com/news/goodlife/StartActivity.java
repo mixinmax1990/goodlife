@@ -176,89 +176,6 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
     View connectAccountOne;
 
     //Loading Data TODO make Api Call Klarna
-    public String loadJSONFromAsset(){
-        String json = null;
-
-        try{
-            InputStream is = this.getAssets().open("my_account.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-
-        }
-        catch(IOException ex){
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    }
-    private void loadInitData(){
-
-        //RequestCompanyWebsite requestCompanyWebsite = new RequestCompanyWebsite();
-        //Log.i("Company Site", "");
-        //Make sure we check new entries first and leave all existing entries
-        myDB.WalletEvent.deleteAllEvents();
-        // set
-        try{
-            JSONArray account_data = new JSONArray(loadJSONFromAsset());
-            int size = account_data.length();
-            for(int i = 0; i < size; i++){
-
-                JSONObject jsondata = account_data.getJSONObject(i);
-                WalletEventModel dataModel = new WalletEventModel();
-
-                dataModel.setCreated("null");
-                float amount = Float.parseFloat(jsondata.getJSONObject("amount").getString("amount")) / 100;
-
-                dataModel.setValue(""+amount);
-
-                try{
-                    dataModel.setDescription(""+ jsondata.getJSONObject("counter_party").getString("holder_name"));
-                }
-                catch(JSONException e){
-                    dataModel.setDescription(""+ jsondata.getString("reference"));
-                }
-
-
-                //create Date from string
-                try{
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    Date date = sdf.parse(""+jsondata.getString("date"));
-
-                    dataModel.setDate(""+date.getTime());
-                    dataModel.setDateOBJ(date);
-                }
-                catch(ParseException e){
-
-                    dataModel.setDate("null");
-
-                }
-
-                if(jsondata.getString("type").contains("DEBIT")){
-                    dataModel.setPositive("minus");
-                }
-                else{
-                    dataModel.setPositive("plus");
-                }
-
-                dataModel.setRepeat("null");
-
-                myDB.WalletEvent.newCashflow(dataModel);
-
-
-                //Log.i("JSON Data", "" + account_data.getJSONObject(i).getString("reference"));
-                //Log.i("JSON Data", "" + account_data.getJSONObject(i).getJSONObject("amount").getString("amount"));
-
-            }
-
-        }
-        catch(JSONException e){
-            e.printStackTrace();
-        }
-
-    }
     //Loading Icons
     SingletonClass singletonClass;
     CardView blurcard;
@@ -279,10 +196,6 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         singletonClass.setDatabaseController(myDB);
 
         //SetUp App
-
-        SetupApp setup = new SetupApp();
-
-
 
         singletonClass.changeFragment.addObserver(changeFragment);
 
@@ -327,7 +240,6 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         //Connect Account
         connectAccountOne = findViewById(R.id.connect_account_one);
 
-        loadInitData();
 
         //Test Singleton
 
@@ -364,8 +276,25 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         vibrator  = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         //open Wallet First
-        selectedFragment = 3;
-        changeSelectedColor();
+        //Check if we Have the Days Data Ready to Use
+        SetupApp setup = new SetupApp(new SuccessCallback() {
+            @Override
+            public void success() {
+                //Data is ready we can launch the MultiDaysFragment
+                selectedFragment = 3;
+                changeSelectedColor();
+            }
+
+            @Override
+            public void error() {
+
+                Log.i("NoAccountError", "True");
+                slideInContainerThree(null);
+                openSideFragment("KlarnaApp", null);
+                //Handle error callbacks
+            }
+        });
+
 
 
         DarkMode = true;
@@ -1527,6 +1456,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                     public void success() {
                         String client_token = singletonClass.getKlarna().getFlowsController().getFlowData().getData().getClient_token();
                         //Then Launch the Klarna APP
+                        Log.i("CLient_Token", "-"+client_token);
                         ((KlarnaApp)opendSideFragment).setClient_token(client_token);
                     }
 

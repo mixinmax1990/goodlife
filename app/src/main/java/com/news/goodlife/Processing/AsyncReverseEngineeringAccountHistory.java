@@ -10,6 +10,7 @@ import com.news.goodlife.Interfaces.SuccessCallback;
 import com.news.goodlife.Processing.Models.AccountHistory;
 import com.news.goodlife.Processing.Models.DayDataModel;
 import com.news.goodlife.Processing.Models.DayTransactionModel;
+import com.news.goodlife.Singletons.SingletonClass;
 
 import java.lang.reflect.Array;
 import java.text.ParseException;
@@ -18,17 +19,20 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AsyncReverseEngineeringAccountHistory extends AsyncTask<AccountHistory, Void, List<DayDataModel>> {
 
 
     SuccessCallback callback;
     AccountHistory accountHistory;
+    SingletonClass singletonClass = SingletonClass.getInstance();
 
     public AsyncReverseEngineeringAccountHistory(List<BalanceModel> allBalances, List<TransactionModel> allTransactions, SuccessCallback callback){
 
         this.callback = callback;
         accountHistory = new AccountHistory(allTransactions, allBalances);
+
 
         Log.i("AsyncTask", "Constructor");
         execute(accountHistory);
@@ -61,13 +65,14 @@ public class AsyncReverseEngineeringAccountHistory extends AsyncTask<AccountHist
         int SuperStartBalance = 0;
         int FreeToUse;
 
+        getTodayItemPosition(firstDay);
+
         for(int i = 0; i < predictionPeriod; i++){
             //Iterate through all future days
             dayData = new DayDataModel();
             processingDay.setTime(firstDay);
             processingDay.add(Calendar.DATE, i);
             processingDayString = formater.format(processingDay.getTime());
-
 
             DayTransactionModel daysTransactions = getDaysTransactions(processingDayString, allTransactions);
             BalanceModel daysBalance = getDaysBalance(processingDayString, allBalances);
@@ -79,6 +84,13 @@ public class AsyncReverseEngineeringAccountHistory extends AsyncTask<AccountHist
             //The Hypothetical Balance is the MAIN Input of the App Logic
             FreeToUse = AppLogic(HypotheticalBalance);
 
+            dayData.setDayDate(processingDay.getTime());
+            dayData.setHypertheticalBalance(HypotheticalBalance);
+            dayData.setDayNo(""+processingDay.get(Calendar.DAY_OF_MONTH));
+            dayData.setMonthNo(""+processingDay.get(Calendar.MONTH));
+            dayData.setYearNo(""+processingDay.get(Calendar.YEAR));
+            dayData.setMonthShort(""+processingDay.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
+
             allDaysData.add(dayData);
 
         }
@@ -88,8 +100,22 @@ public class AsyncReverseEngineeringAccountHistory extends AsyncTask<AccountHist
         return allDaysData;
     }
 
+    private void getTodayItemPosition(Date firstDay){
+        //today
+        Calendar today = Calendar.getInstance();
+        singletonClass.setTodayLogicDataPosition(getDaysBetween(firstDay, today.getTime()));
+    }
+
+    @Override
+    protected void onPostExecute(List<DayDataModel> dayDataModels) {
+        super.onPostExecute(dayDataModels);
+
+        singletonClass.setLogicData(dayDataModels);
+        callback.success();
+
+    }
     private int AppLogic(int superStartBalance) {
-        int FreeToUse = 0;
+        int FreeToUse = 200;
 
         return FreeToUse;
     }
@@ -171,11 +197,6 @@ public class AsyncReverseEngineeringAccountHistory extends AsyncTask<AccountHist
         super.onPreExecute();
     }
 
-    @Override
-    protected void onPostExecute(List<DayDataModel> dayDataModels) {
-        super.onPostExecute(dayDataModels);
-    }
-
     private Date stringToDate(String dateString){
         SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
         try {
@@ -192,5 +213,13 @@ public class AsyncReverseEngineeringAccountHistory extends AsyncTask<AccountHist
 
     private boolean sameDay(Date one, Date two){
         return true;
+    }
+
+    private int getDaysBetween(Date startDate, Date endDate){
+        int days = 0;
+        long diff = endDate.getTime() - startDate.getTime();
+
+        days = (int) (diff / (24 * 60 * 60 * 1000));
+        return days;
     }
 }

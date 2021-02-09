@@ -73,6 +73,6 @@
     <color name="financialTrendLineColor">#8C248A</color>
     <color name="financialTrendLineColoGradEnd">#00DBAF</color>
     <color name="financialTrendLineColorNeg">#ff6859</color>
-    <color name="testCOlors">#2E2F35</color>
-    <color name="testCOlors2">#40464C</color>
+    <color name="testCOlors">#32363C</color>
+    <color name="testCOlors2">#444951</color>
 </resources>

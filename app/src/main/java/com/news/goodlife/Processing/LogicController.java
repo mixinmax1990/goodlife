@@ -17,8 +17,11 @@ public class LogicController {
     //TODO Make sure this is Asynchronous
 
     SingletonClass singletonClass = SingletonClass.getInstance();
+    SuccessCallback setupCallback;
 
-    public LogicController() {
+    public LogicController(SuccessCallback setupCallback) {
+
+        this.setupCallback = setupCallback;
 
         //Travel Time ufrom the point of latest Balance
         /*
@@ -71,10 +74,12 @@ public class LogicController {
 
         if(allTransactions != null){
             if(allTransactions.size() != 0) {
-                Log.i("AllTransERRRR", "--" + allTransactions.size());
                 AsyncReverseEngineeringAccountHistory reverseEngineering = new AsyncReverseEngineeringAccountHistory(allBalances, allTransactions, new SuccessCallback() {
                     @Override
                     public void success() {
+
+                        //We have a List of all the Data
+                        setupCallback.success();
 
                     }
 

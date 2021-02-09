@@ -46,6 +46,7 @@ import com.news.goodlife.Models.CalendarLayoutDay;
 import com.news.goodlife.Models.ModuleCoords;
 import com.news.goodlife.Models.RelationshipMap;
 import com.news.goodlife.PopWindowData.CashCategoryData;
+import com.news.goodlife.Processing.Models.DayDataModel;
 import com.news.goodlife.R;
 import com.news.goodlife.Singletons.SingletonClass;
 
@@ -70,9 +71,10 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
     View root, rootView;
     int cat_count = 4;
     @ColorInt int selectedStroke, unselectedStroke;
-    JSONObject orderedData;
 
-    List<CalendarLayoutDay> dateRange;
+
+    List<DayDataModel> dateRange;
+    //List<CalendarLayoutDay> dateRange;
 
     WalletDatabaseEvents databaseEventsCallback;
     static int dayCount = 0;
@@ -91,7 +93,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
     //PopFragment
     WalletMultiDaysFragment parentFragmentClass;
 
-    public CashflowMainAdapter(Context context, FrameLayout popWindow, WalletMultiDaysFragment parentFragmentClass, View root, View rootView, List<CalendarLayoutDay> dateRange, JSONObject orderedData) {
+    public CashflowMainAdapter(Context context, FrameLayout popWindow, WalletMultiDaysFragment parentFragmentClass, View root, View rootView, List<DayDataModel> dateRange) {
 
         this.context = context;
         this.popWindow = popWindow;
@@ -99,7 +101,6 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
         this.root = root;
         this.rootView = rootView;
         this.dateRange = dateRange;
-        this.orderedData = orderedData;
 
         this.databaseEventsCallback = (WalletDatabaseEvents) context;
 
@@ -165,8 +166,12 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int pos) {
 
 
-        CalendarLayoutDay calDay = dateRange.get(pos);
+        DayDataModel calDay = dateRange.get(pos);
 
+
+        return new CashflowMainAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.wallet_recycler_day_cover, parent, false), pos, calDay);
+
+        /*
         switch(calDay.getType()){
             case "weekend":
                 return new CashflowMainAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.wallet_recycler_weekend_item, parent, false), pos, calDay);
@@ -180,7 +185,7 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
             default:
                 return null;
-        }
+        }*/
     }
 
     @Override
@@ -223,13 +228,27 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
         InflateDayDetails AsyncDay;
 
 
-        public ViewHolder(@NonNull final View itemView, final int pos, final CalendarLayoutDay dayData) {
+        public ViewHolder(@NonNull final View itemView, final int pos, final DayDataModel dayData) {
             super(itemView);
 
             itemView.setTag("pos_"+pos);
 
-            switch(dayData.getType()){
+           switch(dayData.getType()){
                 case "day":
+
+                    TextView dayNameTV, dayDateTV;
+
+                    dayNameTV = itemView.findViewById(R.id.overview_day);
+                    dayDateTV = itemView.findViewById(R.id.overview_date);
+                    //Get The Date Name
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(dayData.getDayDate());
+
+                    dayNameTV.setText(cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()));
+
+                    String dayDateString = ""+cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + " "+cal.get(Calendar.DAY_OF_MONTH)+ ", " + cal.get(Calendar.YEAR);
+
+                    dayDateTV.setText(dayDateString);
 
                     //ViewGroup dayDetailsContainer = itemView.findViewById(R.id.day_detail_container);
                     //AsyncDay = new InflateDayDetails(new AsyncLayoutInflater(context), dayDetailsContainer, dayData);
@@ -544,12 +563,12 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                 case "weekend":
                     break;
                 case "monthend":
-                    TextView monthname = itemView.findViewById(R.id.wallet_balance_card_new_month);
-                    monthname.setText(dayData.getMONTH_NAME());
+                    //TextView monthname = itemView.findViewById(R.id.wallet_balance_card_new_month);
+                    //monthname.setText(dayData.getMONTH_NAME());
                     break;
                 case "yearend":
-                    TextView yearname = itemView.findViewById(R.id.wallet_balance_card_new_year);
-                    yearname.setText(dayData.getYEAR());
+                    //TextView yearname = itemView.findViewById(R.id.wallet_balance_card_new_year);
+                    //yearname.setText(dayData.getYEAR());
                     break;
             }
 

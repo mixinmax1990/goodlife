@@ -46,30 +46,11 @@ public class BehindMenuView extends View {
         rectF.bottom = getHeight();
 
         //Draw BG  #151619
-        paint.setColor(Color.parseColor("#17191C"));
+        paint.setColor(Color.parseColor("#32363C"));
         paint.setAlpha(255);
         canvas.drawRoundRect(rectF, dpToPx(25),dpToPx(25), paint);
         setClipToOutline(false);
 
-        //Drawfirstcircle
-        paint.setColor(Color.parseColor("#000000"));
-        paint.setAlpha(50);
-        //canvas.drawCircle(getWidth()/5, 0, getHeight()/2, paint);
-
-        //Drawfirstcircle
-        paint.setColor(Color.parseColor("#FB2364"));
-        paint.setAlpha(20);
-        //canvas.drawCircle((float)(getWidth()/5)*4, 0, getHeight()/1.5f, paint);
-
-        //Drawfirstcircle
-        paint.setColor(Color.parseColor("#153E34"));
-        paint.setAlpha(50);
-        //canvas.drawCircle((float)(getWidth()/5)*3, (float)getHeight()/2, getHeight(), paint);
-
-        //Drawfirstcircle
-        paint.setColor(Color.parseColor("#54AFEE"));
-        paint.setAlpha(250);
-        //canvas.drawCircle((float)(getWidth()/5)/2, (float)getHeight()/2, (float)getHeight()/4, paint);
 
         paint.setStyle(Paint.Style.FILL);
 

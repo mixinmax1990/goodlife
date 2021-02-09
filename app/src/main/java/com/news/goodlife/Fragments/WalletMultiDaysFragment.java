@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -40,8 +42,10 @@ import com.news.goodlife.CustomViews.SpectrumBar;
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
 import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
 import com.news.goodlife.Data.Local.Models.WalletEventDayOrderModel;
+import com.news.goodlife.Functions.AsyncGetDaysInMonth;
 import com.news.goodlife.Functions.InflateDayDetails;
 import com.news.goodlife.Functions.InflateSideMonthDay;
+import com.news.goodlife.Interfaces.DaysInMonthCallback;
 import com.news.goodlife.Interfaces.MonthCashflowBezierCallback;
 import com.news.goodlife.Interfaces.SuccessCallback;
 import com.news.goodlife.LayoutManagers.MultiDaysLinearLayoutManager;
@@ -50,6 +54,7 @@ import com.news.goodlife.Models.CalendarLayoutMonth;
 import com.news.goodlife.Models.DayCashflowModel;
 import com.news.goodlife.Models.MonthCashflowModel;
 import com.news.goodlife.Models.toCalendarViewTransition;
+import com.news.goodlife.Processing.Models.DayDataModel;
 import com.news.goodlife.R;
 import com.news.goodlife.Singletons.SingletonClass;
 import com.news.goodlife.StartActivity;
@@ -66,6 +71,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Random;
 
 import eightbitlab.com.blurview.BlurView;
@@ -94,7 +100,7 @@ public class WalletMultiDaysFragment extends Fragment{
 
 
 
-    View wallet_side_container;
+    ViewGroup wallet_side_container;
 
     public DatabaseController getMyDB() {
         return myDB;
@@ -131,6 +137,7 @@ public class WalletMultiDaysFragment extends Fragment{
         activity = (StartActivity) getActivity();
 
         orderedData = myDB.WalletEvent.getAllByRange(getFirstDayInRange());
+        /*
         //Get Dates
         if(selectedDay != null){
             Calendar cal = Calendar.getInstance();
@@ -144,12 +151,13 @@ public class WalletMultiDaysFragment extends Fragment{
             getCalendarRange(null);
         }
 
+        */
         //blurTopGraph = root.findViewById(R.id.blurtopgraph);
         //blur(20, blurTopGraph);
 
         //Tab Sections
         cashflow_recycler = root.findViewById(R.id.cashflow_recycler);
-        cashflowMainAdapter = new CashflowMainAdapter(getContext(), popContainer, this, root, getActivity().getWindow().getDecorView(), allCalendarDays, orderedData);
+        cashflowMainAdapter = new CashflowMainAdapter(getContext(), popContainer, this, root, getActivity().getWindow().getDecorView(), singletonClass.getLogicData());
         llm = new MultiDaysLinearLayoutManager(getContext());
         llm.setStackFromEnd(false);
 
@@ -162,19 +170,12 @@ public class WalletMultiDaysFragment extends Fragment{
 
         slideIndicator = root.findViewById(R.id.slide_indicator);
 
-        cashflow_recycler.scrollToPosition(todayItemPosition);
+        cashflow_recycler.scrollToPosition(singletonClass.getTodayLogicDataPosition());
 
-        sideMonthDayHolder = root.findViewById(R.id.side_month_dayholder);
-        int maxHeight = (int)(singletonClass.getDisplayHeight() * 0.6);
-        sideMonthDayHolder.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                sideMonthDayHolder.getLayoutParams().height = maxHeight;
-                sideMonthDayHolder.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
-        });
+
 
         sideMonthName = root.findViewById(R.id.side_month_monthname);
+
         wallet_side_container = root.findViewById(R.id.wallet_side_month_container);
         wallet_side_container.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -183,6 +184,8 @@ public class WalletMultiDaysFragment extends Fragment{
                 wallet_side_container.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
+
+        inflateSideMonth();
 
         final LiquidView[] countVisibleLiquid = new LiquidView[1];
         final TextView[] countVisibleDayNames = new TextView[1];
@@ -228,10 +231,24 @@ public class WalletMultiDaysFragment extends Fragment{
     ViewGroup sideMonthDayHolder;
     TextView sideMonthName;
     String selectedMonth = "none";
+    String selectedYear = "none";
     private void setSideCalendar(int position) {
 
-        CalendarLayoutDay selectedDay = allCalendarDays.get(position);
+        //CalendarLayoutDay selectedDay = allCalendarDays.get(position);
+        DayDataModel selectedDay = singletonClass.getLogicData().get(position);;
 
+
+        if(!selectedDay.getMonthNo().equals(selectedMonth)){
+            selectedMonth = selectedDay.getMonthNo();
+            selectedYear = selectedDay.getYearNo();
+            drawMonthDays();
+
+        }
+        else{
+            selectSideDay(selectedDay.getDayNo());
+        }
+
+        /*
         if(!selectedDay.getMONTH_NUMBER().equals(selectedMonth)){
             //Draw a new Month
             Log.i("Drawing Month", "True");
@@ -244,37 +261,104 @@ public class WalletMultiDaysFragment extends Fragment{
             Log.i("Selecting Month", "True");
             selectSideDay(selectedDay);
         }
+        */
+    }
+    private void inflateSideMonth(){
+        AsyncLayoutInflater inflater = new AsyncLayoutInflater(requireContext());
+        inflater.inflate(R.layout.wallet_side_month, wallet_side_container, new AsyncLayoutInflater.OnInflateFinishedListener() {
+            @Override
+            public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
+
+                sideMonthDayHolder = (ViewGroup) view;
+                int maxHeight = (int)(singletonClass.getDisplayHeight() * 0.6);
+                sideMonthDayHolder.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        sideMonthDayHolder.getLayoutParams().height = maxHeight;
+
+                        sideMonthDayHolder.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
+                });
+
+                sideMonthDayHolder.getChildCount();
+                for(int i = 0; i < sideMonthDayHolder.getChildCount(); i++){
+
+                    ViewGroup child = (ViewGroup)sideMonthDayHolder.getChildAt(i);
+                    int dayNumber = i + 1;
+                    child.setTag(""+dayNumber);
+                    ((TextView)child.getChildAt(0)).setText(""+dayNumber);
+
+                }
+
+                parent.addView(sideMonthDayHolder);
+            }
+        });
+
+
     }
 
     private void drawMonthDays(){
-        boolean calnameset = false;
 
-        for(CalendarLayoutDay calDay: allCalendarDays){
+        for(int i = 0; i < sideMonthDayHolder.getChildCount(); i++){
 
-            if(calDay.getMONTH_NUMBER().equals(selectedMonth) & calDay.getType().equals("day")){
-                //The Day belongs to the Month
-                //Asyncinflate the Day
+            sideMonthDayHolder.getChildAt(i).setAlpha(.3f);
 
-                sideMonthName.setText(calDay.getMONTH_NAME_SHORT());
-
-                new InflateSideMonthDay(new AsyncLayoutInflater(getContext()), sideMonthDayHolder, calDay, new SuccessCallback() {
-                    @Override
-                    public void success() {
-
-                    }
-
-                    @Override
-                    public void error() {
-
-                    }
-                });
-            }
         }
+
+        AsyncLayoutInflater inflater = new AsyncLayoutInflater(requireContext());
+        //Create a List of all The Days in the Month Asynchronously -> then Inflate them Asynchronously -> Then Allow Select Month of Drawn is Finishd
+        new AsyncGetDaysInMonth(selectedMonth, selectedYear, new DaysInMonthCallback() {
+            @Override
+            public void daysInMonthData(List<DayDataModel> monthDays) {
+                Log.i("DaysInMonth", " - "+monthDays.size());
+                //sideMonthDayHolder.removeAllViews();
+                //Inflate all the Day we Got from the AsyncTask
+                boolean monthNamed = false;
+                for(DayDataModel calDay: monthDays){
+                    //First Name the Month in Short
+                    if(!monthNamed){
+                        sideMonthName.setText(calDay.getMonthShort());
+                        monthNamed = true;
+                    }
+
+                    //Iterate through the SideDays to see Which ones to Display
+
+                    sideMonthDayHolder.getChildCount();
+
+                    sideMonthDayHolder.findViewWithTag(calDay.getDayNo()).setAlpha(1);
+
+                /*
+                    //Then inflate The day
+                    new InflateSideMonthDay(inflater, sideMonthDayHolder, calDay.getDayNo(), new SuccessCallback() {
+                        @Override
+                        public void success() {
+
+                        }
+
+                        @Override
+                        public void error() {
+
+                        }
+                    });*/
+                }
+
+            }
+        });
     }
 
     BorderRoundView selectedDayButton = null;
     TextView selectedDayNumber = null;
-    private void selectSideDay(CalendarLayoutDay selectedDay){
+    View firstVisible = null;
+    View firstInvisible = null;
+    boolean scrollingDown = true;
+    int firstVisibleInt = 0;
+    private void selectSideDay(String dayNo){
+
+        if(firstVisible == null){
+
+            firstVisible = sideMonthDayHolder.findViewWithTag("1");
+
+        }
 
         if(selectedDayButton != null){
             selectedDayNumber.setTextColor(Color.WHITE);
@@ -282,10 +366,70 @@ public class WalletMultiDaysFragment extends Fragment{
         }
 
         //Get the Date of item at that Position
-        selectedDayButton = sideMonthDayHolder.findViewWithTag(selectedDay.getMONTH_DAY_NUMBER());
-        selectedDayNumber = selectedDayButton.findViewById(R.id.sidemonth_daynumber);
+        selectedDayButton = sideMonthDayHolder.findViewWithTag(dayNo);
+        selectedDayNumber = (TextView)selectedDayButton.getChildAt(0);
         selectedDayButton.dynamicallySetBackgroundColor("#FFFFFF");
         selectedDayNumber.setTextColor(Color.BLACK);
+
+
+        //Create perfect Logic to ave all Selected Days visible
+
+        int intDayNo = Integer.parseInt(dayNo);
+        try {
+
+            if(scrollingDown){
+                //keepSideCalendarInFrame(intDayNo);
+                if(intDayNo > 15){
+                    //remove the first Visible Day from the list
+                    firstVisible.setVisibility(GONE);
+                    int nextVisible = Integer.parseInt(firstVisible.getTag().toString()) + 1;
+
+                    firstInvisible = firstVisible;
+                    firstVisible = sideMonthDayHolder.findViewWithTag(""+nextVisible);
+
+                }
+            }
+            else{
+                //keepSideCalendarInFrame(intDayNo);
+                //If Scroll Is Up then Start showing next Visible
+
+                if(firstInvisible != null){
+                    firstInvisible.setVisibility(VISIBLE);
+                    firstVisible = firstInvisible;
+                    int nextInvisibleNo = Integer.parseInt(firstVisible.getTag().toString()) - 1;
+                    firstInvisible = sideMonthDayHolder.findViewWithTag(""+nextInvisibleNo);
+                }
+
+            }
+
+        }
+        catch(Exception e){
+
+        }
+    }
+
+    private void keepSideCalendarInFrame(int intDayNo){
+
+        if(intDayNo > 15){
+            //remove the first Visible Day from the list
+            firstVisible.setVisibility(GONE);
+            int nextVisible = Integer.parseInt(firstVisible.getTag().toString()) + 1;
+
+            firstInvisible = firstVisible;
+            firstVisible = sideMonthDayHolder.findViewWithTag(""+nextVisible);
+
+        }
+        else{
+            if(firstInvisible != null){
+
+                firstInvisible.setVisibility(VISIBLE);
+                int nextInvisible = Integer.parseInt(firstInvisible.getTag().toString()) - 1;
+                //firstVisible =
+
+                       // firstVisible = sideMonthDayHolder.findViewWithTag(""+nextVisible);
+
+            }
+        }
 
     }
 
@@ -732,12 +876,13 @@ public class WalletMultiDaysFragment extends Fragment{
                                 public void success(){
                                     //Log.i("Expand Day is ", "Inside");
                                     try{
+                                        AsyncDay.loadBudgets();
+                                        fullyExpandedDetail = true;
 
-                                        toggleSideMonth(false, new SuccessCallback() {
+                                        /*toggleSideMonth(false, new SuccessCallback() {
                                             @Override
                                             public void success() {
-                                               AsyncDay.loadBudgets();
-                                               fullyExpandedDetail = true;
+
 
                                             }
 
@@ -745,7 +890,7 @@ public class WalletMultiDaysFragment extends Fragment{
                                             public void error() {
 
                                             }
-                                        });
+                                        });*/
                                     }
                                     catch(Exception e){
 
@@ -801,6 +946,7 @@ public class WalletMultiDaysFragment extends Fragment{
             if (dy > 0) {
                 // Log.i("Scrolling", "Downward");
 
+                scrollingDown = true;
                 if(preventDayMark){
 
                     if(fullyExpandedDetail){
@@ -867,6 +1013,7 @@ public class WalletMultiDaysFragment extends Fragment{
             } else if (dy < 0) {
                 // Log.i("Scrolling", "Upward");
 
+                scrollingDown = false;
                 if(preventDayMark){
 
                     if(fullyExpandedDetail){

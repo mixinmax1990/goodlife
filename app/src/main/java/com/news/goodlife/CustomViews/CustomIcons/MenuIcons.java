@@ -106,7 +106,7 @@ public class MenuIcons extends FrameLayout {
 
         menuBackground = new Paint(Paint.ANTI_ALIAS_FLAG);
         menuBackground.setStyle(Paint.Style.FILL);
-        menuBackground.setColor(Color.parseColor("#2E2F35"));
+        menuBackground.setColor(Color.parseColor("#444951"));
         //menuBackground.setShadowLayer(2, 0, 0, Color.parseColor("#FFFFFF"));
        // setLayerType(LAYER_TYPE_SOFTWARE, menuBackground);
 

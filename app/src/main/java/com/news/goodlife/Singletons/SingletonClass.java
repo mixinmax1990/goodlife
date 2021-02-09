@@ -12,12 +12,18 @@ import com.news.goodlife.Data.Remote.Klarna.Controller.KlarnaRequestController;
 import com.news.goodlife.Data.Remote.Klarna.Models.Consent.POSTgetConsentDataModel;
 import com.news.goodlife.Interfaces.SuccessCallback;
 import com.news.goodlife.Models.ObservableFragmentChange;
+import com.news.goodlife.Processing.Models.DayDataModel;
+
+import java.util.List;
 
 public class SingletonClass {
 
     private static volatile SingletonClass sSoleInstance;
     private static volatile KlarnaRequestController klarna;
     private String currencySymbol;
+
+
+    private List<DayDataModel> LogicData;
 
     //private constructor.
     private SingletonClass(){
@@ -46,6 +52,24 @@ public class SingletonClass {
         }
 
         return sSoleInstance;
+    }
+
+    public List<DayDataModel> getLogicData() {
+        return LogicData;
+    }
+
+    int todayLogicDataPosition = 0;
+
+    public int getTodayLogicDataPosition() {
+        return todayLogicDataPosition;
+    }
+
+    public void setTodayLogicDataPosition(int todayLogicDataPosition) {
+        this.todayLogicDataPosition = todayLogicDataPosition;
+    }
+
+    public void setLogicData(List<DayDataModel> logicData) {
+        LogicData = logicData;
     }
 
     //Klarna Controller

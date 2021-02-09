@@ -10,13 +10,32 @@
         app:layout_constraintDimensionRatio="1:1"
         app:borderCustomRadius="50"
         android:layout_margin="10dp"
+        android:padding="26dp"
         android:id="@+id/overview_cover"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Monday"
+            android:id="@+id/overview_day"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="24sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/overview_day"
+            android:text="November 7, 2021"
+            android:id="@+id/overview_date"
+            android:textSize="13sp"
+            android:alpha=".6"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Overview"
+            android:id="@+id/covertext"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

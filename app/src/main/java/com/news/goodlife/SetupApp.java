@@ -21,8 +21,10 @@ import java.util.concurrent.TimeUnit;
 public class SetupApp {
 
     SingletonClass singletonClass = SingletonClass.getInstance();
+    SuccessCallback startAcivityCallback;
 
-    public SetupApp() {
+    public SetupApp(SuccessCallback startAcivityCallback) {
+        this.startAcivityCallback = startAcivityCallback;
 
         singletonClass.setSubscribed(checkSubscription());
 
@@ -34,6 +36,7 @@ public class SetupApp {
 
             @Override
             public void error() {
+                startAcivityCallback.error();
 
             }
         });
@@ -45,7 +48,19 @@ public class SetupApp {
 
     LogicController logicController;
     private void startLogic() {
-        logicController = new LogicController();
+        logicController = new LogicController(new SuccessCallback() {
+            @Override
+            public void success() {
+                // Day Logic Data is Ready to be Used
+                startAcivityCallback.success();
+            }
+
+            @Override
+            public void error() {
+
+                //startAcivityCallback.error();
+            }
+        });
     }
 
 
@@ -64,6 +79,7 @@ public class SetupApp {
         if(consentData == null){
 
             Log.i("Get Consent", "No Consent YET");
+            callback.error();
 
         }
         else{

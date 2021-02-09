@@ -38,9 +38,9 @@ public class MarkedConstraintLayout extends ConstraintLayout {
         selectionBorderPaint = new Paint();
         selectionBorderPaint.setStyle(Paint.Style.STROKE);
         selectionBorderPaint.setStrokeWidth(strokeWidth);
-        selectionBorderPaint.setColor(Color.parseColor("#FFFFFF"));
+        selectionBorderPaint.setColor(Color.parseColor("#19FFFFFF"));
         selectionBorderPaint.setAntiAlias(true);
-        selectionBorderPaint.setAlpha(100);
+        //selectionBorderPaint.setAlpha(100);
 
     }
 
@@ -68,13 +68,13 @@ public class MarkedConstraintLayout extends ConstraintLayout {
     boolean selected = false;
     public void selectView(Boolean select){
         selected = select;
-        alpha = 155;
+        alpha = 60;
         invalidate();
     }
 
-    int alpha = 255;
+    int alpha = 60;
     public void fadeOutBorder(){
-        ValueAnimator va = ValueAnimator.ofInt(255,0);
+        ValueAnimator va = ValueAnimator.ofInt(60,0);
         va.setDuration(255);
         va.setInterpolator(new DecelerateInterpolator());
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
