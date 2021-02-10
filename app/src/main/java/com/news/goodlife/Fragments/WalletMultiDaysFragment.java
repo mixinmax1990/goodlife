@@ -865,13 +865,15 @@ public class WalletMultiDaysFragment extends Fragment{
                             detailedView = true;
                             preventDayMark = true;
 
+                            int pos = Integer.parseInt(lastSelected.getTag().toString());
+                            DayDataModel dayData = singletonClass.getLogicData().get(pos);
                             ViewGroup detailcont = lastSelected.findViewById(R.id.day_detail_container);
                             View overview_cover = lastSelected.findViewById(R.id.overview_cover);
                             //cashflow_recycler.smoothScrollToPosition(expandedItemNo);
 
                             cashflow_recycler.smoothScrollBy(0, (int)lastSelected.getY());
                             //recyclerView.smooth
-                            AsyncDay = new InflateDayDetails(new AsyncLayoutInflater(getContext()), detailcont, overview_cover, null, new SuccessCallback() {
+                            AsyncDay = new InflateDayDetails(new AsyncLayoutInflater(getContext()), detailcont, overview_cover, dayData, new SuccessCallback() {
                                 @Override
                                 public void success(){
                                     //Log.i("Expand Day is ", "Inside");

@@ -7,6 +7,15 @@ public class DayDataModel {
 
     Date dayDate;
     String type = "day";
+    DayTransactionModel dayTransactionsModel;
+
+    public DayTransactionModel getDayTransactionsModel() {
+        return dayTransactionsModel;
+    }
+
+    public void setDayTransactionsModel(DayTransactionModel dayTransactionsModel) {
+        this.dayTransactionsModel = dayTransactionsModel;
+    }
 
     String dayNo, monthNo, yearNo, monthShort;
 

@@ -9,6 +9,7 @@
     tools:context=".StartActivity">
 
 
+
     <eightbitlab.com.blurview.BlurView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -400,6 +401,16 @@
         app:layout_constraintBottom_toTopOf="@id/menu_container"
         app:layout_constraintStart_toStartOf="@id/menu_container"
         app:layout_constraintEnd_toEndOf="@id/menu_container"/>
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="20dp"
+        android:tint="@color/white"
+        app:backgroundTint="@color/white"
+        android:elevation="3000dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

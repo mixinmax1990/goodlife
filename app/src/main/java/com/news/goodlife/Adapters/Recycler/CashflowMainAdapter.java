@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentTransaction;
@@ -35,6 +36,7 @@ import com.news.goodlife.CustomViews.LiquidView;
 import com.news.goodlife.CustomViews.RelationshipMapView;
 import com.news.goodlife.Data.Local.Models.Financial.BudgetCategoryModel;
 import com.news.goodlife.Data.Local.Models.Financial.BudgetModel;
+import com.news.goodlife.Data.Local.Models.Financial.TransactionModel;
 import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
 import com.news.goodlife.Data.Local.Models.WalletEventDayOrderModel;
 import com.news.goodlife.Data.Remote.Klarna.Interfaces.Callbacks.KlarnaResponseCallback;
@@ -47,6 +49,7 @@ import com.news.goodlife.Models.ModuleCoords;
 import com.news.goodlife.Models.RelationshipMap;
 import com.news.goodlife.PopWindowData.CashCategoryData;
 import com.news.goodlife.Processing.Models.DayDataModel;
+import com.news.goodlife.Processing.Models.DayTransactionModel;
 import com.news.goodlife.R;
 import com.news.goodlife.Singletons.SingletonClass;
 
@@ -236,19 +239,24 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
            switch(dayData.getType()){
                 case "day":
 
-                    TextView dayNameTV, dayDateTV;
+                    TextView dayNameTV, dayDateTV, dayBalance;
 
+                    itemView.setTag(""+pos);
                     dayNameTV = itemView.findViewById(R.id.overview_day);
                     dayDateTV = itemView.findViewById(R.id.overview_date);
+                    dayBalance = itemView.findViewById(R.id.cover_balance);
                     //Get The Date Name
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(dayData.getDayDate());
+                    dayBalance.setText(singletonMain.monefy(""+dayData.getHypertheticalBalance()));
 
                     dayNameTV.setText(cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()));
 
                     String dayDateString = ""+cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + " "+cal.get(Calendar.DAY_OF_MONTH)+ ", " + cal.get(Calendar.YEAR);
 
                     dayDateTV.setText(dayDateString);
+
+
 
                     //ViewGroup dayDetailsContainer = itemView.findViewById(R.id.day_detail_container);
                     //AsyncDay = new InflateDayDetails(new AsyncLayoutInflater(context), dayDetailsContainer, dayData);
@@ -573,6 +581,8 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
             }
 
         }
+
+
 
         List<ModuleCoords> moduleCoords = new ArrayList<>();
         List<RelationshipMap> relationshipMapData = new ArrayList<>();

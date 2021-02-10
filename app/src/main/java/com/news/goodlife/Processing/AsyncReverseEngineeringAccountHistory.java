@@ -91,6 +91,8 @@ public class AsyncReverseEngineeringAccountHistory extends AsyncTask<AccountHist
             dayData.setYearNo(""+processingDay.get(Calendar.YEAR));
             dayData.setMonthShort(""+processingDay.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
 
+            dayData.setDayTransactionsModel(daysTransactions);
+
             allDaysData.add(dayData);
 
         }

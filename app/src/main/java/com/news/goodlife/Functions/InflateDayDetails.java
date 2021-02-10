@@ -15,8 +15,10 @@ import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
 
 import com.news.goodlife.CustomViews.IconDoughnutView;
 import com.news.goodlife.CustomViews.LiquidView;
+import com.news.goodlife.Data.Local.Models.Financial.TransactionModel;
 import com.news.goodlife.Interfaces.SuccessCallback;
 import com.news.goodlife.Models.CalendarLayoutDay;
+import com.news.goodlife.Processing.Models.DayDataModel;
 import com.news.goodlife.R;
 import com.news.goodlife.Singletons.SingletonClass;
 
@@ -33,7 +35,7 @@ public class InflateDayDetails {
     //Load a Data object holding the Information for the day
 
     ViewGroup parentCont;
-    CalendarLayoutDay dayData;
+    DayDataModel dayData;
     View cover;
 
     int parent_height;
@@ -42,7 +44,7 @@ public class InflateDayDetails {
     AsyncLayoutInflater inflater;
     SingletonClass singletonClass = SingletonClass.getInstance();
 
-    public InflateDayDetails(AsyncLayoutInflater inflator, ViewGroup parent, View cover,@Nullable CalendarLayoutDay dayData, SuccessCallback successCallback) {
+    public InflateDayDetails(AsyncLayoutInflater inflator, ViewGroup parent, View cover,@Nullable DayDataModel dayData, SuccessCallback successCallback) {
 
         this.inflater = inflator;
         this.parentCont = parent;
@@ -52,6 +54,7 @@ public class InflateDayDetails {
         this.dayData = dayData;
         this.parent_height = parent.getHeight();
         this.cover = cover;
+
     }
 
     int rootheight;
@@ -97,8 +100,33 @@ public class InflateDayDetails {
 
             listeners();
 
+            ViewGroup transactionCont = view.findViewById(R.id.flex_trans_cont);
+            inflateTransactions(transactionCont, dayData);
+
         }
     };
+
+    private void inflateTransactions(ViewGroup transactionCont, DayDataModel dayDataModel){
+
+        for(TransactionModel transaction: dayDataModel.getDayTransactionsModel().getDaysTransactions()){
+
+            inflater.inflate(R.layout.debit_transacaction_item, transactionCont, new AsyncLayoutInflater.OnInflateFinishedListener() {
+                @Override
+                public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
+
+                    ((TextView)view.findViewById(R.id.transaction_amount)).setText(singletonClass.monefy(transaction.getAmount()));
+                    ((TextView)view.findViewById(R.id.transaction_description)).setText(transaction.getReference());
+
+                    parent.addView(view);
+
+                }
+            });
+
+
+        }
+
+
+    }
 
 
     View module_date, module_rev, module_exp, module_inc, module_burn, module_budg, module_trans, module_savings;
@@ -137,12 +165,12 @@ public class InflateDayDetails {
             return;
         }
         Calendar dayCal = Calendar.getInstance();
-        dayCal.setTime(dayData.getDate());
+        dayCal.setTime(dayData.getDayDate());
 
         String dayName = dayCal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
         day_weekday.setText(dayName);
 
-        String dayDate = dayData.getMONTH_DAY_NUMBER()+" "+dayData.getMONTH_NAME()+" "+dayData.getYEAR();
+        String dayDate = dayCal.get(Calendar.DAY_OF_MONTH)+" "+dayCal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())+" "+dayCal.get(Calendar.YEAR);
         day_date.setText(dayDate);
 
     }
