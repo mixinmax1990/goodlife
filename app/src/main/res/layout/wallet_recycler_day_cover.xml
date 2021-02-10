@@ -2,6 +2,7 @@
 <com.news.goodlife.CustomViews.MarkedConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingBottom="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame

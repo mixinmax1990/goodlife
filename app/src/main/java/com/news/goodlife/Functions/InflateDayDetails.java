@@ -2,7 +2,9 @@ package com.news.goodlife.Functions;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -14,10 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
 
 import com.news.goodlife.CustomViews.IconDoughnutView;
-import com.news.goodlife.CustomViews.LiquidView;
 import com.news.goodlife.Data.Local.Models.Financial.TransactionModel;
 import com.news.goodlife.Interfaces.SuccessCallback;
-import com.news.goodlife.Models.CalendarLayoutDay;
 import com.news.goodlife.Processing.Models.DayDataModel;
 import com.news.goodlife.R;
 import com.news.goodlife.Singletons.SingletonClass;
@@ -43,9 +43,11 @@ public class InflateDayDetails {
     SuccessCallback successCallback;
     AsyncLayoutInflater inflater;
     SingletonClass singletonClass = SingletonClass.getInstance();
+    LayoutInflater inflaterNormal;
 
-    public InflateDayDetails(AsyncLayoutInflater inflator, ViewGroup parent, View cover,@Nullable DayDataModel dayData, SuccessCallback successCallback) {
+    public InflateDayDetails(LayoutInflater normalInflater, AsyncLayoutInflater inflator, ViewGroup parent, View cover, @Nullable DayDataModel dayData, SuccessCallback successCallback) {
 
+        this.inflaterNormal = normalInflater;
         this.inflater = inflator;
         this.parentCont = parent;
         this.successCallback = successCallback;
@@ -95,36 +97,72 @@ public class InflateDayDetails {
             module_savings = view.findViewById(R.id.savings_module);
             module_date = view.findViewById(R.id.date_container);
 
+            ViewGroup transactionCont = view.findViewById(R.id.flex_trans_cont);
+            inflateTransactions(transactionCont, dayData);
+
             rootheight = view.getHeight();
             parentCont.addView(view);
 
             listeners();
 
-            ViewGroup transactionCont = view.findViewById(R.id.flex_trans_cont);
-            inflateTransactions(transactionCont, dayData);
+
 
         }
     };
-
+    int iterationCount = 1;
+    View rootTrans;
     private void inflateTransactions(ViewGroup transactionCont, DayDataModel dayDataModel){
+        int noOfTransactions = dayDataModel.getDayTransactionsModel().getDaysTransactions().size();
+        Log.i("Nof", " - "+noOfTransactions);
+        View notrans = module_trans.findViewById(R.id.no_transactions);
 
-        for(TransactionModel transaction: dayDataModel.getDayTransactionsModel().getDaysTransactions()){
-
-            inflater.inflate(R.layout.debit_transacaction_item, transactionCont, new AsyncLayoutInflater.OnInflateFinishedListener() {
-                @Override
-                public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
-
-                    ((TextView)view.findViewById(R.id.transaction_amount)).setText(singletonClass.monefy(transaction.getAmount()));
-                    ((TextView)view.findViewById(R.id.transaction_description)).setText(transaction.getReference());
-
-                    parent.addView(view);
-
-                }
-            });
-
+        if(noOfTransactions == 0){
 
         }
+        else{
+            notrans.setVisibility(View.GONE);
+            for(TransactionModel transaction: dayDataModel.getDayTransactionsModel().getDaysTransactions()){
 
+                int layout;
+
+                if(transaction.getType().equals("DEBIT")){
+                    layout = R.layout.transaction_item_debit;
+                }
+                else{
+                    layout = R.layout.transaction_item_credit;
+                }
+
+
+                rootTrans = inflaterNormal.inflate(layout, transactionCont);
+                TextView amount = rootTrans.findViewById(R.id.transaction_amount);
+                amount.setText(singletonClass.monefy(transaction.getAmount()));
+                //((TextView)root.findViewById(R.id.transaction_amount)).setText(singletonClass.monefy(transaction.getAmount()));
+                //((TextView)root.findViewById(R.id.transaction_description)).setText(transaction.getReference());
+
+                /*
+                inflater.inflate(layout, transactionCont, new AsyncLayoutInflater.OnInflateFinishedListener() {
+                    @Override
+                    public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
+
+                        ((TextView)view.findViewById(R.id.transaction_amount)).setText(singletonClass.monefy(transaction.getAmount()));
+                        ((TextView)view.findViewById(R.id.transaction_description)).setText(transaction.getReference());
+
+                        parent.addView(view);
+
+                        iterationCount ++;
+                        if(iterationCount == noOfTransactions){
+
+                            //enable inflation
+
+
+                        }
+
+                    }
+                });*/
+
+
+            }
+        }
 
     }
 
@@ -241,11 +279,17 @@ public class InflateDayDetails {
         });
     }
 
+
     private void setUpPositions(){
 
         if(inflated == 8){
-            baseCollapseDay();
-            expandDay();
+
+
+                //If all Transactions are Loaded them Expand the Layout
+                baseCollapseDay();
+                expandDay();
+
+
         }
 
 
@@ -271,14 +315,15 @@ public class InflateDayDetails {
                 module_date.setY(mdate_top * animVal);
 
                 root.setAlpha(animVal);
-                cover.setAlpha(1f - animVal);
+
+                //cover.setAlpha(1f - animVal);
             }
         });
 
         va.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
+            cover.setAlpha(0);
             }
 
             @Override

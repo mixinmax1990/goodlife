@@ -13,7 +13,7 @@
         app:borderCustomRadius="50"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        app:backgroundCustomColor="#0AFFFFFF"
+        app:backgroundCustomColor="#1f2024"
         android:id="@+id/add_budget_cat_darkcont"
         >
         <ImageView

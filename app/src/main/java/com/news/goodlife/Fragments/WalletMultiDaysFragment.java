@@ -129,12 +129,14 @@ public class WalletMultiDaysFragment extends Fragment{
     ViewHolder visibleViewHolder;
     View root;
     JSONObject orderedData;
+    LayoutInflater inflaterNormal;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.wallet_multi_days, container, false);
         activity = (StartActivity) getActivity();
+        inflaterNormal = inflater;
 
         orderedData = myDB.WalletEvent.getAllByRange(getFirstDayInRange());
         /*
@@ -873,7 +875,7 @@ public class WalletMultiDaysFragment extends Fragment{
 
                             cashflow_recycler.smoothScrollBy(0, (int)lastSelected.getY());
                             //recyclerView.smooth
-                            AsyncDay = new InflateDayDetails(new AsyncLayoutInflater(getContext()), detailcont, overview_cover, dayData, new SuccessCallback() {
+                            AsyncDay = new InflateDayDetails(inflaterNormal, new AsyncLayoutInflater(getContext()), detailcont, overview_cover, dayData, new SuccessCallback() {
                                 @Override
                                 public void success(){
                                     //Log.i("Expand Day is ", "Inside");

@@ -63,7 +63,9 @@ public class PopUpFrame extends ConstraintLayout {
         setAttributes(attrs);
         configurePaints();
         setWillNotDraw(false);
-        setBackgroundColor("#1DFFFFFF");
+
+        setBackgroundColor("#212226");
+        //#1DFFFFFF
     }
 
 
@@ -89,8 +91,8 @@ public class PopUpFrame extends ConstraintLayout {
 
             paintFill.setColor(color);
             //canvas.drawRoundRect(roundedRectangle, radiusSize, radiusSize, paintFill);
-            paintFill.setColor(Color.parseColor("#FFFFFF"));
-            paintFill.setAlpha(10);
+            paintFill.setColor(Color.parseColor("#1f2024"));
+            //paintFill.setAlpha(10);
 
             roundPath.reset();
             roundPath.addRoundRect(roundedRectangle, radiusSize, radiusSize, Path.Direction.CW);

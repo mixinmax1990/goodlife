@@ -14,7 +14,7 @@
         app:borderCustomRadius="50"
         android:padding="5dp"
         android:tag="category_background"
-        app:backgroundCustomColor="#0AFFFFFF"
+        app:backgroundCustomColor="#1f2024"
         android:id="@+id/budget_cat_cont1"
         >
 
