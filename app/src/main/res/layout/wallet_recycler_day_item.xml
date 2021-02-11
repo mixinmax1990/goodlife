@@ -239,10 +239,11 @@
 
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="150dp"
+        app:borderCustomRadius="50"
         android:id="@+id/cashflow_activities_container"
         app:layout_constraintTop_toBottomOf="@id/module_status_overview"
         android:layout_marginTop="10dp"
@@ -259,6 +260,7 @@
             android:text="Bank Accounts"
             android:layout_marginStart="16dp"
             android:alpha=".7"
+            android:padding="6dp"
             android:textSize="12sp"
             android:id="@+id/cash_pop_title"
             />
@@ -296,12 +298,13 @@
             android:layout_marginBottom="10dp"
             app:layout_constraintStart_toStartOf="parent"
             android:alpha="1"
+            android:padding="16dp"
             android:id="@+id/flex_trans_cont"
             app:layout_constraintTop_toBottomOf="@id/cash_pop_title"
             >
 
         </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>>
+    </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="4dp">
-    <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    >
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#2DFFFFFF"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:borderCustomRadius="250"
-        app:backgroundCustomColor="#B9FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         />
     <TextView
@@ -23,8 +20,7 @@
         android:id="@+id/transaction_type"
         android:paddingEnd="3dp"
         android:layout_marginStart="16dp"
-        android:textColor="@color/black"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="sans-serif-light"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/transaction_amount"
         app:layout_constraintBottom_toBottomOf="@id/transaction_amount"
@@ -34,10 +30,9 @@
         android:layout_height="wrap_content"
         android:text="10023"
         android:textSize="16sp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:textColor="@color/black"
-        android:fontFamily="sans-serif-medium"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:fontFamily="sans-serif-light"
         android:id="@+id/transaction_amount"
         app:layout_constraintStart_toEndOf="@id/transaction_type"
         app:layout_constraintTop_toTopOf="parent"
@@ -48,11 +43,9 @@
         android:layout_height="wrap_content"
         android:alpha=".7"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/black"
         android:id="@+id/transaction_description"
         app:layout_constraintStart_toEndOf="@id/transaction_amount"
         app:layout_constraintTop_toTopOf="@id/transaction_amount"
         app:layout_constraintBottom_toBottomOf="@id/transaction_amount"
-        app:layout_constraintEnd_toEndOf="parent"
         android:text="Description"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
