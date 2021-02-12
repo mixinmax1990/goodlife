@@ -3,25 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="end"
+    android:paddingTop="25dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="4dp">
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#31FFFFFF"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+    >
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="+"
         android:textSize="18sp"
+        android:fontFamily="@font/product_sans_regular"
         android:id="@+id/transaction_type"
-        android:fontFamily="sans-serif-light"
         android:paddingStart="6dp"
-        android:layout_marginEnd="16dp"
-       app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/transaction_amount"
         app:layout_constraintBottom_toBottomOf="@id/transaction_amount"
         />
@@ -29,24 +22,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="10023"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:textSize="16sp"
+        android:textSize="17sp"
         android:id="@+id/transaction_amount"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="@font/product_sans_regular"
         app:layout_constraintEnd_toStartOf="@id/transaction_type"
         app:layout_constraintTop_toTopOf="parent"
         />
     <TextView
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="17dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:alpha=".7"
+        android:alpha="1"
+        android:textSize="17sp"
         android:id="@+id/transaction_description"
-        app:layout_constraintStart_toStartOf="parent"
+        android:fontFamily="@font/product_sans_regular"
         android:layout_marginStart="16dp"
         app:layout_constraintEnd_toStartOf="@id/transaction_amount"
         app:layout_constraintTop_toTopOf="@id/transaction_amount"
         app:layout_constraintBottom_toBottomOf="@id/transaction_amount"
         android:text="Description"/>
+
+    <TextView
+        app:layout_constraintEnd_toEndOf="@id/transaction_amount"
+        app:layout_constraintTop_toBottomOf="@id/transaction_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:alpha=".8"
+        android:fontFamily="@font/product_sans_regular"
+        android:textColor="#B689F6"
+        android:text="Autocover · Budget"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

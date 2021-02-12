@@ -250,7 +250,7 @@ public class SingletonClass {
             moneyfied = new StringBuilder(klarnaAmount).insert(klarnaAmount.length()-2, ".").toString() + getCurrencySymbol();
         }
         else{
-            moneyfied = "0,00€";
+            moneyfied = "€0,00";
         }
 
 
