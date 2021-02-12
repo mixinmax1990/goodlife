@@ -110,7 +110,7 @@ public class InflateDayDetails {
         }
     };
     int iterationCount = 1;
-    View rootTrans;
+    //View rootTrans;
     private void inflateTransactions(ViewGroup transactionCont, DayDataModel dayDataModel){
         int noOfTransactions = dayDataModel.getDayTransactionsModel().getDaysTransactions().size();
         Log.i("Nof", " - "+noOfTransactions);
@@ -133,8 +133,9 @@ public class InflateDayDetails {
                 }
 
 
-                rootTrans = inflaterNormal.inflate(layout, transactionCont);
+                View rootTrans = inflaterNormal.inflate(layout, transactionCont, true);
                 TextView amount = rootTrans.findViewById(R.id.transaction_amount);
+                Log.i("HashCodeView",""+rootTrans.hashCode()+" No of Children");
                 amount.setText(singletonClass.monefy(transaction.getAmount()));
                 //((TextView)root.findViewById(R.id.transaction_amount)).setText(singletonClass.monefy(transaction.getAmount()));
                 //((TextView)root.findViewById(R.id.transaction_description)).setText(transaction.getReference());

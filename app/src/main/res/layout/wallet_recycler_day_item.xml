@@ -55,8 +55,7 @@
             android:text="21 August 2020"
             android:textSize="14sp"
             android:fontFamily="@font/product_sans_regular"
-            android:alpha=".5"
-            android:textColor="?attr/textColorPrimary"
+            android:textColor="#808489"
             android:id="@+id/item_date"
             android:paddingBottom="40dp"
             android:paddingTop="5dp"
@@ -92,8 +91,8 @@
         android:text="Total Balance"
         android:fontFamily="@font/product_sans_regular"
         android:textSize="14sp"
+        android:textColor="#808489"
         android:layout_marginTop="8dp"
-        android:alpha=".5"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/available_amount"
@@ -157,13 +156,14 @@
             android:text="Free to use"
             android:fontFamily="@font/product_sans_regular"
             android:textSize="14sp"
+            android:textColor="#808489"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/revenue_module_amount"
             android:id="@+id/freetouse_title"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:alpha=".5"/>
+            />
         <TextView
             android:id="@+id/revenue_module_amount"
             android:layout_width="wrap_content"
@@ -207,8 +207,9 @@
                 android:layout_height="wrap_content"
                 android:text="FixC"
                 android:textSize="18sp"
+                android:textColor="#808489"
                 android:fontFamily="@font/product_sans_regular"
-                android:alpha=".5"
+                android:alpha="1"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -267,12 +268,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Bank Accounts"
+            android:textColor="#808489"
             android:fontFamily="@font/product_sans_regular"
             android:layout_marginStart="16dp"
-            android:alpha=".5"
             android:padding="6dp"
             android:layout_marginTop="10dp"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:id="@+id/cash_pop_title"
             />
         <androidx.cardview.widget.CardView
@@ -296,12 +297,23 @@
             android:text="Synced: 4 Minutes ago"
             android:alpha=".3"
             android:textSize="11sp"
+            android:padding="10dp"
+            android:id="@+id/last_synced_notice"
             android:fontFamily="@font/product_sans_regular"
             app:layout_constraintTop_toBottomOf="@id/flex_trans_cont"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="8dp"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_refresh_24"
+            android:tint="#89B3F6"
+            app:layout_constraintStart_toEndOf="@id/last_synced_notice"
+            app:layout_constraintTop_toTopOf="@id/last_synced_notice"
+            app:layout_constraintBottom_toBottomOf="@id/last_synced_notice"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -313,9 +325,18 @@
             android:padding="16dp"
             android:id="@+id/flex_trans_cont"
             app:layout_constraintTop_toBottomOf="@id/cash_pop_title"
-            >
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFFFFF"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:alpha=".25"
+            app:layout_constraintTop_toBottomOf="@id/flex_trans_cont"
+            />
 
-        </LinearLayout>
+
     </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="end"
-    android:paddingTop="25dp"
+    android:paddingBottom="25dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <TextView
@@ -48,8 +48,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="13sp"
-        android:alpha=".8"
+        android:textColor="#808489"
         android:fontFamily="@font/product_sans_regular"
-        android:textColor="#B689F6"
-        android:text="Autocover · Budget"/>
+        android:text="Konto: Sparkasse · Deckt Kontostand"/>
+    <!-- #48FFFFFF -->
 </androidx.constraintlayout.widget.ConstraintLayout>

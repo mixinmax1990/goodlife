@@ -19,12 +19,12 @@
         />
     <TextView
         app:layout_constraintTop_toBottomOf="@id/budget_circle_mini"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/budget_circle_mini"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="Name"
+        android:fontFamily="@font/product_sans_regular"
         android:textSize="12sp"
-        android:alpha=".5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="0dp"

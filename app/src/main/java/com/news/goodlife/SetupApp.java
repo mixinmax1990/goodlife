@@ -31,7 +31,9 @@ public class SetupApp {
         checkBankConsent(new SuccessCallback() {
             @Override
             public void success() {
+
                 startLogic();
+
             }
 
             @Override

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="25dp"
+    android:paddingBottom="25dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <TextView
@@ -47,9 +48,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="13sp"
-        android:alpha=".8"
+        android:alpha="1"
+        android:textColor="#808489"
         android:id="@+id/covered_title"
         android:fontFamily="@font/product_sans_regular"
-        android:textColor="#89B3F6"
-        android:text="Manualcover · Budget"/>
+        android:text="Konto: Sparkasse · Deckung: Budget"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
