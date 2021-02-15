@@ -118,7 +118,7 @@ public class BudgetCircleMini extends FrameLayout {
 
     int geom_centerX, geom_centerY;
     int geom_center_angle, geom_radius;
-
+    boolean icon = false;
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -148,6 +148,30 @@ public class BudgetCircleMini extends FrameLayout {
 
             //canvas.drawText("356€", width/2, height/2 + (fontSize/3), labelPaint);
         }
+
+        if(icon){
+            barsPaint.setColor(Color.BLACK);
+            barsPaint.setAlpha(100);
+            barsBgPaint.setColor(Color.BLACK);
+            barsBgPaint.setAlpha(100);
+            canvas.drawArc(rectF, 270, 300, false, barsPaint);
+            for(int i = 0; i < months; i++){
+                //Month Line
+                //Log.i("DRAWING", "barMargin = "+ barMargin +"-- sweepAngle = "+ sweepAngle + " startAngle = "+ startAngle);
+                canvas.drawArc(rectFinner, startAngle, sweepAngle, false, barsBgPaint);
+                startAngle = startAngle + sweepAngle + barMargin;
+
+            }
+
+        }
+    }
+    public void setIcon(){
+
+        this.months = 3;
+        icon = true;
+        draw = false;
+        invalidate();
+
     }
 
 

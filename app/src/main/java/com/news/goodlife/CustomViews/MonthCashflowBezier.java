@@ -1,6 +1,5 @@
 package com.news.goodlife.CustomViews;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -17,16 +16,13 @@ import android.view.ViewTreeObserver;
 import androidx.annotation.Nullable;
 
 import com.news.goodlife.Fragments.WalletMultiDaysFragment;
-import com.news.goodlife.Interfaces.MonthCashflowBezierCallback;
 import com.news.goodlife.Models.BezierCurvePoint;
 import com.news.goodlife.Models.DayCashflowModel;
-import com.news.goodlife.Models.MonthCashflowModel;
+import com.news.goodlife.Models.MultiDayCashflowModel;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.VIBRATOR_SERVICE;
@@ -36,7 +32,7 @@ public class MonthCashflowBezier extends View {
     Paint line, curve, curveselected, areaSelected, point, pointselected, textPaint;
     Path curvePath, selectedCurvePath, areaSelectedPath;
 
-    public List<MonthCashflowModel> bezierData;
+    public List<MultiDayCashflowModel> bezierData;
     private float smallestAmmount;
     private float largestAmount;
     private Vibrator myVib;
@@ -174,7 +170,7 @@ public class MonthCashflowBezier extends View {
 
     int visibleDays = 35;
     int dayWidth;
-    public void setBezierData(List<MonthCashflowModel> bezierData) {
+    public void setBezierData(List<MultiDayCashflowModel> bezierData) {
         this.bezierData = bezierData;
         //Set First Day
         setFirstAndLastDays();
@@ -226,7 +222,7 @@ public class MonthCashflowBezier extends View {
         }
         //then Iterate thru the Data
 
-        for(MonthCashflowModel month: bezierData){
+        for(MultiDayCashflowModel month: bezierData){
             for(DayCashflowModel day : month.getMonthCashflow()){
                 float amountPos = getAmountPos(day.getAmount());
                 //Log.i("BezierDataDays", ""+circlePosition);

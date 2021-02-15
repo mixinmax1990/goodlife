@@ -15,14 +15,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
 
+import com.news.goodlife.CustomViews.CustomBezierGraph;
 import com.news.goodlife.CustomViews.IconDoughnutView;
 import com.news.goodlife.Data.Local.Models.Financial.TransactionModel;
 import com.news.goodlife.Interfaces.SuccessCallback;
+import com.news.goodlife.Models.DayCashflowModel;
+import com.news.goodlife.Models.MultiDayCashflowModel;
 import com.news.goodlife.Processing.Models.DayDataModel;
 import com.news.goodlife.R;
 import com.news.goodlife.Singletons.SingletonClass;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -67,6 +71,18 @@ public class InflateDayDetails {
             root = view;
             view.setAlpha(0);
 
+            //Draw th Week Graph
+            CustomBezierGraph weekGraph = view.findViewById(R.id.week_graph);
+            weekGraph.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+
+                    weekGraph.setMultiDayData(testBezier(), new Date());
+                    weekGraph.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+            });
+
+
             Log.i("AsyncInflation", "Done");
             monthFlex = view.findViewById(R.id.month_flex);
 
@@ -109,18 +125,43 @@ public class InflateDayDetails {
 
         }
     };
+
+
+    private MultiDayCashflowModel testBezier() {
+        MultiDayCashflowModel  multidaysData = new MultiDayCashflowModel();
+        DayCashflowModel dayData;
+        Date testDate = new Date();
+        //create 7 Days Test Data
+        dayData = new DayCashflowModel(testDate,2000);
+        multidaysData.addDayCashflow(dayData);
+        dayData = new DayCashflowModel(testDate,1400);
+        multidaysData.addDayCashflow(dayData);
+        dayData = new DayCashflowModel(testDate,600);
+        multidaysData.addDayCashflow(dayData);
+        dayData = new DayCashflowModel(testDate,1200);
+        multidaysData.addDayCashflow(dayData);
+        dayData = new DayCashflowModel(testDate,1700);
+        multidaysData.addDayCashflow(dayData);
+        dayData = new DayCashflowModel(testDate,2500);
+        multidaysData.addDayCashflow(dayData);
+        dayData = new DayCashflowModel(testDate,1600);
+        multidaysData.addDayCashflow(dayData);
+
+        return multidaysData;
+
+    }
     int iterationCount = 1;
     //View rootTrans;
     private void inflateTransactions(ViewGroup transactionCont, DayDataModel dayDataModel){
         int noOfTransactions = dayDataModel.getDayTransactionsModel().getDaysTransactions().size();
         Log.i("Nof", " - "+noOfTransactions);
-        View notrans = module_trans.findViewById(R.id.no_transactions);
+
 
         if(noOfTransactions == 0){
 
         }
         else{
-            notrans.setVisibility(View.GONE);
+
             for(TransactionModel transaction: dayDataModel.getDayTransactionsModel().getDaysTransactions()){
 
                 int layout;

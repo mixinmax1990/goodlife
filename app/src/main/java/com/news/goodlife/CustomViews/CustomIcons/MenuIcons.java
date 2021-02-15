@@ -181,13 +181,13 @@ public class MenuIcons extends FrameLayout {
                 (int)(width - iconMargin)
         );
         menuIcon.setFilterBitmap(true);
-        menuIcon.draw(canvas);
+        //menuIcon.draw(canvas);
 
         menuText.setTextSize(11 * getResources().getDisplayMetrics().scaledDensity);
         menuText.setTextAlign(Paint.Align.CENTER);
         //menuText.setColor(Color.WHITE);
         menuText.setAlpha(255);
-        canvas.drawText(menuName, (int)(width/2), (int)(width) - (textMargin / 2), menuText);
+        //canvas.drawText(menuName, (int)(width/2), (int)(width) - (textMargin / 2), menuText);
 
 
         if(menuName.equals("Wallet")) {

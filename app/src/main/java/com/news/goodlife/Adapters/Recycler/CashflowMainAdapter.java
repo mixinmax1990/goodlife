@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.news.goodlife.CustomViews.BulletPointTextView;
+import com.news.goodlife.CustomViews.CustomBezierGraph;
 import com.news.goodlife.CustomViews.CustomEntries.LabeledEntryView;
 import com.news.goodlife.CustomViews.CustomEntries.PopUpFrame;
 import com.news.goodlife.CustomViews.IconDoughnutView;
@@ -45,7 +46,9 @@ import com.news.goodlife.Fragments.WalletMultiDaysFragment;
 import com.news.goodlife.Functions.InflateDayDetails;
 import com.news.goodlife.Interfaces.WalletDatabaseEvents;
 import com.news.goodlife.Models.CalendarLayoutDay;
+import com.news.goodlife.Models.DayCashflowModel;
 import com.news.goodlife.Models.ModuleCoords;
+import com.news.goodlife.Models.MultiDayCashflowModel;
 import com.news.goodlife.Models.RelationshipMap;
 import com.news.goodlife.PopWindowData.CashCategoryData;
 import com.news.goodlife.Processing.Models.DayDataModel;
@@ -56,6 +59,7 @@ import com.news.goodlife.Singletons.SingletonClass;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,7 +71,6 @@ import java.util.Random;
 
 public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapter.ViewHolder>{
 
-    String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
     Context context;
     int position;
     FrameLayout popWindow;
@@ -115,6 +118,8 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
         loadPopFragments();
         loadBudgets();
 
+        testBezier();
+
         //Get Color Attributes
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = context.getTheme();
@@ -126,6 +131,29 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
         theme.resolveAttribute(R.attr.textColorPrimary, typedValue, true);
         unselectedStroke = typedValue.data;
 
+
+    }
+
+    MultiDayCashflowModel multidaysData;
+    private void testBezier() {
+        multidaysData = new MultiDayCashflowModel();
+        DayCashflowModel dayData;
+        Date testDate = new Date();
+        //create 7 Days Test Data
+        dayData = new DayCashflowModel(testDate,2000);
+        multidaysData.addDayCashflow(dayData);
+        dayData = new DayCashflowModel(testDate,1400);
+        multidaysData.addDayCashflow(dayData);
+        dayData = new DayCashflowModel(testDate,600);
+        multidaysData.addDayCashflow(dayData);
+        dayData = new DayCashflowModel(testDate,1200);
+        multidaysData.addDayCashflow(dayData);
+        dayData = new DayCashflowModel(testDate,1700);
+        multidaysData.addDayCashflow(dayData);
+        dayData = new DayCashflowModel(testDate,2500);
+        multidaysData.addDayCashflow(dayData);
+        dayData = new DayCashflowModel(testDate,1600);
+        multidaysData.addDayCashflow(dayData);
 
     }
 
@@ -240,6 +268,18 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                 case "day":
 
                     TextView dayNameTV, dayDateTV, dayBalance;
+                    CustomBezierGraph bezierGraph = itemView.findViewById(R.id.cover_graph);
+
+                    bezierGraph.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+
+                            bezierGraph.setMultiDayData(multidaysData, new Date());
+
+                            bezierGraph.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        }
+                    });
+
 
                     itemView.setTag(""+pos);
                     dayNameTV = itemView.findViewById(R.id.overview_day);

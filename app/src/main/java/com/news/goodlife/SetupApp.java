@@ -5,6 +5,7 @@ import android.util.Log;
 import com.news.goodlife.Data.Local.Models.Financial.AccountModel;
 import com.news.goodlife.Data.Local.Models.Financial.BalanceModel;
 import com.news.goodlife.Data.Local.Models.Financial.CounterPartyModel;
+import com.news.goodlife.Data.Local.Models.Financial.TransactionModel;
 import com.news.goodlife.Data.Remote.Klarna.Interfaces.Callbacks.KlarnaResponseCallback;
 import com.news.goodlife.Data.Remote.Klarna.Models.AccountDataModels.KlarnaTransactionModel;
 import com.news.goodlife.Data.Remote.Klarna.Models.Consent.POSTgetConsentDataModel;
@@ -22,30 +23,75 @@ public class SetupApp {
 
     SingletonClass singletonClass = SingletonClass.getInstance();
     SuccessCallback startAcivityCallback;
+    boolean test = true;
 
     public SetupApp(SuccessCallback startAcivityCallback) {
         this.startAcivityCallback = startAcivityCallback;
 
         singletonClass.setSubscribed(checkSubscription());
 
-        checkBankConsent(new SuccessCallback() {
-            @Override
-            public void success() {
+        //Load Test Data
+        if(test){
 
-                startLogic();
+            startLogic();
+            /*TestData(new SuccessCallback() {
+                @Override
+                public void success() {
+                    startLogic();
+                }
 
-            }
+                @Override
+                public void error() {
 
-            @Override
-            public void error() {
-                startAcivityCallback.error();
+                }
+            });*/
+        }
+        else{
+            checkBankConsent(new SuccessCallback() {
+                @Override
+                public void success() {
 
-            }
-        });
+                    startLogic();
 
+                }
 
+                @Override
+                public void error() {
+                    startAcivityCallback.error();
+
+                }
+            });
+
+        }
 
         singletonClass.setCurrencySymbol("€");
+    }
+
+    private void TestData(SuccessCallback callback){
+
+        String accountID = "1234";
+        AccountModel testAccount = new AccountModel();
+        testAccount.setAccount_number(accountID);
+        testAccount.setAccount_type("Some");
+        testAccount.setAlias("Some");
+        testAccount.setBank_address_country("null");
+        testAccount.setBic("null");
+        testAccount.setIban("null");
+        testAccount.setKlarna_id(accountID);
+        testAccount.setTransfer_type("null");
+
+        singletonClass.getDatabaseController().AccountsController.addAccount(testAccount);
+
+
+        MyAccountData myData = new MyAccountData(accountID);
+
+        for(TransactionModel transaction: myData.getMyTestTransactions()){
+
+            singletonClass.getDatabaseController().TransactionController.addTransaction(transaction);
+
+        }
+        callback.success();
+
     }
 
     LogicController logicController;
@@ -64,7 +110,6 @@ public class SetupApp {
             }
         });
     }
-
 
     private boolean checkSubscription(){
         boolean connected = false;

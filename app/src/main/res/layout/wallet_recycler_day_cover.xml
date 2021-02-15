@@ -11,7 +11,6 @@
         app:layout_constraintDimensionRatio="1:1"
         app:borderCustomRadius="50"
         android:layout_margin="10dp"
-        android:padding="26dp"
         android:id="@+id/overview_cover"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -19,15 +18,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Monday"
+            android:textColor="#F0F0F0"
             android:fontFamily="@font/product_sans_regular"
             android:id="@+id/overview_day"
+            android:layout_marginTop="26dp"
+            android:layout_marginStart="26dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:textSize="24sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/overview_day"
             app:layout_constraintTop_toBottomOf="@id/overview_day"
             android:text="November 7, 2021"
             android:fontFamily="@font/product_sans_regular"
@@ -51,6 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2340,00€"
+            android:textColor="#F0F0F0"
             android:fontFamily="@font/product_sans_regular"
             android:textSize="28sp"
             android:id="@+id/cover_balance"
@@ -70,6 +73,14 @@
             android:layout_marginTop="20dp"
             android:alpha=".6"
             />
+        <com.news.goodlife.CustomViews.CustomBezierGraph
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/cover_graph"
+            app:layout_constraintDimensionRatio="10:4"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
 
     </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>

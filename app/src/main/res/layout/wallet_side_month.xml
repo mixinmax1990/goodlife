@@ -11,7 +11,7 @@
 
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -26,7 +26,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -41,7 +41,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -56,7 +56,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -71,7 +71,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -86,7 +86,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -101,7 +101,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -116,7 +116,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -131,7 +131,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -146,7 +146,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -161,7 +161,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -176,7 +176,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -191,7 +191,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -206,7 +206,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -221,7 +221,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -236,7 +236,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -251,7 +251,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -266,7 +266,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -281,7 +281,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -296,7 +296,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -311,7 +311,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -326,7 +326,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -341,7 +341,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -356,7 +356,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -371,7 +371,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -386,7 +386,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -401,7 +401,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -416,7 +416,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -431,7 +431,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -446,7 +446,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -461,7 +461,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -476,7 +476,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView
@@ -491,7 +491,7 @@
     </com.news.goodlife.CustomViews.CustomEntries.BorderRoundView>
     <com.news.goodlife.CustomViews.CustomEntries.BorderRoundView android:layout_width="20dp"
         android:layout_height="20dp"
-        app:backgroundCustomColor="#212226"
+        app:backgroundCustomColor="#3C424A"
         app:borderCustomRadius="15"
         android:layout_marginBottom="5dp">
         <TextView

@@ -312,8 +312,6 @@
                         android:layout_marginTop="3dp"
                         android:layout_marginEnd="2dp"
                         android:layout_marginStart="2dp"/>
-
-
                     <!--?attr/standoutButton-->
                     <com.news.goodlife.CustomViews.CustomIcons.WalletIcon
                         android:layout_width="0dp"
@@ -335,6 +333,19 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toEndOf="@id/buttonWallet"
                         app:layout_constraintEnd_toStartOf="@id/magic_button"/>
+                    <com.news.goodlife.CustomViews.CustomBezierGraph
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:id="@+id/analysis_icon_graph"
+                        app:layout_constraintStart_toStartOf="@id/buttonGoals"
+                        app:layout_constraintBottom_toBottomOf="@id/buttonGoals"
+                        app:layout_constraintTop_toTopOf="@id/buttonGoals"
+                        app:layout_constraintEnd_toEndOf="@id/buttonGoals"
+                        />
                     <com.news.goodlife.CustomViews.CustomIcons.MenuIcons
                         android:layout_width="0dp"
                         android:layout_height="0dp"
@@ -345,6 +356,16 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toEndOf="@id/magic_button"
                         app:layout_constraintEnd_toStartOf="@id/buttonHub"/>
+                    <com.news.goodlife.CustomViews.BudgetCircleMini
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="10dp"
+                        app:layout_constraintDimensionRatio="1:1"
+                        android:id="@+id/budget_icon"
+                        app:layout_constraintStart_toStartOf="@id/buttonBudgets"
+                        app:layout_constraintEnd_toEndOf="@id/buttonBudgets"
+                        app:layout_constraintTop_toTopOf="@id/buttonBudgets"
+                        app:layout_constraintBottom_toBottomOf="@id/buttonBudgets"/>
                     <com.news.goodlife.CustomViews.CustomIcons.MenuIcons
                         android:layout_width="0dp"
                         android:layout_height="0dp"
@@ -355,6 +376,16 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toEndOf="@id/buttonBudgets"
                         app:layout_constraintEnd_toEndOf="parent"/>
+                    <com.news.goodlife.CustomViews.CustomIcons.FlagGoalIcon
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginBottom="10dp"
+                        app:layout_constraintStart_toStartOf="@id/buttonHub"
+                        app:layout_constraintTop_toTopOf="@id/buttonHub"
+                        app:layout_constraintBottom_toBottomOf="@id/buttonHub"
+                        app:layout_constraintEnd_toEndOf="@id/buttonHub"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </eightbitlab.com.blurview.BlurView>
 

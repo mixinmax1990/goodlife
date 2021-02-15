@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RadialGradient;
@@ -31,7 +32,7 @@ public class WalletIcon extends FrameLayout {
 
     boolean Night = true;
 
-    Paint menuText, menuBackground, cardBackground, pocketColor;
+    Paint menuText, menuBackground, cardBackground, pocketColor, pocketCutThickPaint, pocketCutSlimPaint;
     Path pocketCutout, bgPath;
     Bitmap cardOneLogo, cardTwoLogo, ardThreeLogo;
     String menuName = "Wallet";
@@ -47,6 +48,7 @@ public class WalletIcon extends FrameLayout {
     RectF rectFrame;
 
     @ColorInt int baseBG, gradStart, gradEnd;
+    int walletCutStroke = 25;
 
 
     public WalletIcon(@NonNull Context context) {
@@ -55,6 +57,8 @@ public class WalletIcon extends FrameLayout {
 
     public WalletIcon(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+
+
 
         setPaints();
     }
@@ -70,14 +74,25 @@ public class WalletIcon extends FrameLayout {
 
         cardColor = new Paint();
         cardColor.setColor(Color.WHITE);
+        cardColor.setAlpha(255);
         cardColor.setAntiAlias(true);
         cardColor.setShadowLayer(12,0,0,Color.parseColor("#66000000"));
+
 
         pocketColor = new Paint();
         pocketColor.setStyle(Paint.Style.FILL);
         pocketColor.setColor(Color.RED);
         pocketColor.setAntiAlias(true);
         pocketColor.setShadowLayer(12,0,0,Color.parseColor("#66000000"));
+
+        pocketCutThickPaint = new Paint();
+        pocketCutThickPaint.setStyle(Paint.Style.STROKE);
+        pocketCutThickPaint.setStrokeWidth(3);
+        pocketCutThickPaint.setPathEffect(new DashPathEffect(new float[]{8, 8, 8, 8}, 0));
+        pocketCutThickPaint.setColor(Color.BLACK);
+        pocketCutThickPaint.setAlpha(100);
+        pocketCutThickPaint.setAntiAlias(true);
+
 
 
         bgPath = new Path();
@@ -108,9 +123,7 @@ public class WalletIcon extends FrameLayout {
         bgPath.addRoundRect(rectFrame, 40, 40, Path.Direction.CW);
         bgPath.close();
 
-        menuBackground.setShader(new RadialGradient((float)getWidth(), (float)getHeight(),
-                (float)getHeight()*1.5f, Color.parseColor("#17181A"), Color.parseColor("#373C41"),  Shader.TileMode.REPEAT));
-
+        menuBackground.setColor(Color.parseColor("#444951"));
         menuBackground.setAntiAlias(true);
 
         canvas.drawRoundRect(rectFrame, 40, 40, menuBackground);
@@ -118,7 +131,8 @@ public class WalletIcon extends FrameLayout {
 
         //Draw Cards
         banks.add("Volksbank");
-        banks.add("Sparkasse");
+        banks.add("Volksbank");
+
 
         setCardBanks(banks, canvas);
 
@@ -149,7 +163,10 @@ public class WalletIcon extends FrameLayout {
 
             Bitmap icon = getBankIcon(bank);
 
+
             drawCard(canvas, count, icon);
+
+
         }
 
     }
@@ -184,6 +201,11 @@ public class WalletIcon extends FrameLayout {
 
     private void drawCutout(Canvas canvas) {
 
+        int cutMargin = walletCutStroke / 2;
+
+        Path cutThick = new Path();
+        Path cutSlim = new Path();
+
         centerX = getWidth() / 2;
         float spread;
 
@@ -192,7 +214,10 @@ public class WalletIcon extends FrameLayout {
 
         pocketCutout = new Path();
         pocketCutout.moveTo(0, cutoutTop);
+        cutThick.moveTo(0, cutoutTop + cutMargin);
+
         pocketCutout.lineTo(centerX - (int)(cutoutWidth/2), cutoutTop);
+        cutThick.lineTo(centerX - (int)(cutoutWidth/2), cutoutTop + cutMargin);
 
         spread = (int)(cutoutWidth / 4);
 
@@ -207,6 +232,7 @@ public class WalletIcon extends FrameLayout {
         y1 = y2;
 
         pocketCutout.cubicTo(x0,y0,x1,y1,x2,y2);
+        cutThick.cubicTo(x0,y0 + cutMargin,x1,y1 + cutMargin,x2,y2 + cutMargin);
 
         //Second Bezier
 
@@ -220,17 +246,19 @@ public class WalletIcon extends FrameLayout {
         y1 = y2;
 
         pocketCutout.cubicTo(x0,y0,x1,y1,x2,y2);
+        cutThick.cubicTo(x0,y0 + cutMargin,x1,y1 + cutMargin,x2,y2 + cutMargin);
 
 
         pocketCutout.lineTo(getWidth(), cutoutTop);
+        cutThick.lineTo(getWidth(), cutoutTop + cutMargin);
+
         pocketCutout.lineTo(getWidth(), getHeight());
         pocketCutout.lineTo(0, getHeight());
         pocketCutout.close();
 
-        pocketColor.setShader(new RadialGradient((float)getWidth(), (float)getHeight(),
-                (float)getHeight()*1.5f, Color.parseColor("#1C1D20"), Color.parseColor("#40464C"),  Shader.TileMode.REPEAT));
-
+        pocketColor.setColor(Color.parseColor("#444951"));
         canvas.drawPath(pocketCutout, pocketColor);
+        canvas.drawPath(cutThick, pocketCutThickPaint);
 
     }
 
@@ -276,7 +304,7 @@ public class WalletIcon extends FrameLayout {
         int iconWidth = singletonClass.dpToPx(10);
         int iconCenterX = left + (cardWidth/2);
         int iconCenterY = top + (cardHeight/2);
-        canvas.drawBitmap(icon, null, new Rect(iconCenterX - iconWidth,(iconCenterY - iconWidth) - topGravity,iconCenterX + iconWidth,(iconCenterY + iconWidth) - topGravity), null);
+        //canvas.drawBitmap(icon, null, new Rect(iconCenterX - iconWidth,(iconCenterY - iconWidth) - topGravity,iconCenterX + iconWidth,(iconCenterY + iconWidth) - topGravity), null);
 
     }
 }

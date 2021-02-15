@@ -6,11 +6,11 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MonthCashflowModel {
+public class MultiDayCashflowModel {
     List<DayCashflowModel> MonthCashflow;
     String monthName;
 
-    public MonthCashflowModel() {
+    public MultiDayCashflowModel() {
         MonthCashflow = new ArrayList<>();
     }
 

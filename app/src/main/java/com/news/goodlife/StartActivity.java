@@ -54,6 +54,8 @@ import com.google.android.gms.vision.text.Text;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.news.goodlife.CustomViews.BudgetCircleMini;
+import com.news.goodlife.CustomViews.CustomBezierGraph;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
 import com.news.goodlife.CustomViews.CustomEntries.PageIndicatorBar;
 import com.news.goodlife.CustomViews.CustomIcons.FunctionsIcon;
@@ -82,6 +84,8 @@ import com.news.goodlife.Interfaces.SuccessCallback;
 import com.news.goodlife.Interfaces.WalletDatabaseEvents;
 import com.news.goodlife.LayoutManagers.MultiDaysLinearLayoutManager;
 import com.news.goodlife.Models.CalendarLayoutDay;
+import com.news.goodlife.Models.DayCashflowModel;
+import com.news.goodlife.Models.MultiDayCashflowModel;
 import com.news.goodlife.Singletons.SingletonClass;
 import com.news.goodlife.Tools.CameraScan.CameraScanFragment;
 import com.news.goodlife.Fragments.WalletMultiDaysFragment;
@@ -152,6 +156,8 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
     //MenuIcons
     MenuIcons goalsBTN, budgetsBTN, hubBTN;
+    CustomBezierGraph analysis_icon_bezier;
+    BudgetCircleMini budgetIcon;
     FunctionsIcon magicButton;
     WalletIcon walletBTN;
     PageIndicatorBar walletPageIndicator;
@@ -203,7 +209,9 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
 
         walletBTN = findViewById(R.id.buttonWallet);
         goalsBTN = findViewById(R.id.buttonGoals);
+        analysis_icon_bezier = findViewById(R.id.analysis_icon_graph);
         budgetsBTN = findViewById(R.id.buttonBudgets);
+        budgetIcon = findViewById(R.id.budget_icon);
         hubBTN = findViewById(R.id.buttonHub);
         magicButton = findViewById(R.id.magic_button);
         walletPageIndicator = findViewById(R.id.wallet_page_indicator);
@@ -339,6 +347,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
             }
         });
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     private void biometricAuthentication() {
@@ -1261,6 +1270,26 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
                 //Wait a couple of seconds
 
 
+            }
+        });
+
+        analysis_icon_bezier.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                analysis_icon_bezier.setAnalysisIconBezier();
+
+                analysis_icon_bezier.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+
+        budgetIcon.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                budgetIcon.setIcon();
+
+                budgetIcon.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
 

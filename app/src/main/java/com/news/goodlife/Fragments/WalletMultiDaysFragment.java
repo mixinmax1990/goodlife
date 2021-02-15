@@ -5,7 +5,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -16,7 +15,6 @@ import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,44 +24,35 @@ import androidx.annotation.Nullable;
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.Explode;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.news.goodlife.Adapters.Recycler.CashflowMainAdapter;
 import com.news.goodlife.CustomViews.BubbleChartCategories;
 import com.news.goodlife.CustomViews.CustomEntries.BorderRoundView;
-import com.news.goodlife.CustomViews.ElasticEdgeView;
 import com.news.goodlife.CustomViews.LiquidView;
 import com.news.goodlife.CustomViews.MarkedConstraintLayout;
-import com.news.goodlife.CustomViews.MonthCashflowBezier;
 import com.news.goodlife.CustomViews.SpectrumBar;
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
 import com.news.goodlife.Data.Local.Models.Financial.WalletEventModel;
 import com.news.goodlife.Data.Local.Models.WalletEventDayOrderModel;
 import com.news.goodlife.Functions.AsyncGetDaysInMonth;
 import com.news.goodlife.Functions.InflateDayDetails;
-import com.news.goodlife.Functions.InflateSideMonthDay;
 import com.news.goodlife.Interfaces.DaysInMonthCallback;
-import com.news.goodlife.Interfaces.MonthCashflowBezierCallback;
 import com.news.goodlife.Interfaces.SuccessCallback;
 import com.news.goodlife.LayoutManagers.MultiDaysLinearLayoutManager;
 import com.news.goodlife.Models.CalendarLayoutDay;
 import com.news.goodlife.Models.CalendarLayoutMonth;
 import com.news.goodlife.Models.DayCashflowModel;
-import com.news.goodlife.Models.MonthCashflowModel;
-import com.news.goodlife.Models.toCalendarViewTransition;
+import com.news.goodlife.Models.MultiDayCashflowModel;
 import com.news.goodlife.Processing.Models.DayDataModel;
 import com.news.goodlife.R;
 import com.news.goodlife.Singletons.SingletonClass;
 import com.news.goodlife.StartActivity;
-import com.news.goodlife.Transitions.DetailsTransition;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -71,7 +60,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Random;
 
 import eightbitlab.com.blurview.BlurView;
@@ -364,7 +352,7 @@ public class WalletMultiDaysFragment extends Fragment{
 
         if(selectedDayButton != null){
             selectedDayNumber.setTextColor(Color.WHITE);
-            selectedDayButton.dynamicallySetBackgroundColor("#212226");
+            selectedDayButton.dynamicallySetBackgroundColor("#3C424A");
         }
 
         //Get the Date of item at that Position
@@ -526,13 +514,13 @@ public class WalletMultiDaysFragment extends Fragment{
     static float balanceamount = 2011.11f;
     private int todayItemPosition;
     public List<CalendarLayoutDay> allCalendarDays = new ArrayList<>();
-    public List<MonthCashflowModel> bezierData = new ArrayList<>();
+    public List<MultiDayCashflowModel> bezierData = new ArrayList<>();
     private void getCalendarRange(Date selectDate){
 
         //BezierData
 
-        MonthCashflowModel monthCashflowModel = new MonthCashflowModel();
-        bezierData.add(monthCashflowModel);
+        MultiDayCashflowModel multiDayCashflowModel = new MultiDayCashflowModel();
+        bezierData.add(multiDayCashflowModel);
 
         //getThelast
         bezierData.get(bezierData.size()-1);
@@ -693,9 +681,9 @@ public class WalletMultiDaysFragment extends Fragment{
             CalendarLayoutMonth month = new CalendarLayoutMonth(allCalendarDays);
 
             //BezierData start new Month
-            MonthCashflowModel monthCashflowModel = new MonthCashflowModel();
-            monthCashflowModel.setMonthName(day.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
-            bezierData.add(monthCashflowModel);
+            MultiDayCashflowModel multiDayCashflowModel = new MultiDayCashflowModel();
+            multiDayCashflowModel.setMonthName(day.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
+            bezierData.add(multiDayCashflowModel);
 
         }
         day.add(Calendar.DATE, -1);
