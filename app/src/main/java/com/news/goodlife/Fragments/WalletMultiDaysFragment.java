@@ -870,6 +870,7 @@ public class WalletMultiDaysFragment extends Fragment{
                                     try{
                                         AsyncDay.loadBudgets();
                                         fullyExpandedDetail = true;
+                                        singletonClass.functionsIcon.cashflowMagic();
 
                                         /*toggleSideMonth(false, new SuccessCallback() {
                                             @Override
@@ -969,6 +970,7 @@ public class WalletMultiDaysFragment extends Fragment{
                 }
                 else{
                     //Day is Not visible so expand if required
+                    singletonClass.functionsIcon.noFunction();
                     if(!sideMenuOpened){
                         toggleSideMonth(false, null);
                     }

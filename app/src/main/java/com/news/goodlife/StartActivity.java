@@ -84,8 +84,6 @@ import com.news.goodlife.Interfaces.SuccessCallback;
 import com.news.goodlife.Interfaces.WalletDatabaseEvents;
 import com.news.goodlife.LayoutManagers.MultiDaysLinearLayoutManager;
 import com.news.goodlife.Models.CalendarLayoutDay;
-import com.news.goodlife.Models.DayCashflowModel;
-import com.news.goodlife.Models.MultiDayCashflowModel;
 import com.news.goodlife.Singletons.SingletonClass;
 import com.news.goodlife.Tools.CameraScan.CameraScanFragment;
 import com.news.goodlife.Fragments.WalletMultiDaysFragment;
@@ -95,16 +93,9 @@ import com.news.goodlife.Fragments.PhysicalFragment;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -158,7 +149,6 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
     MenuIcons goalsBTN, budgetsBTN, hubBTN;
     CustomBezierGraph analysis_icon_bezier;
     BudgetCircleMini budgetIcon;
-    FunctionsIcon magicButton;
     WalletIcon walletBTN;
     PageIndicatorBar walletPageIndicator;
 
@@ -213,7 +203,8 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         budgetsBTN = findViewById(R.id.buttonBudgets);
         budgetIcon = findViewById(R.id.budget_icon);
         hubBTN = findViewById(R.id.buttonHub);
-        magicButton = findViewById(R.id.magic_button);
+        singletonClass.functionsIcon = findViewById(R.id.magic_button);
+        singletonClass.functionsIcon.noFunction();
         walletPageIndicator = findViewById(R.id.wallet_page_indicator);
 
         walletCardOne = findViewById(R.id.walletCardOne);
@@ -1232,7 +1223,7 @@ public class StartActivity extends AppCompatActivity implements OnClickedCashflo
         });
 
 
-        magicButton.setOnTouchListener(new View.OnTouchListener() {
+        singletonClass.functionsIcon.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch(motionEvent.getActionMasked()){

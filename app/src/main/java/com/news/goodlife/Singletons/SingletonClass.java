@@ -7,6 +7,7 @@ import android.view.View;
 
 import androidx.fragment.app.FragmentManager;
 
+import com.news.goodlife.CustomViews.CustomIcons.FunctionsIcon;
 import com.news.goodlife.Data.Local.Controller.DatabaseController;
 import com.news.goodlife.Data.Remote.Klarna.Controller.KlarnaRequestController;
 import com.news.goodlife.Data.Remote.Klarna.Models.Consent.POSTgetConsentDataModel;
@@ -21,6 +22,7 @@ public class SingletonClass {
     private static volatile SingletonClass sSoleInstance;
     private static volatile KlarnaRequestController klarna;
     private String currencySymbol;
+    public FunctionsIcon functionsIcon;
 
 
     private List<DayDataModel> LogicData;
