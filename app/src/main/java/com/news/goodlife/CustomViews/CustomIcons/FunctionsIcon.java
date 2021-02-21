@@ -115,14 +115,16 @@ public class FunctionsIcon extends FrameLayout {
         switch(FUNCTION){
 
             case "cashflow":
+                cashflowPaint.setStyle(Paint.Style.FILL);
                 canvas.drawCircle(c1X, c1Y, circlewWidth, cashflowPaint);
                 canvas.drawCircle(c2X, c2Y, circlewWidth, cashflowPaint);
 
                 //Draw Line
-                cashflowPaint.setPathEffect(new DashPathEffect(new float[]{12, 12, 12, 12}, 0));
+                cashflowPaint.setStyle(Paint.Style.STROKE);
 
-                canvas.drawLine(c1X - circlewWidth/2, c1Y -circlewWidth/2, c2X - circlewWidth/2, c2Y - circlewWidth/2, cashflowPaint);
-                cashflowPaint.setPathEffect(null);
+
+                canvas.drawLine(c1X , c1Y , c2X , c2Y, cashflowPaint);
+
                 break;
             default:
                 break;
@@ -135,6 +137,9 @@ public class FunctionsIcon extends FrameLayout {
         menuBackground.setStyle(Paint.Style.STROKE);
         menuBackground.setStrokeWidth(3);
         menuBackground.setPathEffect(new DashPathEffect(new float[]{8, 8, 8, 8}, 0));
+        menuBackground.setColor(Color.parseColor("#444951"));
+        FUNCTION = "none";
+        invalidate();
 
     }
 
@@ -146,9 +151,10 @@ public class FunctionsIcon extends FrameLayout {
 
         cashflowPaint = new Paint();
         cashflowPaint.setStyle(Paint.Style.STROKE);
-        cashflowPaint.setColor(Color.BLACK);
+        cashflowPaint.setColor(Color.WHITE);
         cashflowPaint.setAntiAlias(true);
-        cashflowPaint.setStrokeWidth(8);
+        cashflowPaint.setStrokeWidth(5);
+        cashflowPaint.setPathEffect(new DashPathEffect(new float[]{10, 10, 10, 10}, 0));
 
         circlewWidth = width / 10;
         initc1X = width / 2;
@@ -163,7 +169,15 @@ public class FunctionsIcon extends FrameLayout {
         c2X = initc2X;
         c2Y = initc2Y;
 
+        selectButton();
+
         animateInCashflow();
+    }
+
+    private void selectButton(){
+
+        menuBackground.setColor(Color.parseColor("#7E8998"));
+
     }
 
     private void animateInCashflow() {

@@ -175,9 +175,12 @@ public class InflateDayDetails {
 
 
                 View rootTrans = inflaterNormal.inflate(layout, transactionCont, true);
+                rootTrans = transactionCont.getChildAt(transactionCont.getChildCount() - 1);
                 TextView amount = rootTrans.findViewById(R.id.transaction_amount);
-                Log.i("HashCodeView",""+rootTrans.hashCode()+" No of Children");
+                TextView description = rootTrans.findViewById(R.id.transaction_description);
+                Log.i("HashCodeView",""+rootTrans.hashCode()+" No of Children:" + transactionCont.getChildCount());
                 amount.setText(singletonClass.monefy(transaction.getAmount()));
+                description.setText(transaction.getReference());
                 //((TextView)root.findViewById(R.id.transaction_amount)).setText(singletonClass.monefy(transaction.getAmount()));
                 //((TextView)root.findViewById(R.id.transaction_description)).setText(transaction.getReference());
 

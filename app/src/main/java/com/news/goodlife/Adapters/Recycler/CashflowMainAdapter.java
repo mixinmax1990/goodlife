@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.util.Log;
 import android.util.TypedValue;
@@ -32,6 +33,7 @@ import com.news.goodlife.CustomViews.BulletPointTextView;
 import com.news.goodlife.CustomViews.CustomBezierGraph;
 import com.news.goodlife.CustomViews.CustomEntries.LabeledEntryView;
 import com.news.goodlife.CustomViews.CustomEntries.PopUpFrame;
+import com.news.goodlife.CustomViews.CustomIcons.PlusMinusIcon;
 import com.news.goodlife.CustomViews.IconDoughnutView;
 import com.news.goodlife.CustomViews.LiquidView;
 import com.news.goodlife.CustomViews.RelationshipMapView;
@@ -267,7 +269,9 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
            switch(dayData.getType()){
                 case "day":
 
-                    TextView dayNameTV, dayDateTV, dayBalance;
+                    TextView dayNameTV, dayDateTV, dayBalance, transactionsCount;
+                    CardView transactionCountBackground;
+                    PlusMinusIcon minusIcon, plusIcon;
                     CustomBezierGraph bezierGraph = itemView.findViewById(R.id.cover_graph);
 
                     bezierGraph.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -285,6 +289,11 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
                     dayNameTV = itemView.findViewById(R.id.overview_day);
                     dayDateTV = itemView.findViewById(R.id.overview_date);
                     dayBalance = itemView.findViewById(R.id.cover_balance);
+                    transactionsCount = itemView.findViewById(R.id.transaction_count);
+                    transactionCountBackground = itemView.findViewById(R.id.transaction_card);
+                    plusIcon = itemView.findViewById(R.id.add_symbol);
+                    minusIcon = itemView.findViewById(R.id.substract_symbol);
+
                     //Get The Date Name
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(dayData.getDayDate());
@@ -296,7 +305,35 @@ public class CashflowMainAdapter extends RecyclerView.Adapter<CashflowMainAdapte
 
                     dayDateTV.setText(dayDateString);
 
+                    int noOfTransactions = dayData.getDayTransactionsModel().getDaysTransactions().size();
+                    transactionsCount.setText(""+noOfTransactions);
+                    if(noOfTransactions > 0){
 
+                        transactionCountBackground.setCardBackgroundColor(Color.parseColor("#D3FFFFFF"));
+                        transactionsCount.setTextColor(Color.BLACK);
+
+                    }
+
+                    int allNegative = 0;
+                    int allPositive = 0;
+                    for(TransactionModel transaction: dayData.getDayTransactionsModel().getDaysTransactions()){
+
+                        if(transaction.getType().equals("CREDIT")){
+                            allPositive = allPositive + Integer.parseInt(transaction.getAmount());
+                        }
+                        else{
+                            allNegative = allNegative + Integer.parseInt(transaction.getAmount());
+                        }
+
+
+                    }
+
+                    if(allNegative > 0){
+                        minusIcon.selectIcon();
+                    }
+                    if(allPositive > 0){
+                        plusIcon.selectIcon();
+                    }
 
                     //ViewGroup dayDetailsContainer = itemView.findViewById(R.id.day_detail_container);
                     //AsyncDay = new InflateDayDetails(new AsyncLayoutInflater(context), dayDetailsContainer, dayData);

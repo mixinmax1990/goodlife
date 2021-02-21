@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    app:layout_flexBasisPercent="33%"
+    >
+    <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
+        android:layout_width="match_parent"
+        app:borderCustomRadius="50"
+        android:layout_height="wrap_content"
+
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <com.news.goodlife.CustomViews.BudgetCircleMini
+            android:layout_width="match_parent"
+            android:layout_marginEnd="50dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:id="@+id/budget_circle_mini"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/covered_tranactions"
+            app:layout_constraintStart_toEndOf="@id/budget_circle_mini"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            android:text="6"
+            android:fontFamily="@font/product_sans_regular"
+            android:textColor="#808489"
+            android:textAlignment="center"
+            android:padding="10dp"
+            android:textSize="22sp"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/new_covered_tranactions"
+            app:layout_constraintTop_toBottomOf="@id/covered_tranactions"
+            app:layout_constraintStart_toEndOf="@id/budget_circle_mini"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            android:text="+1"
+            android:fontFamily="@font/product_sans_regular"
+            android:textColor="#ADD581"
+            android:textAlignment="center"
+            android:padding="10dp"
+            android:textSize="15sp"
+            />
+        <TextView
+            app:layout_constraintTop_toBottomOf="@id/budget_circle_mini"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="350.00€"
+            android:textSize="20sp"
+            android:alpha=".7"
+            android:fontFamily="@font/product_sans_regular"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/restbudget_available"/>
+
+        <TextView
+            app:layout_constraintTop_toBottomOf="@id/restbudget_available"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Budget"
+            android:padding="10dp"
+            android:fontFamily="@font/product_sans_regular"
+            android:textSize="13sp"
+            android:textColor="#808489"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:id="@+id/budget_name"/>
+
+    </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
+
+</LinearLayout>

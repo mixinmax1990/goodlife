@@ -266,10 +266,117 @@ public class MyAccountData {
 
 
 
+        //2021
 
+        allTransactions.add(getTransaction(Account_ID,"2021-01-01","AMZNPrime","799","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-01","Monatliche Kontoführungsgebühren","500","DEBIT"));
 
+        allTransactions.add(getTransaction(Account_ID,"2021-01-02","WorldRemit","4099","DEBIT"));
 
+        allTransactions.add(getTransaction(Account_ID,"2021-01-02","AWS EMEA","3805","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-02","SSB","397","DEBIT"));
 
+        allTransactions.add(getTransaction(Account_ID,"2021-01-05","Überweisung aus Kartenguthaben","60","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-05","Dampforado","3115","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-06","PayPal","599","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-07","Lidl","5169","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-07","Prime Video","399","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-09","PayPal","4350","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-12","Penny","715","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-12","Zalando","10695","CREDIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-12","Überweisung Kartenguthaben","60","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-12","WorldRemit","5099","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-13","PayPal","2000","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-14","Penny","1076","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-15","PayPal","4860","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-16","Michael Bruecken K","4107","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-18","Disney Plus","699","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-18","PayPal","2000","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-18","Google Payments","115","CREDIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-19","Überweisung Kartenguthaben","60","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-19","WorldRemit","12099","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-19","Persona","173350","CREDIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-20","Netflix","1599","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-20","SPK Arnsberg","15000","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-21","PayPal","1000","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-21","GOOGLE","199","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-21","Bargeldabhebung Automat","500","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-21","E-Plus","999","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-21","E-Plus","999","CREDIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-22","PayPal","3650","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-23","Michael Brueckeen K","4786","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-23","Jahresentgelt","6800","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-23","PayPal","7390","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-24","Überweisung Kartenguthaben","60","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-24","DB Vertrieb","999","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-25","AMZNPrime","20","CREDIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-26","Google Pay","549","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-27","Kaufland","17873","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-28","Google Stadia","999","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-28","Überweisung aus Kartenguthaben","60","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-28","Christine Rau","113702","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-28","Überweisung aus Kartneguthaben","60","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-28","1und1 IONOS","2519","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-01-28","Persona","92500","CREDIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-01-30","PayPal","1299","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-02-01","AMZNPRIME","799","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-02-01","Monatliche Kontoführung","500","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-02-01","Überweisung aus Kartenguthaben","60","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-02-01","WorldRemit","15099","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-02-01","Überweisung Kartenguthaben","60","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-02-01","Fabian Feyer","370","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-02-02","SSB","11800","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-02-03","AWS","4622","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-02-05","AMZN MKTP","3995","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-02-07","Überweisung Kartneguthaben","60","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-02-07","PPPRO Payment","15399","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-02-08","PayPal","1500","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-02-08","PayPal","1500","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-02-15","Kaufland","14425","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-02-16","PayPal","2000","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-02-16","Persona","125826","CREDIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-02-16","Überweisung aus Kartenguthabben","60","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-02-16","PPRO Payment","30399","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-02-17","Disney PLus","699","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-02-17","Überweisung aus Kartenguthaben","60","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-02-17","PPRO Payment","30399","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-02-17","SPARDA BANK","7000","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-02-18","Bargeldabhebung am Automat","500","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-02-18","CRO Internet","11619","DEBIT"));
+
+        allTransactions.add(getTransaction(Account_ID,"2021-02-19","Netflix","1599","DEBIT"));
+        allTransactions.add(getTransaction(Account_ID,"2021-02-19","PPRO Payment","30399","CREDIT"));
 
         return allTransactions;
     }

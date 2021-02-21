@@ -1032,6 +1032,7 @@ public class WalletMultiDaysFragment extends Fragment{
                     }
                 }
                 else{
+                    singletonClass.functionsIcon.noFunction();
                     if(!sideMenuOpened){
                         toggleSideMonth(false, null);
                     }

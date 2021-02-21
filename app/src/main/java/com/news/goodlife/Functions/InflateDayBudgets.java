@@ -1,6 +1,5 @@
 package com.news.goodlife.Functions;
 
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -8,11 +7,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
-import androidx.cardview.widget.CardView;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.news.goodlife.CustomViews.BudgetCircleMini;
-import com.news.goodlife.CustomViews.IconDoughnutView;
 import com.news.goodlife.Data.Local.Models.Financial.BudgetCategoryModel;
 import com.news.goodlife.Data.Local.Models.Financial.BudgetModel;
 import com.news.goodlife.Interfaces.SuccessCallback;
@@ -30,10 +27,22 @@ public class InflateDayBudgets {
 
     public InflateDayBudgets(AsyncLayoutInflater inflater, ViewGroup parent) {
 
+        List<BudgetModel> allBudgets = singletonMain.getDatabaseController().BudgetController.getAllBudgets();
+        int pos = 1;
+        for(BudgetModel budget: allBudgets){
+            inflateBudget(inflater, budget, parent, pos);
+            pos++;
+            if(pos == 4){
+                pos = 1;
+            }
+        }
+
+
+
         List<BudgetCategoryModel> allCategories = singletonMain.getDatabaseController().BudgetCategoryController.getAllBudgetCategories();
 
 
-        for(BudgetCategoryModel budgetCategory: allCategories){
+        /*for(BudgetCategoryModel budgetCategory: allCategories){
 
             final String catname = budgetCategory.getCatname();
             final String catid = budgetCategory.getId();
@@ -93,10 +102,73 @@ public class InflateDayBudgets {
 
                 }
             });
-        }
+        }*/
     }
 
     int testprogress = 110;
+    private void inflateBudget(AsyncLayoutInflater inflater, BudgetModel budget, ViewGroup parent, int pos){
+
+
+        inflater.inflate(R.layout.budget_flexitem_3rd, parent, new AsyncLayoutInflater.OnInflateFinishedListener() {
+            @Override
+            public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
+
+                paddView(pos, view);
+
+                testprogress = testprogress - 10;
+                BudgetCircleMini budgetCircleMini = view.findViewById(R.id.budget_circle_mini);
+                budgetCircleMini.setMonths(Integer.parseInt(budget.getMonths()));
+                budgetCircleMini.setPercentage(testprogress);
+
+                TextView budgetName = view.findViewById(R.id.budget_name);
+                budgetName.setText(budget.getName());
+
+                TextView remaining = view.findViewById(R.id.restbudget_available);
+                remaining.setText(singletonMain.monefy(budget.amount));
+
+                FlexboxLayout.LayoutParams lp = (FlexboxLayout.LayoutParams) view.getLayoutParams();
+                lp.setFlexBasisPercent(.333f);
+                view.setLayoutParams(lp);
+
+                parent.addView(view);
+                singletonMain.toggleFadeView(true, view, new SuccessCallback() {
+                    @Override
+                    public void success() {
+
+                    }
+
+                    @Override
+                    public void error() {
+
+                    }
+                });
+
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        singletonMain.changeFragment.data = new ArrayList<>();
+                        singletonMain.changeFragment.getData().add(budget.getId());
+                        singletonMain.changeFragment.setValue("BudgetModule");
+                    }
+                });
+            }
+
+            private void paddView(int pos, View view) {
+
+                if(pos == 1){
+                    view.setPadding(0,singletonMain.dpToPx(3),singletonMain.dpToPx(2),0);
+                }
+                else if(pos == 2){
+                    view.setPadding(singletonMain.dpToPx(1),singletonMain.dpToPx(3),singletonMain.dpToPx(1),0);
+                }
+                else{
+                    view.setPadding(singletonMain.dpToPx(2),singletonMain.dpToPx(3),0,0);
+                }
+            }
+        });
+    }
+
+
     private void inflateBudget(AsyncLayoutInflater inflater, BudgetModel budget, ViewGroup parent, boolean bigCategory){
 
         inflater.inflate(R.layout.budget_flexitem_mini, parent, new AsyncLayoutInflater.OnInflateFinishedListener() {

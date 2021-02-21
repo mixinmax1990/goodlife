@@ -2,6 +2,7 @@
 <com.news.goodlife.CustomViews.MarkedConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="40dp"
     android:paddingBottom="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -36,6 +37,86 @@
             android:id="@+id/overview_date"
             android:textSize="13sp"
             android:alpha=".6"/>
+
+        <com.news.goodlife.CustomViews.CustomIcons.PlusMinusIcon
+            android:layout_width="24dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="26dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:tag="minus"
+            android:alpha="1"
+            android:id="@+id/substract_symbol"
+            app:layout_constraintTop_toBottomOf="@id/overview_date"
+            app:layout_constraintStart_toStartOf="@id/negative_value"
+            app:layout_constraintEnd_toEndOf="@id/negative_value"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/product_sans_regular"
+            android:text="€134.00"
+            android:textColor="#808489"
+            android:id="@+id/negative_value"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toBottomOf="@id/substract_symbol"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="18sp"
+            android:paddingTop="10dp"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:id="@+id/transactions_center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:id="@+id/transaction_card"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/substract_symbol"
+            android:outlineProvider="none"
+            app:layout_constraintDimensionRatio="1:1"
+            app:cardBackgroundColor="#444951"
+            app:cardCornerRadius="50dp"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="@id/positive_value">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2"
+            android:id="@+id/transaction_count"
+            android:textColor="#E1E8EF"
+            android:layout_margin="10dp"
+            android:textAlignment="center"
+            android:fontFamily="@font/product_sans_bold"
+            android:textSize="24sp"
+            />
+        </androidx.cardview.widget.CardView>
+        <com.news.goodlife.CustomViews.CustomIcons.PlusMinusIcon
+            android:layout_width="24dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="26dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:tag="plus"
+            android:id="@+id/add_symbol"
+            android:alpha="1"
+            app:layout_constraintTop_toBottomOf="@id/overview_date"
+            app:layout_constraintEnd_toEndOf="@id/positive_value"
+            app:layout_constraintStart_toStartOf="@id/positive_value"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/product_sans_regular"
+            android:text="€434.00"
+            android:id="@+id/positive_value"
+            android:textColor="#808489"
+            app:layout_constraintTop_toBottomOf="@id/add_symbol"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"
+            android:textSize="18sp"
+            android:paddingTop="10dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,7 +124,7 @@
             android:fontFamily="@font/product_sans_regular"
             android:alpha=".6"
             android:textSize="12sp"
-            app:layout_constraintTop_toBottomOf="@id/overview_date"
+            app:layout_constraintBottom_toTopOf="@id/cover_balance"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="20dp"
@@ -57,21 +138,9 @@
             android:fontFamily="@font/product_sans_regular"
             android:textSize="28sp"
             android:id="@+id/cover_balance"
-            app:layout_constraintTop_toBottomOf="@id/cover_balance_headline"
+            app:layout_constraintBottom_toTopOf="@id/cover_graph"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-0,00€"
-            android:fontFamily="@font/product_sans_regular"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cover_balance"
-            android:textSize="24dp"
-            android:layout_marginTop="20dp"
-            android:alpha=".6"
             />
         <com.news.goodlife.CustomViews.CustomBezierGraph
             android:layout_width="match_parent"

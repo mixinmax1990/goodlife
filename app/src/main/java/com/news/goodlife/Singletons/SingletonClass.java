@@ -167,6 +167,10 @@ public class SingletonClass {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 
+    public int dpToPx(float dp) {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
     boolean Subscribed;
 
     public boolean isSubscribed() {
