@@ -253,10 +253,10 @@ public class SingletonClass {
         String moneyfied;
 
         if(klarnaAmount.length() > 2){
-            moneyfied = getCurrencySymbol() + new StringBuilder(klarnaAmount).insert(klarnaAmount.length()-2, ".").toString();
+            moneyfied = new StringBuilder(klarnaAmount).insert(klarnaAmount.length()-2, ".").toString() +  getCurrencySymbol();
         }
         else{
-            moneyfied = "€0,00";
+            moneyfied = "0.00€";
         }
 
 

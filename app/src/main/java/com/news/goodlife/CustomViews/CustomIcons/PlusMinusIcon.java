@@ -96,10 +96,11 @@ public class PlusMinusIcon extends View {
     private void drawPlus(Canvas canvas) {
         canvas.drawRoundRect(minusRect, 20,20,stroke);
         canvas.drawRoundRect(plusRect, 20,20,stroke);
+
     }
 
     int colorInt;
-    int alpha = 50;
+    int alpha = 255;
     public void selectIcon(){
 
         colorInt = Color.parseColor("#FFFFFF");

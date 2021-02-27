@@ -264,7 +264,26 @@
         android:visibility="gone"
         android:id="@+id/previewImage"/>
 
-
+    <!-- Test new Menu -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:elevation="107dp"
+        android:outlineProvider="none"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="?attr/backgroundSecondary">
+        <com.news.goodlife.CustomViews.BudgetCircleMini
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="10dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <com.news.goodlife.CustomViews.CustomBackground.BehindMenuView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -360,8 +379,8 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_margin="10dp"
-                        app:layout_constraintDimensionRatio="1:1"
                         android:id="@+id/budget_icon"
+                        app:layout_constraintDimensionRatio="1:1"
                         app:layout_constraintStart_toStartOf="@id/buttonBudgets"
                         app:layout_constraintEnd_toEndOf="@id/buttonBudgets"
                         app:layout_constraintTop_toTopOf="@id/buttonBudgets"

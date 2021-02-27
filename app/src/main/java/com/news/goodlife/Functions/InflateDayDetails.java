@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -15,7 +16,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
 
+import com.news.goodlife.CustomViews.BudgetCircleMini;
+import com.news.goodlife.CustomViews.CashflowBubble;
 import com.news.goodlife.CustomViews.CustomBezierGraph;
+import com.news.goodlife.CustomViews.CustomEntries.PopUpFrame;
+import com.news.goodlife.CustomViews.CustomIcons.FlagGoalIcon;
 import com.news.goodlife.CustomViews.IconDoughnutView;
 import com.news.goodlife.Data.Local.Models.Financial.TransactionModel;
 import com.news.goodlife.Interfaces.SuccessCallback;
@@ -42,12 +47,15 @@ public class InflateDayDetails {
     DayDataModel dayData;
     View cover;
 
+
     int parent_height;
 
     SuccessCallback successCallback;
     AsyncLayoutInflater inflater;
     SingletonClass singletonClass = SingletonClass.getInstance();
     LayoutInflater inflaterNormal;
+    BudgetCircleMini activeBudgets;
+    FlagGoalIcon activeGoals;
 
     public InflateDayDetails(LayoutInflater normalInflater, AsyncLayoutInflater inflator, ViewGroup parent, View cover, @Nullable DayDataModel dayData, SuccessCallback successCallback) {
 
@@ -62,7 +70,7 @@ public class InflateDayDetails {
         this.cover = cover;
 
     }
-
+    PopUpFrame fixedCostModule, fixedIncomeModule;
     int rootheight;
     final AsyncLayoutInflater.OnInflateFinishedListener callback = new AsyncLayoutInflater.OnInflateFinishedListener() {
         @Override
@@ -97,6 +105,27 @@ public class InflateDayDetails {
 
             day_savings_available = view.findViewById(R.id.saving_module_amount);
 
+            activeBudgets = view.findViewById(R.id.active_budgets);
+            activeBudgets.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+
+                    activeBudgets.setActiveIcon();
+
+                    activeBudgets.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+            });
+
+            activeGoals = view.findViewById(R.id.active_goals);
+            activeGoals.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+
+                    activeGoals.setActiveIcon();
+                    activeGoals.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+            });
+
 
             //Inflate Budgets Async separately after data is Loaded
 
@@ -112,6 +141,10 @@ public class InflateDayDetails {
             module_trans = view.findViewById(R.id.cashflow_activities_container);
             module_savings = view.findViewById(R.id.savings_module);
             module_date = view.findViewById(R.id.date_container);
+
+
+            module_exp.highlight(1);
+            //module_savings.highlight(1);
 
             ViewGroup transactionCont = view.findViewById(R.id.flex_trans_cont);
             inflateTransactions(transactionCont, dayData);
@@ -164,18 +197,23 @@ public class InflateDayDetails {
 
             for(TransactionModel transaction: dayDataModel.getDayTransactionsModel().getDaysTransactions()){
 
-                int layout;
+
+                CashflowBubble rootTrans;
 
                 if(transaction.getType().equals("DEBIT")){
-                    layout = R.layout.transaction_item_debit;
+                    inflaterNormal.inflate(R.layout.transaction_item_debit, transactionCont, true);
+                    rootTrans = (CashflowBubble) transactionCont.getChildAt(transactionCont.getChildCount() - 1);
+                    rootTrans.setIn(false);
                 }
                 else{
-                    layout = R.layout.transaction_item_credit;
+                    inflaterNormal.inflate(R.layout.transaction_item_credit, transactionCont, true);
+                    rootTrans = (CashflowBubble) transactionCont.getChildAt(transactionCont.getChildCount() - 1);
+                    rootTrans.setIn(true);
                 }
 
 
-                View rootTrans = inflaterNormal.inflate(layout, transactionCont, true);
-                rootTrans = transactionCont.getChildAt(transactionCont.getChildCount() - 1);
+
+
                 TextView amount = rootTrans.findViewById(R.id.transaction_amount);
                 TextView description = rootTrans.findViewById(R.id.transaction_description);
                 Log.i("HashCodeView",""+rootTrans.hashCode()+" No of Children:" + transactionCont.getChildCount());
@@ -212,7 +250,8 @@ public class InflateDayDetails {
     }
 
 
-    View module_date, module_rev, module_exp, module_inc, module_burn, module_budg, module_trans, module_savings;
+    PopUpFrame module_date, module_rev, module_exp, module_inc, module_burn, module_trans, module_savings;
+    View module_budg;
     float mdate_top, mrev_top, mexp_top, minc_top, mburn_top, mbudg_top, mtrans_top, mgoal_top, msavings_top;
     private void baseCollapseDay() {
 
@@ -300,15 +339,65 @@ public class InflateDayDetails {
 
 
 
-        module_exp.setOnClickListener(new View.OnClickListener() {
+        module_exp.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                singletonClass.changeFragment.setValue("FixedModule");
+            public boolean onTouch(View v, MotionEvent event) {
+
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        //some code....
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        module_exp.ripple(event.getX(), event.getY(), new SuccessCallback() {
+                            @Override
+                            public void success() {
+                                singletonClass.changeFragment.setValue("FixedModule");
+                            }
+
+                            @Override
+                            public void error() {
+
+                            }
+                        });
+                        v.performClick();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        break;
+                    default:
+                        break;
+
+                }
+                return true;
             }
         });
 
+        module_date.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
 
-
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        //some code....
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        module_date.ripple(event.getX(), event.getY(), new SuccessCallback() {
+                            @Override
+                            public void success() {
+                            }
+                            @Override
+                            public void error() {
+                            }
+                        });
+                        v.performClick();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
 
     }
 
@@ -342,7 +431,7 @@ public class InflateDayDetails {
     public void expandDay(){
 
         ValueAnimator va = ValueAnimator.ofFloat(0,1);
-        va.setDuration(250);
+        va.setDuration(350);
 
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -399,6 +488,12 @@ public class InflateDayDetails {
     }
 
     public void collapseDay(SuccessCallback callback){
+        callback.success();
+        parentCont.removeAllViews();
+        cover.setAlpha(1f);
+        cover.setVisibility(View.VISIBLE);
+
+
         ValueAnimator va = ValueAnimator.ofFloat(1,0);
         va.setDuration(150);
 
@@ -453,7 +548,7 @@ public class InflateDayDetails {
 
         va.setInterpolator(new DecelerateInterpolator());
 
-        va.start();
+        //va.start();
 
     }
 }

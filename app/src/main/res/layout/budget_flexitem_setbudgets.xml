@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    app:layout_flexBasisPercent="33%"
+    android:paddingTop="3dp"
+    >
+    <com.news.goodlife.CustomViews.CustomEntries.PopUpFrame
+        android:layout_width="match_parent"
+        app:borderCustomRadius="50"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Setup Budgets"
+            android:alpha=".8"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textAlignment="center"
+            />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"/>
+    </com.news.goodlife.CustomViews.CustomEntries.PopUpFrame>
+
+</LinearLayout>

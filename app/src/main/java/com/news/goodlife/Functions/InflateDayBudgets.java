@@ -1,5 +1,6 @@
 package com.news.goodlife.Functions;
 
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.news.goodlife.CustomViews.BudgetCircleMini;
+import com.news.goodlife.CustomViews.CustomEntries.PopUpFrame;
 import com.news.goodlife.Data.Local.Models.Financial.BudgetCategoryModel;
 import com.news.goodlife.Data.Local.Models.Financial.BudgetModel;
 import com.news.goodlife.Interfaces.SuccessCallback;
@@ -28,14 +30,22 @@ public class InflateDayBudgets {
     public InflateDayBudgets(AsyncLayoutInflater inflater, ViewGroup parent) {
 
         List<BudgetModel> allBudgets = singletonMain.getDatabaseController().BudgetController.getAllBudgets();
-        int pos = 1;
-        for(BudgetModel budget: allBudgets){
-            inflateBudget(inflater, budget, parent, pos);
-            pos++;
-            if(pos == 4){
-                pos = 1;
+        if(allBudgets.size() != 0){
+            int pos = 1;
+            for(BudgetModel budget: allBudgets){
+                inflateBudget(inflater, budget, parent, pos);
+                pos++;
+                if(pos == 4){
+                    pos = 1;
+                }
             }
         }
+        else{
+
+            inflateNoBudget(inflater, parent);
+
+        }
+
 
 
 
@@ -105,15 +115,30 @@ public class InflateDayBudgets {
         }*/
     }
 
+    private void inflateNoBudget(AsyncLayoutInflater inflater, ViewGroup parent) {
+
+        inflater.inflate(R.layout.budget_flexitem_setbudgets, parent, new AsyncLayoutInflater.OnInflateFinishedListener() {
+            @Override
+            public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
+
+                parent.addView(view);
+
+            }
+        });
+    }
+
     int testprogress = 110;
+    int testcount = 0;
     private void inflateBudget(AsyncLayoutInflater inflater, BudgetModel budget, ViewGroup parent, int pos){
+
 
 
         inflater.inflate(R.layout.budget_flexitem_3rd, parent, new AsyncLayoutInflater.OnInflateFinishedListener() {
             @Override
-            public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
-
-                paddView(pos, view);
+            public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent){
+                testcount++;
+                PopUpFrame popUpFrame = (PopUpFrame) view;
+                paddView(pos, popUpFrame);
 
                 testprogress = testprogress - 10;
                 BudgetCircleMini budgetCircleMini = view.findViewById(R.id.budget_circle_mini);
@@ -125,6 +150,27 @@ public class InflateDayBudgets {
 
                 TextView remaining = view.findViewById(R.id.restbudget_available);
                 remaining.setText(singletonMain.monefy(budget.amount));
+
+                TextView newTransactions = view.findViewById(R.id.new_covered_tranactions);
+
+                if(testcount == 2){
+                    popUpFrame.highlight(1);
+                    newTransactions.setVisibility(View.VISIBLE);
+                    newTransactions.setText("+2");
+                }
+
+                if(testcount == 6){
+                    popUpFrame.highlight(1);
+                    newTransactions.setVisibility(View.VISIBLE);
+                    newTransactions.setText("+1");
+                }
+
+                if(testcount == 7){
+                    popUpFrame.highlight(1);
+                    newTransactions.setVisibility(View.VISIBLE);
+                    newTransactions.setText("+5");
+                }
+
 
                 FlexboxLayout.LayoutParams lp = (FlexboxLayout.LayoutParams) view.getLayoutParams();
                 lp.setFlexBasisPercent(.333f);
@@ -143,25 +189,54 @@ public class InflateDayBudgets {
                     }
                 });
 
-                view.setOnClickListener(new View.OnClickListener() {
+                popUpFrame.setOnTouchListener(new View.OnTouchListener() {
                     @Override
-                    public void onClick(View view) {
-                        singletonMain.changeFragment.data = new ArrayList<>();
-                        singletonMain.changeFragment.getData().add(budget.getId());
-                        singletonMain.changeFragment.setValue("BudgetModule");
+                    public boolean onTouch(View v, MotionEvent event) {
+
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                //some code....
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                popUpFrame.ripple(event.getX(), event.getY(), new SuccessCallback() {
+                                    @Override
+                                    public void success() {
+                                        singletonMain.changeFragment.data = new ArrayList<>();
+                                        singletonMain.changeFragment.getData().add(budget.getId());
+                                        singletonMain.changeFragment.setValue("BudgetModule");
+                                    }
+
+                                    @Override
+                                    public void error() {
+
+                                    }
+                                });
+                                v.performClick();
+                                break;
+                            case MotionEvent.ACTION_MOVE:
+                                break;
+                            default:
+                                break;
+
+                        }
+                        return true;
                     }
                 });
             }
 
-            private void paddView(int pos, View view) {
+            private void paddView(int pos, PopUpFrame view) {
 
                 if(pos == 1){
+                    view.bgPadding(0,singletonMain.dpToPx(3),singletonMain.dpToPx(2),0);
                     view.setPadding(0,singletonMain.dpToPx(3),singletonMain.dpToPx(2),0);
+
                 }
                 else if(pos == 2){
+                    view.bgPadding(singletonMain.dpToPx(1),singletonMain.dpToPx(3),singletonMain.dpToPx(1),0);
                     view.setPadding(singletonMain.dpToPx(1),singletonMain.dpToPx(3),singletonMain.dpToPx(1),0);
                 }
                 else{
+                    view.bgPadding(singletonMain.dpToPx(2),singletonMain.dpToPx(3),0,0);
                     view.setPadding(singletonMain.dpToPx(2),singletonMain.dpToPx(3),0,0);
                 }
             }
@@ -207,12 +282,37 @@ public class InflateDayBudgets {
                     }
                 });
 
-                view.setOnClickListener(new View.OnClickListener() {
+                view.setOnTouchListener(new View.OnTouchListener() {
                     @Override
-                    public void onClick(View view) {
-                        singletonMain.changeFragment.data = new ArrayList<>();
-                        singletonMain.changeFragment.getData().add(budget.getId());
-                        singletonMain.changeFragment.setValue("BudgetModule");
+                    public boolean onTouch(View v, MotionEvent event) {
+
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                //some code....
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                ((PopUpFrame)view).ripple(event.getX(), event.getY(), new SuccessCallback() {
+                                    @Override
+                                    public void success() {
+                                        singletonMain.changeFragment.data = new ArrayList<>();
+                                        singletonMain.changeFragment.getData().add(budget.getId());
+                                        singletonMain.changeFragment.setValue("BudgetModule");
+                                    }
+
+                                    @Override
+                                    public void error() {
+
+                                    }
+                                });
+                                v.performClick();
+                                break;
+                            case MotionEvent.ACTION_MOVE:
+                                break;
+                            default:
+                                break;
+
+                        }
+                        return true;
                     }
                 });
             }

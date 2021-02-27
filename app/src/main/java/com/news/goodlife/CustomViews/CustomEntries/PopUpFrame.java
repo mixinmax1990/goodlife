@@ -1,5 +1,7 @@
 package com.news.goodlife.CustomViews.CustomEntries;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -18,19 +20,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.news.goodlife.Interfaces.SuccessCallback;
 import com.news.goodlife.R;
 
 public class PopUpFrame extends ConstraintLayout {
     String strokeColor, backgroundColor;
     @ColorInt int color;
     @ColorInt int expandDotColor;
+    int backgroundColorInt;
 
     int strokeSize, borderRadius;
 
     boolean stroke, background, radius, strokeCol;
     int radiusSize = 0;
 
-    Paint paintFill, paintStroke, expandableArcPaint;
+    Paint paintFill, paintStroke, expandableArcPaint, ripplePaint;
     RectF roundedRectangle, expandEdgeRectangle;
     Path roundPath;
 
@@ -59,6 +63,7 @@ public class PopUpFrame extends ConstraintLayout {
         expandDotColor = typedValue.data;
 
 
+        backgroundColorInt = Color.parseColor("#1f2024");
 
         setAttributes(attrs);
         configurePaints();
@@ -70,10 +75,16 @@ public class PopUpFrame extends ConstraintLayout {
 
 
     int expandMargin = 25;
+    int width, height, centerX, centerY;
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+
+        width = w;
+        height = h;
+        centerX = width / 2;
+        centerY = height / 2;
     }
 
     @Override
@@ -81,9 +92,11 @@ public class PopUpFrame extends ConstraintLayout {
         super.dispatchDraw(canvas);
     }
 
+
+    int rippleDiameter = 0;
     @Override
     protected void onDraw(Canvas canvas) {
-        roundedRectangle = new RectF(0 + strokeSize, 0 + strokeSize, getWidth() - strokeSize, getHeight() - strokeSize);
+        roundedRectangle = new RectF((0 + strokeSize) + paddingLeft, (0 + strokeSize) + paddingTop, (getWidth() - strokeSize) - paddingRight, (getHeight() - strokeSize) - paddingBottom);
         expandEdgeRectangle = new RectF((int)(getWidth() - radiusSize * 1) - expandMargin, (int)(getHeight() - radiusSize * 1) - expandMargin, getWidth() - expandMargin, getHeight() - expandMargin);
 
 //#1C2125
@@ -91,7 +104,7 @@ public class PopUpFrame extends ConstraintLayout {
 
             paintFill.setColor(color);
             //canvas.drawRoundRect(roundedRectangle, radiusSize, radiusSize, paintFill);
-            paintFill.setColor(Color.parseColor("#1f2024"));
+            paintFill.setColor(backgroundColorInt);
             //paintFill.setAlpha(10);
 
             roundPath.reset();
@@ -113,6 +126,13 @@ public class PopUpFrame extends ConstraintLayout {
         if(expandable){
            // canvas.drawCircle(getWidth() - 35, getHeight() -35, 5, expandableArcPaint);
         }
+
+
+        if(drawRipple){
+
+            canvas.drawCircle(touchX, touchY,rippleDiameter, ripplePaint);
+
+        };
         super.onDraw(canvas);
     }
     private void configurePaints(){
@@ -160,6 +180,11 @@ public class PopUpFrame extends ConstraintLayout {
         expandableArcPaint.setAntiAlias(true);
         expandableArcPaint.setStrokeCap(Paint.Cap.ROUND);
 
+        ripplePaint = new Paint();
+        ripplePaint.setStyle(Paint.Style.FILL);
+        ripplePaint.setColor(Color.WHITE);
+        ripplePaint.setAlpha(20);
+        ripplePaint.setAntiAlias(true);
     }
 
     public void setAttributes(AttributeSet attrs){
@@ -228,12 +253,103 @@ public class PopUpFrame extends ConstraintLayout {
         invalidate();
     }
 
+
+    public void highlight(int type){
+
+        switch(type){
+            case 1:
+                backgroundColorInt = Color.parseColor("#2A3240");
+                break;
+            case 2:
+                backgroundColorInt = Color.parseColor("#FFFFFF");
+                break;
+            default:
+                break;
+        }
+
+        invalidate();
+    }
     public int getBorderRadius() {
         return borderRadius;
     }
 
     public void setBorderRadius(int borderRadius) {
         this.borderRadius = borderRadius;
+    }
+
+    boolean drawRipple = false;
+    float touchX, touchY, fluct;
+    float scale = 1;
+    public void ripple(float x, float y, SuccessCallback callback){
+        drawRipple = true;
+        touchX = x;
+        touchY = y;
+
+        ValueAnimator va = ValueAnimator.ofFloat(0,1);
+        va.setDuration(400);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+                float animVal = (float) animation.getAnimatedValue();
+                rippleDiameter = (int)(animVal * (width));
+
+                fluct = animVal;
+                if(animVal > .5f){
+                    fluct = 1 - animVal;
+                }
+                scale = 1 + fluct * 0.5f;
+                setScaleX(scale);
+                setScaleY(scale);
+
+                invalidate();
+
+            }
+        });
+
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+                setElevation(100);
+                setOutlineProvider(null);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                callback.success();
+                drawRipple = false;
+                setElevation(0);
+                invalidate();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+        va.start();
+
+    }
+
+    int paddingLeft = 0;
+    int paddingTop = 0;
+    int paddingRight = 0;
+    int paddingBottom = 0;
+    public void bgPadding(int left, int top, int right, int bottom){
+
+        paddingLeft = left;
+        paddingTop = top;
+        paddingRight = right;
+        paddingBottom = bottom;
+        invalidate();
+
     }
 }
 

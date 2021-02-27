@@ -34,8 +34,8 @@ public class SetupApp {
         if(test){
 
             startLogic();
-
-           /* TestData(new SuccessCallback() {
+            /*
+           TestData(new SuccessCallback() {
                 @Override
                 public void success() {
                     startLogic();

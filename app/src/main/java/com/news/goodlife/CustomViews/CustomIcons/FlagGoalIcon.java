@@ -68,6 +68,8 @@ public class FlagGoalIcon extends View {
         thickStroke.setStrokeJoin(Paint.Join.ROUND);
         thickStroke.setPathEffect(new CornerPathEffect(20));
         thickStroke.setAlpha(100);
+        thickStroke.setAntiAlias(true);
+        thickStroke.setDither(true);
 
         slimStroke = new Paint();
         slimStroke.setStyle(Paint.Style.STROKE);
@@ -83,7 +85,15 @@ public class FlagGoalIcon extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
         canvas.drawPath(thickPath, thickStroke);
+    }
+
+    public void setActiveIcon(){
+        //thickStroke.setStrokeWidth(12);
+        thickStroke.setColor(Color.WHITE);
+        thickStroke.setAlpha(200);
+        thickStroke.setStrokeWidth(6);
+        thickStroke.setPathEffect(new CornerPathEffect(10));
+        invalidate();
     }
 }

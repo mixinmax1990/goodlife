@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -19,7 +20,7 @@ import androidx.annotation.Nullable;
 import com.news.goodlife.Singletons.SingletonClass;
 
 public class BudgetCircleMini extends FrameLayout {
-    Paint barsPaint, barsBgPaint, labelPaint;
+    Paint barsPaint, barsBgPaint, labelPaint, iconBGPaint;
     RectF rectF, rectFinner;
     int height, width;
     int strokeSize = 30;
@@ -96,6 +97,12 @@ public class BudgetCircleMini extends FrameLayout {
         labelPaint.setTextSize(fontSize);
         labelPaint.setAlpha(255);
 
+        iconBGPaint = new Paint();
+        iconBGPaint.setStyle(Paint.Style.FILL);
+        iconBGPaint.setColor(Color.WHITE);
+        iconBGPaint.setAlpha(30);
+        iconBGPaint.setAntiAlias(true);
+
     }
 
     @Override
@@ -105,15 +112,21 @@ public class BudgetCircleMini extends FrameLayout {
 
         height = h;
         width = w;
-        strokeSize = (int)(w * 0.07f);
-        strokeSizeOuter = (int)(strokeSize * 0.5f);
-        int innerMargin = (int)(strokeSize * 2.5);
 
-        rectF = new RectF(strokeSize,strokeSize,w - strokeSize,h - strokeSize);
-        rectFinner = new RectF(strokeSizeOuter + innerMargin,strokeSizeOuter + innerMargin,w - strokeSizeOuter - innerMargin,h - strokeSizeOuter - innerMargin);
+        setRectFs(0);
         setPaints();
         draw = true;
         invalidate();
+    }
+
+    private void setRectFs(int padding){
+        strokeSize = (int)(width * 0.07f);
+        strokeSizeOuter = (int)(strokeSize * 0.5f);
+        int innerMargin = (int)(strokeSize * 2.5);
+
+        rectF = new RectF(padding + strokeSize, padding + strokeSize,(width - strokeSize) - padding,(height - strokeSize) - padding);
+        rectFinner = new RectF(padding + (strokeSizeOuter + innerMargin),padding + (strokeSizeOuter + innerMargin),(width - strokeSizeOuter - innerMargin) - padding,(height - strokeSizeOuter - innerMargin) - padding);
+        iconRectF = new RectF(0,0,width,height);
     }
 
     int geom_centerX, geom_centerY;
@@ -150,10 +163,8 @@ public class BudgetCircleMini extends FrameLayout {
         }
 
         if(icon){
-            barsPaint.setColor(Color.BLACK);
-            barsPaint.setAlpha(100);
-            barsBgPaint.setColor(Color.BLACK);
-            barsBgPaint.setAlpha(100);
+            barsBgPaint.setAlpha(200);
+            barsPaint.setAlpha(200);
             canvas.drawArc(rectF, 270, 300, false, barsPaint);
             for(int i = 0; i < months; i++){
                 //Month Line
@@ -165,13 +176,32 @@ public class BudgetCircleMini extends FrameLayout {
 
         }
     }
+
+    RectF iconRectF;
     public void setIcon(){
 
         this.months = 3;
+        barsPaint.setColor(Color.WHITE);
+        barsPaint.setAlpha(150);
+        barsBgPaint.setColor(Color.WHITE);
+        barsBgPaint.setAlpha(150);
+
+        icon = true;
+        draw = false;
+
+        invalidate();
+
+    }
+
+    public void setActiveIcon(){
+        this.months = 3;
+        barsPaint.setColor(Color.WHITE);
+        barsPaint.setAlpha(100);
+        barsBgPaint.setColor(Color.WHITE);
+        barsBgPaint.setAlpha(100);
         icon = true;
         draw = false;
         invalidate();
-
     }
 
 
